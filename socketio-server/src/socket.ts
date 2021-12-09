@@ -8,9 +8,9 @@ export default (httpServer) => {
     },
   });
 
-  io.on("connection", (socket) => {
-    console.log("connection");
-  });
+  //   io.on("connection", (socket) => {
+  //     console.log("connection");
+  //   });
 
   useSocketServer(io, { controllers: [__dirname + "/api/controllers/*.ts"] });
 

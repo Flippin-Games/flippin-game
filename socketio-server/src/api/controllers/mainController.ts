@@ -7,7 +7,7 @@ import {
 import { Socket, Server } from "socket.io";
 
 @SocketController()
-class MainController {
+export class MainController {
   @OnConnect()
   public onConnection(
     @ConnectedSocket() socket: Socket,
