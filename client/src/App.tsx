@@ -1,25 +1,39 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
-import { io } from "socket.io-client";
+import JoinRoom from "./components/joinRoom/joinRoom";
+import GameContext, { IGameContextProps } from "./gameContext";
+import socketService from "./services/socketService";
 
 function App() {
-  const connect = () => {
-    const socket = io("http://localhost:9000");
+  const [isInRoom, setIsInRoom] = useState(false);
 
-    socket.on("connect", () => {
-      console.log("Connected!");
-      socket.emit("custom_event", { name: "Weronika", age: 28 });
-    });
+  const connectSocket = async () => {
+    const socket = await socketService
+      .connect("http://localhost:9000")
+      .catch((err) => {
+        console.log("Error: ", err);
+      });
   };
 
   useEffect(() => {
-    connect();
+    connectSocket();
   }, []);
 
+  const gameConextValue: IGameContextProps = {
+    isInRoom,
+    setIsInRoom,
+  };
+
   return (
-    <div className="App">
-      <header className="App-header"> Hello app</header>
-    </div>
+    <GameContext.Provider value={gameConextValue}>
+      <div className="App">
+        <header></header>
+        <main className="App-header">
+          <h1>Hello Agile Penny 👋</h1>
+          <JoinRoom />
+        </main>
+      </div>
+    </GameContext.Provider>
   );
 }
 
