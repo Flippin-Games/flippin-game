@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import gameContext from "../../gameContext";
 import socketService from "../../services/socketService";
-import gameService from "../../services/socketService/gameService";
+import gameService from "../../services/gameService";
 
 interface IJoinRoomProps {}
 
