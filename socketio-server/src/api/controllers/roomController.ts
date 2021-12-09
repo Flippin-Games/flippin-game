@@ -15,8 +15,6 @@ export class RoomController {
     @ConnectedSocket() socket: Socket,
     @MessageBody() message: any
   ) {
-    console.log("New User joining room:", message);
-
     const connectedSockets = io.sockets.adapter.rooms.get(message.roomId);
     const socketRooms = Array.from(socket.rooms.values()).filter(
       (room) => room !== socket.id
@@ -32,6 +30,7 @@ export class RoomController {
     } else {
       await socket.join(message.roomId);
       socket.emit("room_joined");
+      console.log("New User joining room:", message);
     }
   }
 }

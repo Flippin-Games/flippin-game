@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 .App {
   text-align: center;
 }
@@ -35,4 +38,14 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+button,
+input {
+  padding: 16px;
+}
+
+button {
+  text-transform: uppercase;
+  cursor: pointer;
 }
