@@ -5,6 +5,11 @@ import { io } from "socket.io-client";
 function App() {
   const connect = () => {
     const socket = io("http://localhost:9000");
+
+    socket.on("connect", () => {
+      console.log("Connected!");
+      socket.emit("custom_event", { name: "Weronika", age: 28 });
+    });
   };
 
   useEffect(() => {
