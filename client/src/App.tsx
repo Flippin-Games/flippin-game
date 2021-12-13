@@ -7,8 +7,8 @@ import socketService from "./services/socketService";
 
 function App() {
   const [isInRoom, setIsInRoom] = useState(false);
-  const [counter, setCounter] = useState<number>(20);
-  const [username, setUsername] = useState("Sonny");
+  const [counter, setCounter] = useState<number>(0);
+  const [username, setUsername] = useState("");
 
   const connectSocket = async () => {
     const socket = await socketService

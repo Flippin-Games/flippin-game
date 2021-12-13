@@ -20,20 +20,38 @@ export class RoomController {
       (room) => room !== socket.id
     );
 
-    console.log(io.sockets.adapter.rooms.get(message.username));
-
     if (
       socketRooms.length ||
-      (connectedSockets && connectedSockets.size === 2)
+      (connectedSockets && connectedSockets.size === 8)
     ) {
       socket.emit("room_join_error", {
         error: "Room is full, please use another room!",
       });
     } else {
       await socket.join(message.roomId);
-      socket.data.username = message.username;
-      socket.emit("room_joined", message.username);
-      console.log("New User " + message.username + " joining room:", message);
+      socket.data = message;
+
+      // TODO: this doesn't seem like the best solution, but it's from docs
+      // https://socket.io/docs/v4/server-socket-instance/#socketdata
+      const sockets = await io.fetchSockets();
+      const usersInRoom = Array.from(sockets)
+        .filter((client) => client.data.roomId === message.roomId)
+        .map((client) => client.data.username);
+
+      socket.emit("room_joined", message.username, usersInRoom);
+      console.log(
+        "New User " + message.username + " joining room:",
+        message.roomId
+      );
+
+      // const users = [];
+      // for (let [id, socket] of sockets) {
+      //   users.push({
+      //     userID: id,
+      //     username: socket.data.username,
+      //   });
+      // }
+      // socket.emit("users", users);
     }
   }
 }

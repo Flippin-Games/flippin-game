@@ -1,6 +1,7 @@
 import {
   ConnectedSocket,
   OnConnect,
+  OnDisconnect,
   SocketController,
   SocketIO,
 } from "socket-controllers";
@@ -14,5 +15,15 @@ export class MainController {
     @SocketIO() io: Server
   ) {
     console.log("New Socket connected", socket.id);
+  }
+
+  @OnDisconnect()
+  public async onDisconnection(
+    @ConnectedSocket() socket: Socket,
+    @SocketIO() io: Server
+  ) {
+    var connectionMessage =
+      socket.data.username + " Disconnected from Socket " + socket.id;
+    console.log(connectionMessage);
   }
 }

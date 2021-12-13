@@ -8,7 +8,8 @@ class GameService {
   ): Promise<boolean> {
     return new Promise((resolve, reject) => {
       socket.emit("join_game", { roomId, username });
-      socket.on("room_joined", () => {
+      socket.on("room_joined", (name, users) => {
+        console.log(username, users);
         resolve(true);
       });
       socket.on("room_join_error", ({ error }) => {
