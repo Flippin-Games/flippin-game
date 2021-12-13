@@ -14,7 +14,7 @@ export class GameController {
       (room) => room !== socket.id
     );
 
-    // TODO: if not connected cancel action
+    // TODO: if not connected cancel action - could it be just replaces with broadcast?
 
     const gameRoom = socketRooms && socketRooms[0];
     return gameRoom;

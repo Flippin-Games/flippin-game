@@ -1,9 +1,13 @@
 import { Socket } from "socket.io-client";
 
 class GameService {
-  public async joinGameRoom(socket: Socket, roomId: string): Promise<boolean> {
+  public async joinGameRoom(
+    socket: Socket,
+    roomId: string,
+    username: string
+  ): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      socket.emit("join_game", { roomId });
+      socket.emit("join_game", { roomId, username });
       socket.on("room_joined", () => {
         resolve(true);
       });
@@ -15,7 +19,6 @@ class GameService {
 
   public async updateGame(socket: Socket, counterValue: number) {
     socket.emit("update_game", { counterValue });
-    console.log("emit update game");
   }
 
   public async onGameUpdate(

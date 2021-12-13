@@ -20,6 +20,8 @@ export class RoomController {
       (room) => room !== socket.id
     );
 
+    console.log(io.sockets.adapter.rooms.get(message.username));
+
     if (
       socketRooms.length ||
       (connectedSockets && connectedSockets.size === 2)
@@ -29,8 +31,9 @@ export class RoomController {
       });
     } else {
       await socket.join(message.roomId);
-      socket.emit("room_joined");
-      console.log("New User joining room:", message);
+      socket.data.username = message.username;
+      socket.emit("room_joined", message.username);
+      console.log("New User " + message.username + " joining room:", message);
     }
   }
 }

@@ -8,7 +8,7 @@ interface IGame {}
 
 function Game(props: IGame) {
   const [isActive, setIsActive] = useState<boolean>(true);
-  const { counter, setCounter } = useContext(gameContext);
+  const { counter, setCounter, username } = useContext(gameContext);
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     setCounter(counter + 1);
     console.log("=== in handle click ===", counter);
@@ -35,13 +35,9 @@ function Game(props: IGame) {
     // }
   }, []);
 
-  useEffect(() => {
-    console.log(counter);
-  }, [counter]);
-
   return (
     <div className={styles.wrapper}>
-      <h1>Hello Player</h1>
+      <h1>Hello {username}</h1>
       <p>{counter}</p>
       <button onClick={handleClick} disabled={!isActive}>
         Click on me
