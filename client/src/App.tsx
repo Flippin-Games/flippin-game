@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Game from "./components/game/game";
 import JoinRoom from "./components/joinRoom/joinRoom";
 import GameContext, { IGameContextProps } from "./gameContext";
 import socketService from "./services/socketService";
 
 function App() {
   const [isInRoom, setIsInRoom] = useState(false);
+  const [counter, setCounter] = useState<number>(20);
 
   const connectSocket = async () => {
     const socket = await socketService
@@ -22,6 +24,8 @@ function App() {
   const gameConextValue: IGameContextProps = {
     isInRoom,
     setIsInRoom,
+    counter,
+    setCounter,
   };
 
   return (
@@ -30,7 +34,7 @@ function App() {
         <header></header>
         <main className="App-header">
           <h1>Hello Agile Penny 👋</h1>
-          <JoinRoom />
+          {!isInRoom ? <JoinRoom /> : <Game />}
         </main>
       </div>
     </GameContext.Provider>

@@ -12,6 +12,19 @@ class GameService {
       });
     });
   }
+
+  public async updateGame(socket: Socket, counterValue: number) {
+    socket.emit("update_game", { counterValue });
+    console.log("emit update game");
+  }
+
+  public async onGameUpdate(
+    socket: Socket,
+    listener: (counterValue: number) => void
+  ) {
+    socket.on("on_game_update", ({ counterValue }) => listener(counterValue));
+    console.log("on game update");
+  }
 }
 
 export default new GameService();
