@@ -6,6 +6,7 @@ import {
   SocketIO,
 } from "socket-controllers";
 import { Socket, Server } from "socket.io";
+import { GameController } from "./gameController";
 
 @SocketController()
 export class MainController {
@@ -22,8 +23,13 @@ export class MainController {
     @ConnectedSocket() socket: Socket,
     @SocketIO() io: Server
   ) {
-    var connectionMessage =
-      socket.data.username + " Disconnected from Socket " + socket.id;
+    const connectionMessage =
+      socket.data.username +
+      " Disconnected from Socket " +
+      socket.id +
+      " and room: " +
+      socket.data.roomId;
+    GameController.removeUser(socket.data.roomId, socket.data.username);
     console.log(connectionMessage);
   }
 }

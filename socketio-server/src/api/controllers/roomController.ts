@@ -6,7 +6,11 @@ import {
   SocketIO,
 } from "socket-controllers";
 import { Server, Socket } from "socket.io";
-import { GameController } from "./gameController";
+import { GameController, Iroom } from "./gameController";
+
+// TODO:
+// - add validation for name - avoid same user n ames
+// - sanitize inputs
 
 @SocketController()
 export class RoomController {
@@ -32,12 +36,28 @@ export class RoomController {
       await socket.join(message.roomId);
       socket.data = message;
 
-      // TODO: this could probably be fetched in one func
-      const GC = new GameController();
-      const users = await GC.getUsers(io, message.roomId);
-      const currentState = await GC.getCurrentStateFromUser(io, message.roomId);
+      const room = GameController.getRoomFromState(message.roomId);
 
-      socket.emit("room_joined", message.username, users, currentState);
+      if (!room) {
+        const room: Iroom = {
+          id: message.roomId,
+          users: [message.username],
+        };
+
+        GameController.gameState.rooms.push(room);
+      } else {
+        room.users.push(message.username);
+      }
+
+      const users = GameController.getUsers(message.roomId);
+      const counter = GameController.getCounter(message.roomId);
+
+      socket.emit(
+        "room_joined",
+        message.username,
+        users, // TODO: do I need to pass it here?
+        counter // TODO: do I need to pass it here?
+      );
       console.log(
         "New User " + message.username + " joining room:",
         message.roomId

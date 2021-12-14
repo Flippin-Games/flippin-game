@@ -5,12 +5,11 @@ class GameService {
     socket: Socket,
     roomId: string,
     username: string
-  ): Promise<{ joined: boolean; users: []; counterValue: number }> {
+  ): Promise<{ joined: boolean; users: []; counter: number }> {
     return new Promise((resolve, reject) => {
       socket.emit("join_game", { roomId, username });
-      // TODO: setting users should be separate thing from room joined
-      socket.on("room_joined", (name, users, counterValue) => {
-        resolve({ joined: true, users, counterValue });
+      socket.on("room_joined", (name, users, counter) => {
+        resolve({ joined: true, users, counter });
       });
       socket.on("room_join_error", ({ error }) => {
         reject(error);
@@ -18,17 +17,17 @@ class GameService {
     });
   }
 
-  public async updateGame(socket: Socket, counterValue: number) {
+  public async updateGame(socket: Socket, counter: number) {
     console.log("UPDATE GAME");
-    socket.emit("update_game", { counterValue });
+    socket.emit("update_game", { counter });
   }
 
   public async onGameUpdate(
     socket: Socket,
-    listener: (counterValue: number, users: []) => void
+    listener: (counter: number, users: []) => void
   ) {
-    socket.on("on_game_update", ({ counterValue }, users) => {
-      listener(counterValue, users);
+    socket.on("on_game_update", (counter, users) => {
+      listener(counter, users);
     });
     console.log("on game update");
   }

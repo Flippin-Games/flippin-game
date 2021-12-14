@@ -28,12 +28,11 @@ function Game(props: IGame) {
     }
   };
 
-  // TODO: change that "any"
-  const updateContext = (newCounterValue: number, users: []) => {
-    console.log("setting counter to: ", newCounterValue);
+  const updateContext = (newCounter: number, users: []) => {
+    console.log("setting counter to: ", newCounter);
     console.log("users: ", users);
     setUsers(users);
-    setCounter(newCounterValue);
+    setCounter(newCounter);
   };
 
   useEffect(() => {

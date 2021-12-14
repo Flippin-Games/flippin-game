@@ -7,37 +7,59 @@ import {
 } from "socket-controllers";
 import { Server, Socket } from "socket.io";
 
+export interface Iroom {
+  id: string;
+  users: string[];
+  counter?: number;
+}
+
+interface IGameState {
+  rooms: Iroom[];
+}
 @SocketController()
 export class GameController {
+  static gameState: IGameState = { rooms: [] };
+
   private getSocketGameRoom(socket: Socket): string {
     const socketRooms = Array.from(socket.rooms.values()).filter(
       (room) => room !== socket.id
     );
 
-    // TODO: if not connected cancel action - could it be just replaces with broadcast?
-
     const gameRoom = socketRooms && socketRooms[0];
     return gameRoom;
   }
 
-  public async getUsers(@SocketIO() io: Server, roomId: string) {
-    // TODO: this doesn't seem like the best solution, but it's from docs
-    // https://socket.io/docs/v4/server-socket-instance/#socketdata
-    const sockets = await io.fetchSockets();
-    const usersInRoom = Array.from(sockets)
-      .filter((client) => client.data.roomId === roomId)
-      .map((client) => client.data.username);
-    return usersInRoom;
+  static getRoomFromState(roomId: string) {
+    const room = GameController.gameState.rooms.find((r) => {
+      return r.id === roomId;
+    });
+
+    return room;
   }
 
-  public async getCurrentStateFromUser(@SocketIO() io: Server, roomId: string) {
-    // TODO: this doesn't seem like the best solution, but it's from docs
-    // https://socket.io/docs/v4/server-socket-instance/#socketdata
-    const sockets = await io.fetchSockets();
-    const data = Array.from(sockets)
-      .filter((client) => client.data.roomId === roomId)
-      .map((client) => client.data.counterValue || 0);
-    return Math.max(...data);
+  static getUsers(roomId: string) {
+    const room = GameController.getRoomFromState(roomId);
+
+    return room.users;
+  }
+  static getCounter(roomId: string): number {
+    const room = GameController.getRoomFromState(roomId);
+
+    return room.counter;
+  }
+
+  // public addUser(roomId) { }
+  static removeUser(roomId: string, username: string): void {
+    const room = GameController.getRoomFromState(roomId);
+
+    room.users = room.users.filter((user) => user !== username);
+  }
+
+  public updateCounter(roomId, value) {
+    const room = GameController.getRoomFromState(roomId);
+
+    room.counter = value;
+    return room.counter;
   }
 
   @OnMessage("update_game")
@@ -47,14 +69,9 @@ export class GameController {
     @MessageBody() message: any
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
-    const usersInRoom = await this.getUsers(io, gameRoom);
-    socket.data = {
-      ...socket.data,
-      users: usersInRoom,
-      counterValue: message.counterValue,
-    };
-    console.log(socket.data.username, socket.data);
-    socket.to(gameRoom).emit("on_game_update", message, usersInRoom);
-    console.log("update game: ", message, "users: ", usersInRoom);
+    const usersInRoom = await GameController.getUsers(gameRoom);
+    const counter = this.updateCounter(gameRoom, message.counter);
+
+    socket.to(gameRoom).emit("on_game_update", counter, usersInRoom);
   }
 }
