@@ -9,6 +9,7 @@ function App() {
   const [isInRoom, setIsInRoom] = useState(false);
   const [counter, setCounter] = useState<number>(0);
   const [username, setUsername] = useState("");
+  const [users, setUsers] = useState([]);
 
   const connectSocket = async () => {
     const socket = await socketService
@@ -22,17 +23,24 @@ function App() {
     connectSocket();
   }, []);
 
-  const gameConextValue: IGameContextProps = {
+  // TODO: useMemo
+  const gameContextValue: IGameContextProps = {
     isInRoom,
     setIsInRoom,
     counter,
     setCounter,
     username,
     setUsername,
+    users,
+    setUsers,
   };
 
+  // useEffect(() => {
+  //   console.log(gameContextValue);
+  // }, [gameContextValue]);
+
   return (
-    <GameContext.Provider value={gameConextValue}>
+    <GameContext.Provider value={gameContextValue}>
       <div className="App">
         <header></header>
         <main className="App-header">

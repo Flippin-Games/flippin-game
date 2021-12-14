@@ -5,12 +5,12 @@ class GameService {
     socket: Socket,
     roomId: string,
     username: string
-  ): Promise<boolean> {
+  ): Promise<{ joined: boolean; users: [] }> {
     return new Promise((resolve, reject) => {
       socket.emit("join_game", { roomId, username });
+      // TODO: setting users should be separate thing from room joined
       socket.on("room_joined", (name, users) => {
-        console.log(username, users);
-        resolve(true);
+        resolve({ joined: true, users });
       });
       socket.on("room_join_error", ({ error }) => {
         reject(error);

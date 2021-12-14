@@ -7,6 +7,8 @@ export interface IGameContextProps {
   setCounter: (counter: number) => void;
   username: string;
   setUsername: (username: string) => void;
+  users: {}[];
+  setUsers: (users: []) => void;
 }
 
 const defaultState: IGameContextProps = {
@@ -16,6 +18,8 @@ const defaultState: IGameContextProps = {
   setCounter: () => {},
   username: "Sonny",
   setUsername: () => {},
+  users: [],
+  setUsers: () => {},
 };
 
 export default React.createContext(defaultState);

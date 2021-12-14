@@ -9,7 +9,7 @@ function JoinRoom(props: IJoinRoomProps) {
   const [roomName, setRoomName] = useState("");
   const [isJoining, setIsJoining] = useState(false);
 
-  const { setIsInRoom, isInRoom, username, setUsername } =
+  const { setIsInRoom, isInRoom, username, setUsername, setUsers } =
     useContext(gameContext);
 
   const handleRoomNameChange = (e: React.ChangeEvent<any>) => {
@@ -29,12 +29,17 @@ function JoinRoom(props: IJoinRoomProps) {
     setIsJoining(true);
 
     // TODO: do server need username?
-    const joined = await gameService
+    const data = await gameService
       .joinGameRoom(socket, roomName, username)
       .catch((err) => alert(err));
 
-    if (joined) {
+    console.log(data?.joined);
+    if (data?.joined) {
       setIsInRoom(true);
+    }
+
+    if (data?.users?.length) {
+      setUsers(data.users);
     }
 
     setIsJoining(false);
