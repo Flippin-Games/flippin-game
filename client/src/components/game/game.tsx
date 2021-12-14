@@ -6,6 +6,7 @@ import styles from "./game.module.css";
 
 interface IGame {
   name?: any;
+  activeUser: boolean;
 }
 
 function Game(props: IGame) {
@@ -46,9 +47,11 @@ function Game(props: IGame) {
     <div className={styles.wrapper}>
       <h1>Hello {props.name || username}</h1>
       <p>{counter}</p>
-      <button onClick={handleClick} disabled={!isActive}>
-        Click on me
-      </button>
+      {props.activeUser && (
+        <button onClick={handleClick} disabled={!isActive}>
+          Click on me
+        </button>
+      )}
     </div>
   );
 }

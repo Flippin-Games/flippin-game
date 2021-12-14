@@ -52,7 +52,10 @@ function App() {
             gameContextValue.users?.map((user) => (
               <div>
                 <p>{user}</p>
-                <Game name={user} />
+                <Game
+                  name={user}
+                  activeUser={user === gameContextValue.username}
+                />
               </div>
             ))
           )}
