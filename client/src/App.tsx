@@ -51,13 +51,10 @@ function App() {
             <JoinRoom />
           ) : (
             gameContextValue.users?.map((user) => (
-              <div>
-                <p>{user}</p>
-                <Game
-                  name={user}
-                  activeUser={user === gameContextValue.username}
-                />
-              </div>
+              <Game
+                name={user}
+                activeUser={user === gameContextValue.username}
+              />
             ))
           )}
         </main>
