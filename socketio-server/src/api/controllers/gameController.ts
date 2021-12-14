@@ -27,8 +27,17 @@ export class GameController {
     const usersInRoom = Array.from(sockets)
       .filter((client) => client.data.roomId === roomId)
       .map((client) => client.data.username);
-
     return usersInRoom;
+  }
+
+  public async getCurrentStateFromUser(@SocketIO() io: Server, roomId: string) {
+    // TODO: this doesn't seem like the best solution, but it's from docs
+    // https://socket.io/docs/v4/server-socket-instance/#socketdata
+    const sockets = await io.fetchSockets();
+    const data = Array.from(sockets)
+      .filter((client) => client.data.roomId === roomId)
+      .map((client) => client.data.counterValue || 0);
+    return Math.max(...data);
   }
 
   @OnMessage("update_game")
@@ -39,8 +48,13 @@ export class GameController {
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
     const usersInRoom = await this.getUsers(io, gameRoom);
-    console.log(usersInRoom);
+    socket.data = {
+      ...socket.data,
+      users: usersInRoom,
+      counterValue: message.counterValue,
+    };
+    console.log(socket.data.username, socket.data);
     socket.to(gameRoom).emit("on_game_update", message, usersInRoom);
-    console.log("update game: ", message);
+    console.log("update game: ", message, "users: ", usersInRoom);
   }
 }

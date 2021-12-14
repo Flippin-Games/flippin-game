@@ -9,7 +9,7 @@ function JoinRoom(props: IJoinRoomProps) {
   const [roomName, setRoomName] = useState("");
   const [isJoining, setIsJoining] = useState(false);
 
-  const { setIsInRoom, isInRoom, username, setUsername, setUsers } =
+  const { setIsInRoom, isInRoom, username, setUsername, setUsers, setCounter } =
     useContext(gameContext);
 
   const handleRoomNameChange = (e: React.ChangeEvent<any>) => {
@@ -39,6 +39,9 @@ function JoinRoom(props: IJoinRoomProps) {
 
     if (data?.users) {
       setUsers(data.users);
+    }
+    if (data?.counterValue) {
+      setCounter(data.counterValue);
     }
 
     setIsJoining(false);

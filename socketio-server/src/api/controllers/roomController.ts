@@ -32,10 +32,12 @@ export class RoomController {
       await socket.join(message.roomId);
       socket.data = message;
 
-      // TODO:
-      const users = await new GameController().getUsers(io, message.roomId);
+      // TODO: this could probably be fetched in one func
+      const GC = new GameController();
+      const users = await GC.getUsers(io, message.roomId);
+      const currentState = await GC.getCurrentStateFromUser(io, message.roomId);
 
-      socket.emit("room_joined", message.username, users);
+      socket.emit("room_joined", message.username, users, currentState);
       console.log(
         "New User " + message.username + " joining room:",
         message.roomId

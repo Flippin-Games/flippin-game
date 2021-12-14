@@ -43,9 +43,10 @@ function App() {
   return (
     <GameContext.Provider value={gameContextValue}>
       <div className="App">
-        <header></header>
-        <main className="App-header">
+        <header>
           <h1>Hello Agile Penny 👋</h1>
+        </header>
+        <main className="App-header">
           {!isInRoom ? (
             <JoinRoom />
           ) : (
