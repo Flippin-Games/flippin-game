@@ -37,6 +37,7 @@ function App() {
 
   // useEffect(() => {
   //   console.log(gameContextValue);
+  //   console.log(gameContextValue.users);
   // }, [gameContextValue]);
 
   return (
@@ -45,7 +46,16 @@ function App() {
         <header></header>
         <main className="App-header">
           <h1>Hello Agile Penny 👋</h1>
-          {!isInRoom ? <JoinRoom /> : <Game />}
+          {!isInRoom ? (
+            <JoinRoom />
+          ) : (
+            gameContextValue.users?.map((user) => (
+              <div>
+                <p>{user}</p>
+                <Game name={user} />
+              </div>
+            ))
+          )}
         </main>
       </div>
     </GameContext.Provider>

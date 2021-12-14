@@ -33,12 +33,11 @@ function JoinRoom(props: IJoinRoomProps) {
       .joinGameRoom(socket, roomName, username)
       .catch((err) => alert(err));
 
-    console.log(data?.joined);
     if (data?.joined) {
       setIsInRoom(true);
     }
 
-    if (data?.users?.length) {
+    if (data?.users) {
       setUsers(data.users);
     }
 

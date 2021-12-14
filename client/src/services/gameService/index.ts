@@ -19,14 +19,18 @@ class GameService {
   }
 
   public async updateGame(socket: Socket, counterValue: number) {
+    console.log("UPDATE GAME");
+
     socket.emit("update_game", { counterValue });
   }
 
   public async onGameUpdate(
     socket: Socket,
-    listener: (counterValue: number) => void
+    listener: (counterValue: number, users: []) => void
   ) {
-    socket.on("on_game_update", ({ counterValue }) => listener(counterValue));
+    socket.on("on_game_update", ({ counterValue }, users) => {
+      listener(counterValue, users);
+    });
     console.log("on game update");
   }
 }

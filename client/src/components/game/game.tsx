@@ -4,11 +4,13 @@ import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
 import styles from "./game.module.css";
 
-interface IGame {}
+interface IGame {
+  name?: any;
+}
 
 function Game(props: IGame) {
   const [isActive, setIsActive] = useState<boolean>(true);
-  const { counter, setCounter, username } = useContext(gameContext);
+  const { counter, setCounter, username, setUsers } = useContext(gameContext);
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     setCounter(counter + 1);
     console.log("=== in handle click ===", counter);
@@ -21,11 +23,16 @@ function Game(props: IGame) {
   const handleGameUpdate = () => {
     console.log("=== in handle game update ===");
     if (socketService.socket) {
-      gameService.onGameUpdate(socketService.socket, (newCounterValue) => {
-        console.log("setting counter to: ", newCounterValue);
-        setCounter(newCounterValue);
-      });
+      gameService.onGameUpdate(socketService.socket, updateContext);
     }
+  };
+
+  // TODO: change that "any"
+  const updateContext = (newCounterValue: number, users: []) => {
+    console.log("setting counter to: ", newCounterValue);
+    console.log("users: ", users);
+    setUsers(users);
+    setCounter(newCounterValue);
   };
 
   useEffect(() => {
@@ -37,7 +44,7 @@ function Game(props: IGame) {
 
   return (
     <div className={styles.wrapper}>
-      <h1>Hello {username}</h1>
+      <h1>Hello {props.name || username}</h1>
       <p>{counter}</p>
       <button onClick={handleClick} disabled={!isActive}>
         Click on me

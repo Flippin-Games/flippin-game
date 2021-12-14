@@ -6,6 +6,7 @@ import {
   SocketIO,
 } from "socket-controllers";
 import { Server, Socket } from "socket.io";
+import { GameController } from "./gameController";
 
 @SocketController()
 export class RoomController {
@@ -31,27 +32,14 @@ export class RoomController {
       await socket.join(message.roomId);
       socket.data = message;
 
-      // TODO: this doesn't seem like the best solution, but it's from docs
-      // https://socket.io/docs/v4/server-socket-instance/#socketdata
-      const sockets = await io.fetchSockets();
-      const usersInRoom = Array.from(sockets)
-        .filter((client) => client.data.roomId === message.roomId)
-        .map((client) => client.data.username);
+      // TODO:
+      const users = await new GameController().getUsers(io, message.roomId);
 
-      socket.emit("room_joined", message.username, usersInRoom);
+      socket.emit("room_joined", message.username, users);
       console.log(
         "New User " + message.username + " joining room:",
         message.roomId
       );
-
-      // const users = [];
-      // for (let [id, socket] of sockets) {
-      //   users.push({
-      //     userID: id,
-      //     username: socket.data.username,
-      //   });
-      // }
-      // socket.emit("users", users);
     }
   }
 }
