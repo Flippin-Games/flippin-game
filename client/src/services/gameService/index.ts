@@ -31,6 +31,20 @@ class GameService {
     });
     console.log("on game update");
   }
+
+  public async createRoom(socket: Socket): Promise<string> {
+    return new Promise((resolve, reject) => {
+      console.log("=== Emitting create_room ===");
+      socket.emit("create_room");
+      socket.on("created_room", (id) => {
+        console.log(id);
+        resolve(id);
+      });
+      socket.on("room_join_error", ({ error }) => {
+        reject(error);
+      });
+    });
+  }
 }
 
 export default new GameService();
