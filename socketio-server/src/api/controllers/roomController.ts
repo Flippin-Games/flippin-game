@@ -43,7 +43,7 @@ export class RoomController {
           error: "This room doesn't exist, please check your room name",
         });
       } else {
-        room.users.push(message.username);
+        room.users.push({ username: message.username, localCounter: 0 });
       }
 
       const users = GameController.getUsers(message.roomId);

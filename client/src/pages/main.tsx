@@ -52,8 +52,8 @@ function Main() {
           ) : (
             gameContextValue.users?.map((user) => (
               <Game
-                name={user}
-                activeUser={user === gameContextValue.username}
+                name={user.username}
+                activeUser={user.username === gameContextValue.username}
               />
             ))
           )}

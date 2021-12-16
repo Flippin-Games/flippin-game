@@ -7,9 +7,14 @@ import {
 } from "socket-controllers";
 import { Server, Socket } from "socket.io";
 
+interface IUser {
+  username: string;
+  localCounter: number;
+}
+
 export interface Iroom {
   id: string;
-  users: string[];
+  users: IUser[];
   counter?: number;
 }
 
@@ -52,7 +57,7 @@ export class GameController {
   static removeUser(roomId: string, username: string): void {
     const room = GameController.getRoomFromState(roomId);
 
-    room.users = room.users.filter((user) => user !== username);
+    room.users = room.users.filter((user) => user.username !== username);
   }
 
   public updateCounter(roomId, value) {
@@ -73,5 +78,25 @@ export class GameController {
     const counter = this.updateCounter(gameRoom, message.counter);
 
     socket.to(gameRoom).emit("on_game_update", counter, usersInRoom);
+  }
+
+  @OnMessage("update_local_counter")
+  public async updateLocalCounter(
+    @SocketIO() io: Server,
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() message: any
+  ) {
+    const gameRoom = this.getSocketGameRoom(socket);
+    const user = GameController.getUsers(gameRoom).find(
+      (user) => user.username === message.username
+    );
+    user.localCounter = message.counter;
+    console.log(user, message);
+    console.log(GameController.gameState[0].users);
+
+    // TODO: emit event that sends room
+    // Change front to accept whole room as context
+    // move checking if it's above 20 to server side = all users need to see others changes on their screens
+    // socket.to(gameRoom).emit("on_game_update", counter, usersInRoom);
   }
 }
