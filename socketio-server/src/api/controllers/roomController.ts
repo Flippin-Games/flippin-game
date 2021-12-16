@@ -6,7 +6,7 @@ import {
   SocketIO,
 } from "socket-controllers";
 import { Server, Socket } from "socket.io";
-import { GameController, Iroom } from "./gameController";
+import { GameController } from "./gameController";
 
 // TODO:
 // - add validation for name - avoid same user n ames
@@ -39,12 +39,9 @@ export class RoomController {
       const room = GameController.getRoomFromState(message.roomId);
 
       if (!room) {
-        const room: Iroom = {
-          id: message.roomId,
-          users: [message.username],
-        };
-
-        GameController.gameState.rooms.push(room);
+        socket.emit("room_join_error", {
+          error: "This room doesn't exist, please check your room name",
+        });
       } else {
         room.users.push(message.username);
       }
