@@ -27,6 +27,7 @@ export class AdminController {
     const room: Iroom = {
       id: roomId.toString(),
       users: [],
+      counter: 0,
     };
     await socket.join(room.id);
     GameController.gameState.rooms.push(room);

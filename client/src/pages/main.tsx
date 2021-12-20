@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Game from "../components/game/game";
 import JoinRoom from "../components/joinRoom/joinRoom";
 import GameContext, { IGameContextProps } from "../gameContext";
+import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 
 function Main() {
@@ -10,6 +11,7 @@ function Main() {
   const [counter, setCounter] = useState<number>(0);
   const [username, setUsername] = useState("");
   const [users, setUsers] = useState([]);
+  const [localCounter, setLocalCounter] = useState<number>(0);
 
   const connectSocket = async () => {
     const socket = await socketService
@@ -33,7 +35,30 @@ function Main() {
     setUsername,
     users,
     setUsers,
+    localCounter,
+    setLocalCounter,
   };
+
+  const handleGameUpdate = () => {
+    console.log("=== in handle game update ===");
+    if (socketService.socket) {
+      gameService.onGameUpdate(socketService.socket, updateContext);
+    }
+  };
+
+  // TODO fix any
+  const updateContext = (state: any) => {
+    console.log(state);
+    setUsers(state.users);
+    setCounter(state.counter);
+  };
+
+  useEffect(() => {
+    handleGameUpdate();
+    // TODO return () => {
+    //   cleanup
+    // }
+  }, []);
 
   // useEffect(() => {
   //   console.log(gameContextValue);
@@ -52,6 +77,8 @@ function Main() {
           ) : (
             gameContextValue.users?.map((user) => (
               <Game
+                counter={gameContextValue.counter}
+                localCounter={user.localCounter}
                 name={user.username}
                 activeUser={user.username === gameContextValue.username}
               />

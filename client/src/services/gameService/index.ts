@@ -17,36 +17,28 @@ class GameService {
     });
   }
 
-  public async updateGame(socket: Socket, counter: number) {
+  public async updateGame(socket: Socket) {
     console.log("UPDATE GAME");
-    socket.emit("update_game", { counter });
+    socket.emit("update_game");
   }
 
-  public async updateLocalCounter(
-    socket: Socket,
-    counter: number,
-    username: string
-  ) {
-    console.log("UPDATE LOCAL COUNTER");
-    socket.emit("update_local_counter", { counter, username });
+  public async updateLocalCounter(socket: Socket, username: string) {
+    console.log("UPDATE LOCAL COUNTER", { username });
+    socket.emit("update_local_counter", { username });
   }
 
-  public async onGameUpdate(
-    socket: Socket,
-    listener: (counter: number, users: []) => void
-  ) {
-    socket.on("on_game_update", (counter, users) => {
-      listener(counter, users);
+  // TODO fix any type
+  public async onGameUpdate(socket: Socket, listener: (state: any) => void) {
+    socket.on("on_game_update", (state) => {
+      listener(state);
     });
     console.log("on game update");
   }
 
   public async createRoom(socket: Socket): Promise<string> {
     return new Promise((resolve, reject) => {
-      console.log("=== Emitting create_room ===");
       socket.emit("create_room");
       socket.on("created_room", (id) => {
-        console.log(id);
         resolve(id);
       });
       socket.on("room_join_error", ({ error }) => {

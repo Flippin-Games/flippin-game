@@ -5,6 +5,8 @@ export interface IGameContextProps {
   setIsInRoom: (inRoom: boolean) => void;
   counter: number;
   setCounter: (counter: number) => void;
+  localCounter: number;
+  setLocalCounter: (localCounter: number) => void;
   username: string;
   setUsername: (username: string) => void;
   users: { username: string; localCounter: number }[];
@@ -16,6 +18,8 @@ const defaultState: IGameContextProps = {
   setIsInRoom: () => {},
   counter: 0,
   setCounter: () => {},
+  localCounter: 0,
+  setLocalCounter: () => {},
   username: "Sonny",
   setUsername: () => {},
   users: [],

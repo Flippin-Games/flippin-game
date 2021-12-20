@@ -60,10 +60,10 @@ export class GameController {
     room.users = room.users.filter((user) => user.username !== username);
   }
 
-  public updateCounter(roomId, value) {
+  public updateCounter(roomId): number {
     const room = GameController.getRoomFromState(roomId);
 
-    room.counter = value;
+    room.counter = room.counter + 1;
     return room.counter;
   }
 
@@ -74,10 +74,13 @@ export class GameController {
     @MessageBody() message: any
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
-    const usersInRoom = await GameController.getUsers(gameRoom);
-    const counter = this.updateCounter(gameRoom, message.counter);
+    this.updateCounter(gameRoom);
+    console.log("update_game");
 
-    socket.to(gameRoom).emit("on_game_update", counter, usersInRoom);
+    io.to(gameRoom).emit(
+      "on_game_update",
+      GameController.getRoomFromState(gameRoom)
+    );
   }
 
   @OnMessage("update_local_counter")
@@ -87,16 +90,17 @@ export class GameController {
     @MessageBody() message: any
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
+    console.log(gameRoom);
     const user = GameController.getUsers(gameRoom).find(
       (user) => user.username === message.username
     );
-    user.localCounter = message.counter;
-    console.log(user, message);
-    console.log(GameController.gameState[0].users);
+    user.localCounter = user.localCounter + 1;
 
-    // TODO: emit event that sends room
-    // Change front to accept whole room as context
-    // move checking if it's above 20 to server side = all users need to see others changes on their screens
-    // socket.to(gameRoom).emit("on_game_update", counter, usersInRoom);
+    console.log(GameController.getRoomFromState(gameRoom));
+
+    io.to(gameRoom).emit(
+      "on_game_update",
+      GameController.getRoomFromState(gameRoom)
+    );
   }
 }
