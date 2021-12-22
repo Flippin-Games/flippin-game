@@ -15,7 +15,6 @@ function Main() {
   const [previousUser, setPerviousUser] = useState({}); // TODO do i need it in context?
 
   const connectSocket = async () => {
-    console.log(process.env.REACT_APP_PUBLIC_URL);
     const socket = await socketService
       .connect(`${process.env.REACT_APP_PUBLIC_URL}:9000`)
       .catch((err) => {
@@ -42,7 +41,6 @@ function Main() {
   };
 
   const handleGameUpdate = () => {
-    console.log("=== in handle game update ===");
     if (socketService.socket) {
       gameService.onGameUpdate(socketService.socket, updateContext);
     }
@@ -72,8 +70,6 @@ function Main() {
       const previousUser = gameContextValue.users[currentUserIndex - 1];
       setPerviousUser(previousUser);
     }
-
-    console.log(gameContextValue.users);
   }, [gameContextValue]);
 
   return (

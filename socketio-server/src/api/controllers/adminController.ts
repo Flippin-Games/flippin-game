@@ -31,7 +31,6 @@ export class AdminController {
     };
     await socket.join(room.id);
     GameController.gameState.rooms.push(room);
-    console.log(GameController.gameState.rooms);
     socket.emit("created_room", room.id);
   }
 

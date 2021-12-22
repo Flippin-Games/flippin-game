@@ -11,14 +11,12 @@ class SocketService {
       this.socket = io(url, {
         transports: ["websocket", "polling", "flashsocket"],
       });
-      console.log("== create socket ", url);
 
       if (!this.socket) {
         return reject;
       }
 
       this.socket.on("connect", () => {
-        console.log("Connected!");
         resolve(this.socket as Socket);
       });
 
