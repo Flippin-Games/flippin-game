@@ -17,6 +17,7 @@ interface IUser {
 export interface Iroom {
   id: string;
   users: IUser[];
+  settings: { autoMoveCoins: boolean; batchSize: number }; // TODO
   counter?: number;
   started?: boolean; // TODO: shouldn't be optional
 }
@@ -115,14 +116,24 @@ export class GameController {
     @MessageBody() message: any
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
-    const user = GameController.getUsers(gameRoom).find(
-      (user) => user.username === message.username
-    );
+    const user = GameController.getUser(gameRoom, message.username);
 
     if (user.localCounter > 0) {
       user.localCounter = user.localCounter - 1;
       user.flipped = user.flipped + 1;
     }
+
+    const roomFromState = GameController.getRoomFromState(gameRoom);
+    // TODO create getter for game state
+    if (user.flipped >= 5 && roomFromState.settings.autoMoveCoins) {
+      // get next user
+      const currentUserIndex = roomFromState.users.findIndex(
+        (user) => user.username === message.username
+      );
+      const nextUser = roomFromState.users[currentUserIndex + 1];
+      this.updateCoinsTaken(gameRoom, message.username, nextUser.username);
+    }
+
     GameController.emitUpateGame(io, gameRoom);
   }
 

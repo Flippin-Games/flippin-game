@@ -15,7 +15,7 @@ interface IGame {
 
 function Game(props: IGame) {
   // const [isActive, setIsActive] = useState<boolean>(true);
-  const { username } = useContext(gameContext);
+  const { username, settings } = useContext(gameContext);
   // const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
   //   // setCounter(counter + 1);
   //   console.log("=== in handle click ===");
@@ -60,7 +60,7 @@ function Game(props: IGame) {
             User in front of me: {props.previousUser.username} has{" "}
             {props.previousUser?.flipped} flipped coins
           </div> */}
-          {props.previousUser?.flipped >= 5 && (
+          {props.previousUser?.flipped >= 5 && !settings.autoMoveCoins && (
             <button onClick={handleTakeCoins}>
               Take coins from {props.previousUser.username}
             </button>

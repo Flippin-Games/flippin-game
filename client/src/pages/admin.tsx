@@ -7,6 +7,8 @@ function Admin() {
   const [code, setCode] = useState<string>("");
   const [started, setStarted] = useState<boolean>(false);
   const [users, setUsers] = useState<any[]>([]);
+  const [batchSize, setBatchSize] = useState<number>(20);
+  const [autoMoveCoins, setAutoMoveCoins] = useState<boolean>(true);
 
   const connectSocket = async () => {
     await socketService
@@ -29,10 +31,11 @@ function Admin() {
   const handleStartGame = async (e: React.FormEvent) => {
     e.preventDefault();
     const socket = socketService.socket;
+    const settings = { batchSize, autoMoveCoins };
     if (!socket) return;
 
     const hasStarted = await gameService
-      .startGame(socket, code)
+      .startGame(socket, code, settings)
       .catch((error) => alert(error));
 
     if (hasStarted) {
@@ -63,6 +66,13 @@ function Admin() {
     setUsers(state.users);
   };
 
+  const handleBatchSize = (e: any) => {
+    setBatchSize(e.target.value);
+  };
+  const handleAutoMoveCoins = (e: any) => {
+    setAutoMoveCoins(!autoMoveCoins);
+  };
+
   useEffect(() => {
     connectSocket();
   }, []);
@@ -87,10 +97,30 @@ function Admin() {
           </button>
           <h2>{code}</h2>
           {code && (
-            <button type="submit" onClick={handleStartGame} disabled={started}>
-              Start Game
-            </button>
+            // TODO
+            <form onSubmit={handleStartGame}>
+              <div>
+                <label>Enter batch size:</label>
+                <input
+                  type="number"
+                  value={batchSize}
+                  onChange={handleBatchSize}
+                />
+              </div>
+              <div>
+                <label>Auto move coins to next user:</label>
+                <input
+                  type="checkbox"
+                  checked={autoMoveCoins}
+                  onChange={handleAutoMoveCoins}
+                />
+              </div>
+              <button type="submit" disabled={started}>
+                Start Game
+              </button>
+            </form>
           )}
+
           {users && (
             <ol>
               {users.map((user) => (

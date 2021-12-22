@@ -11,6 +11,8 @@ export interface IGameContextProps {
   setUsername: (username: string) => void;
   users: { username: string; localCounter: number; flipped: number }[];
   setUsers: (users: []) => void;
+  settings: any;
+  setSettings: (settings: any) => void;
 }
 
 const defaultState: IGameContextProps = {
@@ -24,6 +26,8 @@ const defaultState: IGameContextProps = {
   setUsername: () => {},
   users: [],
   setUsers: () => {},
+  settings: {},
+  setSettings: () => {},
 };
 
 export default React.createContext(defaultState);

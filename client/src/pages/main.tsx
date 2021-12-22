@@ -13,9 +13,10 @@ function Main() {
   const [users, setUsers] = useState([]);
   const [localCounter, setLocalCounter] = useState<number>(0);
   const [previousUser, setPerviousUser] = useState({}); // TODO do i need it in context?
+  const [settings, setSettings] = useState({}); // TODO do i need it in context?
 
   const connectSocket = async () => {
-    const socket = await socketService
+    await socketService
       .connect(`${process.env.REACT_APP_PUBLIC_URL}:9000`)
       .catch((err) => {
         console.log("Error: ", err);
@@ -38,6 +39,8 @@ function Main() {
     setUsers,
     localCounter,
     setLocalCounter,
+    settings,
+    setSettings,
   };
 
   const handleGameUpdate = () => {
@@ -50,6 +53,7 @@ function Main() {
   const updateContext = (state: any) => {
     setUsers(state.users);
     setCounter(state.counter);
+    setSettings(state.settings);
   };
 
   useEffect(() => {
@@ -58,6 +62,13 @@ function Main() {
     //   cleanup
     // }
   }, []);
+
+  useEffect(() => {
+    console.log(gameContextValue);
+    // TODO return () => {
+    //   cleanup
+    // }
+  }, [gameContextValue]);
 
   useEffect(() => {
     const currentUserIndex = gameContextValue.users.findIndex(
