@@ -1,4 +1,4 @@
-import { MouseEvent, useState, useEffect, useContext } from "react";
+import { MouseEvent, useState, useContext } from "react";
 import gameContext from "../../gameContext";
 import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
@@ -9,10 +9,11 @@ interface IGame {
   activeUser: boolean;
   localCounter: number;
   counter: number;
+  previousUser: any; // TODO fix
 }
 
 function Game(props: IGame) {
-  const [isActive, setIsActive] = useState<boolean>(true);
+  // const [isActive, setIsActive] = useState<boolean>(true);
   const { username } = useContext(gameContext);
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     // setCounter(counter + 1);
@@ -29,23 +30,42 @@ function Game(props: IGame) {
     }
   };
 
+  const handleTakeCoins = (e: MouseEvent<HTMLButtonElement>) => {
+    // if (socketService.socket) {
+    //   gameService.updateLocalCounter(socketService.socket, username);
+    // }
+    console.log("take coins from", props.previousUser.username);
+  };
+
   return (
     <div className={styles.wrapper}>
       <h1>Hello {props.name || username}</h1>
       <p>{props.counter}</p>
       {props.activeUser && (
-        <button onClick={handleClick} disabled={!isActive}>
-          global counter +
-        </button>
+        <button onClick={handleClick}>global counter +</button>
       )}
       <div>
-        <p>Local Counter: {props.localCounter}</p>
-        {props.activeUser && (
-          <button onClick={handleLocalCounter} disabled={!isActive}>
-            Local Counter
-          </button>
+        <p>
+          To flip: {props.localCounter} | Flipped: {20 - props.localCounter}
+        </p>
+        {props.activeUser && props.localCounter && (
+          <button onClick={handleLocalCounter}>Flip Coin</button>
         )}
       </div>
+      {/* TODO take this out */}
+      {props.previousUser?.username && props.activeUser && (
+        <>
+          <div>
+            User in front of me: {props.previousUser.username} has{" "}
+            {props.previousUser?.localCounter} flipped coins
+          </div>
+          {props.previousUser?.localCounter < 15 && (
+            <button onClick={handleTakeCoins}>
+              Take coins from {props.previousUser.username}
+            </button>
+          )}
+        </>
+      )}
     </div>
   );
 }

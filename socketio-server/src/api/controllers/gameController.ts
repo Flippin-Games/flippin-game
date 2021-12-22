@@ -98,7 +98,9 @@ export class GameController {
       (user) => user.username === message.username
     );
 
-    user.localCounter = user.localCounter + 1;
+    if (user.localCounter > 0) {
+      user.localCounter = user.localCounter - 1;
+    }
     GameController.emitUpateGame(io, gameRoom);
   }
 }

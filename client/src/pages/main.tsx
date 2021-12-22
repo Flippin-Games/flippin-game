@@ -12,6 +12,7 @@ function Main() {
   const [username, setUsername] = useState("");
   const [users, setUsers] = useState([]);
   const [localCounter, setLocalCounter] = useState<number>(0);
+  const [previousUser, setPerviousUser] = useState({}); // TODO do i need it in context?
 
   const connectSocket = async () => {
     const socket = await socketService
@@ -48,7 +49,6 @@ function Main() {
 
   // TODO fix any
   const updateContext = (state: any) => {
-    console.log(state);
     setUsers(state.users);
     setCounter(state.counter);
   };
@@ -60,10 +60,21 @@ function Main() {
     // }
   }, []);
 
-  // useEffect(() => {
-  //   console.log(gameContextValue);
-  //   console.log(gameContextValue.users);
-  // }, [gameContextValue]);
+  useEffect(() => {
+    console.log(gameContextValue);
+    const currentUserIndex = gameContextValue.users.findIndex(
+      (user) => user.username === gameContextValue.username
+    );
+
+    const isFirst = currentUserIndex === 0;
+
+    if (!isFirst) {
+      const previousUser = gameContextValue.users[currentUserIndex - 1];
+      setPerviousUser(previousUser);
+    }
+
+    console.log(gameContextValue.users);
+  }, [gameContextValue]);
 
   return (
     <GameContext.Provider value={gameContextValue}>
@@ -77,10 +88,12 @@ function Main() {
           ) : (
             gameContextValue.users?.map((user) => (
               <Game
+                key={user.username}
                 counter={gameContextValue.counter}
                 localCounter={user.localCounter}
                 name={user.username}
                 activeUser={user.username === gameContextValue.username}
+                previousUser={previousUser}
               />
             ))
           )}
