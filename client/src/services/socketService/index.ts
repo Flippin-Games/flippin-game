@@ -8,7 +8,9 @@ class SocketService {
     url: string
   ): Promise<Socket<DefaultEventsMap, DefaultEventsMap>> {
     return new Promise((resolve, reject) => {
-      this.socket = io(url);
+      this.socket = io(url, {
+        transports: ["websocket", "polling", "flashsocket"],
+      });
       console.log("== create socket ", url);
 
       if (!this.socket) {

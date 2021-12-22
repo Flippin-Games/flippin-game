@@ -15,8 +15,9 @@ function Main() {
   const [previousUser, setPerviousUser] = useState({}); // TODO do i need it in context?
 
   const connectSocket = async () => {
+    console.log(process.env.REACT_APP_PUBLIC_URL);
     const socket = await socketService
-      .connect("http://localhost:9000")
+      .connect(`${process.env.REACT_APP_PUBLIC_URL}:9000`)
       .catch((err) => {
         console.log("Error: ", err);
       });

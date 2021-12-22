@@ -7,9 +7,11 @@ function Admin() {
   const [started, setStarted] = useState<boolean>(false);
 
   const connectSocket = async () => {
-    await socketService.connect("http://localhost:9000/admin").catch((err) => {
-      console.log("Error: ", err);
-    });
+    await socketService
+      .connect(`${process.env.REACT_APP_PUBLIC_URL}:9000/admin`)
+      .catch((err) => {
+        console.log("Error: ", err);
+      });
   };
 
   const handleGenerateRoom = async (e: React.FormEvent) => {

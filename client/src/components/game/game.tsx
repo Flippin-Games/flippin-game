@@ -48,7 +48,7 @@ function Game(props: IGame) {
 
   return (
     <div className={styles.wrapper}>
-      <h1>Hello {props.name || username}</h1>
+      <h1>{props.name || username}</h1>
       {/* <p>{props.counter}</p>
       {props.activeUser && (
         <button onClick={handleClick}>global counter +</button>
@@ -72,9 +72,9 @@ function Game(props: IGame) {
         <p>
           To flip: {props.localCounter} | Flipped: {props.flipped}
         </p>
-        {props.activeUser && props.localCounter && (
+        {props.activeUser && props.localCounter ? (
           <button onClick={handleLocalCounter}>Flip Coin</button>
-        )}
+        ) : null}
       </div>
     </div>
   );
