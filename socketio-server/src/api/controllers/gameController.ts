@@ -94,8 +94,6 @@ export class GameController {
     const userToGiveTo = GameController.getUser(roomId, to);
     userToTakeFrom.flipped = userToTakeFrom.flipped - 5;
     userToGiveTo.localCounter = userToGiveTo.localCounter + 5;
-
-    console.log(userToTakeFrom, userToGiveTo);
   }
 
   @OnMessage("update_game")
@@ -134,8 +132,6 @@ export class GameController {
     @ConnectedSocket() socket: Socket,
     @MessageBody() message: any
   ) {
-    console.log("TAKE COINS");
-    console.log(message.from, message.to);
     const gameRoom = this.getSocketGameRoom(socket);
     this.updateCoinsTaken(gameRoom, message.from, message.to);
 
