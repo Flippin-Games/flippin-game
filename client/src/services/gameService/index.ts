@@ -26,6 +26,11 @@ class GameService {
     socket.emit("update_local_counter", { username });
   }
 
+  public async takeCoins(socket: Socket, from: string, to: string) {
+    console.log(from, to);
+    socket.emit("take_coins", { from, to });
+  }
+
   // TODO fix any type
   public async onGameUpdate(socket: Socket, listener: (state: any) => void) {
     socket.on("on_game_update", (state) => {

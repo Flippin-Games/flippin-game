@@ -61,7 +61,6 @@ function Main() {
   }, []);
 
   useEffect(() => {
-    console.log(gameContextValue);
     const currentUserIndex = gameContextValue.users.findIndex(
       (user) => user.username === gameContextValue.username
     );
@@ -83,6 +82,7 @@ function Main() {
           <h1>Hello Agile Penny 👋</h1>
         </header>
         <main className="App-header">
+          {/* TODO something feels wrong here with passing whole context here*/}
           {!isInRoom ? (
             <JoinRoom />
           ) : (
@@ -91,6 +91,7 @@ function Main() {
                 key={user.username}
                 counter={gameContextValue.counter}
                 localCounter={user.localCounter}
+                flipped={user.flipped}
                 name={user.username}
                 activeUser={user.username === gameContextValue.username}
                 previousUser={previousUser}

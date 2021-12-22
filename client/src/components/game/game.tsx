@@ -9,20 +9,21 @@ interface IGame {
   activeUser: boolean;
   localCounter: number;
   counter: number;
+  flipped: number;
   previousUser: any; // TODO fix
 }
 
 function Game(props: IGame) {
   // const [isActive, setIsActive] = useState<boolean>(true);
   const { username } = useContext(gameContext);
-  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-    // setCounter(counter + 1);
-    console.log("=== in handle click ===");
+  // const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+  //   // setCounter(counter + 1);
+  //   console.log("=== in handle click ===");
 
-    if (socketService.socket) {
-      gameService.updateGame(socketService.socket);
-    }
-  };
+  //   if (socketService.socket) {
+  //     gameService.updateGame(socketService.socket);
+  //   }
+  // };
 
   const handleLocalCounter = (e: MouseEvent<HTMLButtonElement>) => {
     if (socketService.socket) {
@@ -35,37 +36,46 @@ function Game(props: IGame) {
     //   gameService.updateLocalCounter(socketService.socket, username);
     // }
     console.log("take coins from", props.previousUser.username);
+
+    if (socketService.socket) {
+      gameService.takeCoins(
+        socketService.socket,
+        props.previousUser.username,
+        username
+      );
+    }
   };
 
   return (
     <div className={styles.wrapper}>
       <h1>Hello {props.name || username}</h1>
-      <p>{props.counter}</p>
+      {/* <p>{props.counter}</p>
       {props.activeUser && (
         <button onClick={handleClick}>global counter +</button>
-      )}
-      <div>
-        <p>
-          To flip: {props.localCounter} | Flipped: {20 - props.localCounter}
-        </p>
-        {props.activeUser && props.localCounter && (
-          <button onClick={handleLocalCounter}>Flip Coin</button>
-        )}
-      </div>
+      )} */}
       {/* TODO take this out */}
       {props.previousUser?.username && props.activeUser && (
         <>
-          <div>
+          {/* <div>
             User in front of me: {props.previousUser.username} has{" "}
-            {props.previousUser?.localCounter} flipped coins
-          </div>
-          {props.previousUser?.localCounter < 15 && (
+            {props.previousUser?.flipped} flipped coins
+          </div> */}
+          {props.previousUser?.flipped >= 5 && (
             <button onClick={handleTakeCoins}>
               Take coins from {props.previousUser.username}
             </button>
           )}
         </>
       )}
+      <hr />
+      <div>
+        <p>
+          To flip: {props.localCounter} | Flipped: {props.flipped}
+        </p>
+        {props.activeUser && props.localCounter && (
+          <button onClick={handleLocalCounter}>Flip Coin</button>
+        )}
+      </div>
     </div>
   );
 }

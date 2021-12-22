@@ -7,9 +7,11 @@ import {
 } from "socket-controllers";
 import { Server, Socket } from "socket.io";
 
+// TODO move interface to separate files
 interface IUser {
   username: string;
   localCounter: number;
+  flipped: number;
 }
 
 export interface Iroom {
@@ -48,6 +50,15 @@ export class GameController {
 
     return room.users;
   }
+
+  static getUser(roomId: string, username: string) {
+    const user = GameController.getUsers(roomId).find(
+      (user) => user.username === username
+    );
+
+    return user;
+  }
+
   static getCounter(roomId: string): number {
     const room = GameController.getRoomFromState(roomId);
 
@@ -69,18 +80,29 @@ export class GameController {
     );
   }
 
-  public updateCounter(roomId): number {
+  public updateCounter(roomId: string): number {
     const room = GameController.getRoomFromState(roomId);
 
     room.counter = room.counter + 1;
     return room.counter;
   }
 
+  // TODO should this be async?
+  public updateCoinsTaken(roomId, from, to): void {
+    // TODO error handle and checks
+    const userToTakeFrom = GameController.getUser(roomId, from);
+    const userToGiveTo = GameController.getUser(roomId, to);
+    userToTakeFrom.flipped = userToTakeFrom.flipped - 5;
+    userToGiveTo.localCounter = userToGiveTo.localCounter + 5;
+
+    console.log(userToTakeFrom, userToGiveTo);
+  }
+
   @OnMessage("update_game")
   public async updateGame(
     @SocketIO() io: Server,
-    @ConnectedSocket() socket: Socket,
-    @MessageBody() message: any
+    @ConnectedSocket() socket: Socket
+    // @MessageBody() message: any
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
     this.updateCounter(gameRoom);
@@ -101,7 +123,22 @@ export class GameController {
 
     if (user.localCounter > 0) {
       user.localCounter = user.localCounter - 1;
+      user.flipped = user.flipped + 1;
     }
+    GameController.emitUpateGame(io, gameRoom);
+  }
+
+  @OnMessage("take_coins")
+  public async takeCoins(
+    @SocketIO() io: Server,
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() message: any
+  ) {
+    console.log("TAKE COINS");
+    console.log(message.from, message.to);
+    const gameRoom = this.getSocketGameRoom(socket);
+    this.updateCoinsTaken(gameRoom, message.from, message.to);
+
     GameController.emitUpateGame(io, gameRoom);
   }
 }

@@ -9,7 +9,7 @@ export interface IGameContextProps {
   setLocalCounter: (localCounter: number) => void;
   username: string;
   setUsername: (username: string) => void;
-  users: { username: string; localCounter: number }[];
+  users: { username: string; localCounter: number; flipped: number }[];
   setUsers: (users: []) => void;
 }
 
