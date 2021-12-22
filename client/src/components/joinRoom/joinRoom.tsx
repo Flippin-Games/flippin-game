@@ -9,8 +9,7 @@ function JoinRoom(props: IJoinRoomProps) {
   const [roomName, setRoomName] = useState("");
   const [isJoining, setIsJoining] = useState(false);
 
-  const { setIsInRoom, username, setUsername, setUsers, setCounter } =
-    useContext(gameContext);
+  const { setIsInRoom, username, setUsername } = useContext(gameContext);
 
   const handleRoomNameChange = (e: React.ChangeEvent<any>) => {
     const value = e.target.value;
@@ -28,19 +27,12 @@ function JoinRoom(props: IJoinRoomProps) {
 
     setIsJoining(true);
 
-    const data = await gameService
+    const joined = await gameService
       .joinGameRoom(socket, roomName, username)
       .catch((err) => alert(err));
 
-    if (data?.joined) {
+    if (joined) {
       setIsInRoom(true);
-    }
-
-    if (data?.users) {
-      setUsers(data.users);
-    }
-    if (data?.counter) {
-      setCounter(data.counter);
     }
 
     setIsJoining(false);

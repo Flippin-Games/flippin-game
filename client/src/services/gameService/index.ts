@@ -5,11 +5,11 @@ class GameService {
     socket: Socket,
     roomId: string,
     username: string
-  ): Promise<{ joined: boolean; users: []; counter: number }> {
+  ): Promise<boolean> {
     return new Promise((resolve, reject) => {
       socket.emit("join_game", { roomId, username });
-      socket.on("room_joined", (name, users, counter) => {
-        resolve({ joined: true, users, counter });
+      socket.on("room_joined", () => {
+        resolve(true);
       });
       socket.on("room_join_error", ({ error }) => {
         reject(error);

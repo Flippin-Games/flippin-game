@@ -46,14 +46,14 @@ export class RoomController {
         room.users.push({ username: message.username, localCounter: 0 });
       }
 
-      const users = GameController.getUsers(message.roomId);
-      const counter = GameController.getCounter(message.roomId);
+      socket.emit("room_joined");
 
-      socket.emit(
-        "room_joined",
-        message.username,
-        users, // TODO: do I need to pass it here?
-        counter // TODO: do I need to pass it here?
+      console.log(room, GameController.getRoomFromState(message.roomId));
+
+      // TODO: this is from game controller, should sit there as separate func
+      io.to(message.roomId).emit(
+        "on_game_update",
+        GameController.getRoomFromState(message.roomId)
       );
       console.log(
         "New User " + message.username + " joining room:",

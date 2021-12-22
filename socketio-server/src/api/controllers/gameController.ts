@@ -77,6 +77,7 @@ export class GameController {
     this.updateCounter(gameRoom);
     console.log("update_game");
 
+    // TODO: this is repeated a few times, put it in separate func
     io.to(gameRoom).emit(
       "on_game_update",
       GameController.getRoomFromState(gameRoom)
@@ -90,12 +91,11 @@ export class GameController {
     @MessageBody() message: any
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
-    console.log(gameRoom);
     const user = GameController.getUsers(gameRoom).find(
       (user) => user.username === message.username
     );
-    user.localCounter = user.localCounter + 1;
 
+    user.localCounter = user.localCounter + 1;
     console.log(GameController.getRoomFromState(gameRoom));
 
     io.to(gameRoom).emit(
