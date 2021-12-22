@@ -60,6 +60,14 @@ export class GameController {
     room.users = room.users.filter((user) => user.username !== username);
   }
 
+  static emitUpateGame(@SocketIO() io: Server, gameRoom: string): void {
+    console.log(GameController.getRoomFromState(gameRoom));
+    io.to(gameRoom).emit(
+      "on_game_update",
+      GameController.getRoomFromState(gameRoom)
+    );
+  }
+
   public updateCounter(roomId): number {
     const room = GameController.getRoomFromState(roomId);
 
@@ -75,13 +83,8 @@ export class GameController {
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
     this.updateCounter(gameRoom);
-    console.log("update_game");
 
-    // TODO: this is repeated a few times, put it in separate func
-    io.to(gameRoom).emit(
-      "on_game_update",
-      GameController.getRoomFromState(gameRoom)
-    );
+    GameController.emitUpateGame(io, gameRoom);
   }
 
   @OnMessage("update_local_counter")
@@ -96,11 +99,6 @@ export class GameController {
     );
 
     user.localCounter = user.localCounter + 1;
-    console.log(GameController.getRoomFromState(gameRoom));
-
-    io.to(gameRoom).emit(
-      "on_game_update",
-      GameController.getRoomFromState(gameRoom)
-    );
+    GameController.emitUpateGame(io, gameRoom);
   }
 }

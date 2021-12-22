@@ -12,16 +12,16 @@ import { GameController } from "./gameController";
 export class MainController {
   @OnConnect()
   public onConnection(
-    @ConnectedSocket() socket: Socket,
-    @SocketIO() io: Server
+    @ConnectedSocket() socket: Socket
+    // @SocketIO() io: Server
   ) {
     console.log("New Socket connected", socket.id);
   }
 
   @OnDisconnect()
   public async onDisconnection(
-    @ConnectedSocket() socket: Socket,
-    @SocketIO() io: Server
+    @ConnectedSocket() socket: Socket
+    // @SocketIO() io: Server
   ) {
     const connectionMessage =
       socket.data.username +

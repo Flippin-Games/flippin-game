@@ -48,13 +48,7 @@ export class RoomController {
 
       socket.emit("room_joined");
 
-      console.log(room, GameController.getRoomFromState(message.roomId));
-
-      // TODO: this is from game controller, should sit there as separate func
-      io.to(message.roomId).emit(
-        "on_game_update",
-        GameController.getRoomFromState(message.roomId)
-      );
+      GameController.emitUpateGame(io, message.roomId);
       console.log(
         "New User " + message.username + " joining room:",
         message.roomId
