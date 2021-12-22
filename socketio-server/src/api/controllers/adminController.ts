@@ -34,4 +34,24 @@ export class AdminController {
     console.log(GameController.gameState.rooms);
     socket.emit("created_room", room.id);
   }
+
+  @OnMessage("start_game")
+  public async startGame(
+    @SocketIO() io: Server,
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() roomId: string
+  ) {
+    console.log("Game started! in room: ", roomId);
+    const room = GameController.getRoomFromState(roomId);
+    if (room.users.length > 1) {
+      room.users[0].localCounter = 20;
+      room.started = true;
+      socket.emit("game_started");
+      GameController.emitUpateGame(io, roomId);
+    }
+
+    socket.emit("game_start_error", {
+      error: "Not enough players to start the game",
+    });
+  }
 }

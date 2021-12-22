@@ -34,6 +34,7 @@ class GameService {
     console.log("on game update");
   }
 
+  // TODO admin stuff could be separate service
   public async createRoom(socket: Socket): Promise<string> {
     return new Promise((resolve, reject) => {
       socket.emit("create_room");
@@ -41,6 +42,20 @@ class GameService {
         resolve(id);
       });
       socket.on("room_join_error", ({ error }) => {
+        reject(error);
+      });
+    });
+  }
+
+  public async startGame(socket: Socket, roomId: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      console.log(roomId);
+      socket.emit("start_game", roomId);
+      socket.on("game_started", () => {
+        resolve(true);
+        console.log("START GAME");
+      });
+      socket.on("game_start_error", ({ error }) => {
         reject(error);
       });
     });

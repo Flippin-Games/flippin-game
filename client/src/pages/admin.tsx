@@ -3,22 +3,37 @@ import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 
 function Admin() {
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState<string>("");
+  const [started, setStarted] = useState<boolean>(false);
+
   const connectSocket = async () => {
-    const socket = await socketService
-      .connect("http://localhost:9000/admin")
-      .catch((err) => {
-        console.log("Error: ", err);
-      });
+    await socketService.connect("http://localhost:9000/admin").catch((err) => {
+      console.log("Error: ", err);
+    });
   };
 
-  const handleClick = async (e: React.FormEvent) => {
+  const handleGenerateRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     const socket = socketService.socket;
     if (!socket) return;
 
+    // TODO: handle errors
     const room = await gameService.createRoom(socket);
     setCode(room);
+  };
+
+  const handleStartGame = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const socket = socketService.socket;
+    if (!socket) return;
+
+    const hasStarted = await gameService
+      .startGame(socket, code)
+      .catch((error) => alert(error));
+
+    if (hasStarted) {
+      setStarted(hasStarted);
+    }
   };
 
   useEffect(() => {
@@ -32,12 +47,17 @@ function Admin() {
         <div>
           <button
             type="submit"
-            onClick={handleClick}
+            onClick={handleGenerateRoom}
             disabled={code.length > 0}
           >
             Generate Room
           </button>
           <h2>{code}</h2>
+          {code && (
+            <button type="submit" onClick={handleStartGame} disabled={started}>
+              Start Game
+            </button>
+          )}
         </div>
       </main>
     </div>

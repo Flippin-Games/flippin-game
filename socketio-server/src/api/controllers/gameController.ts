@@ -16,6 +16,7 @@ export interface Iroom {
   id: string;
   users: IUser[];
   counter?: number;
+  started?: boolean; // TODO: shouldn't be optional
 }
 
 interface IGameState {
