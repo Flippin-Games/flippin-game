@@ -8,7 +8,7 @@ import {
 import { Server, Socket } from "socket.io";
 import { GameController, Iroom } from "./gameController";
 
-@SocketController("/admin")
+@SocketController()
 export class AdminController {
   @OnMessage("create_room")
   public async createRoom(

@@ -39,3 +39,14 @@ button {
   text-transform: uppercase;
   cursor: pointer;
 }
+
+/* // TODO temporrary fixes */
+nav {
+  background-color: rgba(230, 34, 71, 1);
+  color: white;
+  padding: 1rem;
+}
+
+nav h1 {
+  margin: 0;
+}

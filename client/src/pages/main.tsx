@@ -76,7 +76,9 @@ function Main() {
     <GameContext.Provider value={gameContextValue}>
       <div className="App">
         <header>
-          <h1>Hello Agile Penny 👋</h1>
+          <nav>
+            <h1>Hello Agile Penny 👋</h1>
+          </nav>
         </header>
         <main className="App-header">
           {/* TODO something feels wrong here with passing whole context here*/}

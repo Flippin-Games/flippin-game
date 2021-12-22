@@ -17,9 +17,9 @@ class GameService {
     });
   }
 
-  public async updateGame(socket: Socket) {
-    socket.emit("update_game");
-  }
+  // public async updateGame(socket: Socket) {
+  //   socket.emit("update_game");
+  // }
 
   public async updateLocalCounter(socket: Socket, username: string) {
     socket.emit("update_local_counter", { username });

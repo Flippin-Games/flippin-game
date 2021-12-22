@@ -20,8 +20,8 @@ export class MainController {
 
   @OnDisconnect()
   public async onDisconnection(
-    @ConnectedSocket() socket: Socket
-    // @SocketIO() io: Server
+    @ConnectedSocket() socket: Socket,
+    @SocketIO() io: Server
   ) {
     const connectionMessage =
       socket.data.username +
@@ -30,6 +30,7 @@ export class MainController {
       " and room: " +
       socket.data.roomId;
     GameController.removeUser(socket.data.roomId, socket.data.username);
+    GameController.emitUpateGame(io, socket.data.roomId);
     console.log(connectionMessage);
   }
 }
