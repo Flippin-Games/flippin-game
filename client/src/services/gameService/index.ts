@@ -60,6 +60,22 @@ class GameService {
       });
     });
   }
+
+  public async removeUser(
+    socket: Socket,
+    roomId: string,
+    username: string
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      socket.emit("remove_user", { roomId, username });
+      socket.on("user_removed", () => {
+        resolve(true);
+      });
+      socket.on("remove_user_error", ({ error }) => {
+        reject(error);
+      });
+    });
+  }
 }
 
 export default new GameService();

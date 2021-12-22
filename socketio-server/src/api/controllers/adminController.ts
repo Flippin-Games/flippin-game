@@ -42,15 +42,26 @@ export class AdminController {
   ) {
     console.log("Game started! in room: ", roomId);
     const room = GameController.getRoomFromState(roomId);
+
     if (room.users.length > 1) {
       room.users[0].localCounter = 20;
       room.started = true;
       socket.emit("game_started");
       GameController.emitUpateGame(io, roomId);
+    } else {
+      socket.emit("game_start_error", {
+        error: "Not enough players to start the game",
+      });
     }
+  }
 
-    socket.emit("game_start_error", {
-      error: "Not enough players to start the game",
-    });
+  @OnMessage("remove_user")
+  public async removeUser(
+    @SocketIO() io: Server,
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() message: any
+  ) {
+    GameController.removeUser(message.roomId, message.username);
+    GameController.emitUpateGame(io, message.roomId);
   }
 }

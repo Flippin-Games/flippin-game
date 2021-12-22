@@ -46,8 +46,16 @@ function Admin() {
     }
   };
 
-  const handleRemove = () => {
-    console.log("Remove user");
+  // using any as I couldn't access dataset
+  const handleRemove = (e: any) => {
+    e.preventDefault();
+    if (socketService.socket) {
+      gameService.removeUser(
+        socketService.socket,
+        code,
+        e.target.dataset.username
+      );
+    }
   };
 
   // TODO fix any
@@ -86,8 +94,11 @@ function Admin() {
           {users && (
             <ol>
               {users.map((user) => (
-                <li>
-                  {user.username} <button onClick={handleRemove}>Remove</button>
+                <li key={user.username}>
+                  {user.username}
+                  <button data-username={user.username} onClick={handleRemove}>
+                    Remove
+                  </button>
                 </li>
               ))}
             </ol>
