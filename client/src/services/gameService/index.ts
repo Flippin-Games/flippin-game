@@ -18,7 +18,6 @@ class GameService {
   }
 
   public async updateGame(socket: Socket) {
-    console.log("UPDATE GAME");
     socket.emit("update_game");
   }
 
@@ -27,7 +26,6 @@ class GameService {
   }
 
   public async takeCoins(socket: Socket, from: string, to: string) {
-    console.log(from, to);
     socket.emit("take_coins", { from, to });
   }
 
@@ -36,7 +34,6 @@ class GameService {
     socket.on("on_game_update", (state) => {
       listener(state);
     });
-    console.log("on game update");
   }
 
   // TODO admin stuff could be separate service
@@ -54,11 +51,9 @@ class GameService {
 
   public async startGame(socket: Socket, roomId: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      console.log(roomId);
       socket.emit("start_game", roomId);
       socket.on("game_started", () => {
         resolve(true);
-        console.log("START GAME");
       });
       socket.on("game_start_error", ({ error }) => {
         reject(error);
