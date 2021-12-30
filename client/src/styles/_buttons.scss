@@ -1,0 +1,93 @@
+@mixin btn(
+  $bg,
+  $border,
+  $bottom,
+  $shadow,
+  $hover,
+  $hover-border,
+  $hover-shadow
+) {
+  background-color: $bg;
+  border-radius: 0.75em;
+  border: 2px solid $border;
+  color: $hover;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  letter-spacing: 2px;
+  padding: 1.25em 2em;
+  text-transform: uppercase;
+  transform-style: preserve-3d;
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+    background 150ms cubic-bezier(0, 0, 0.58, 1);
+  margin: 1rem;
+
+  &::before {
+    background: $bottom;
+    border-radius: inherit;
+    bottom: 0;
+    box-shadow: 0 0 0 2px $border, 0 0.625em 0 0 $shadow;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate3d(0, 0.75em, -1em);
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+      box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+    width: 100%;
+  }
+
+  &:hover:not([disabled]) {
+    background-color: $hover;
+    color: $bg;
+    transform: translate(0, 0.25em);
+    &::before {
+      box-shadow: 0 0 0 2px $hover-border, 0 0.5em 0 0 $hover-shadow;
+      transform: translate3d(0, 0.5em, -1em);
+    }
+  }
+
+  &:active {
+    transform: translate(0em, 0.75em);
+    &::before {
+      box-shadow: 0 0 0 2px $hover-border, 0 0.5em 0 0 $hover-shadow;
+      transform: translate3d(0, 0.5em, -1em);
+    }
+  }
+
+  &[disabled] {
+    background-color: var(--text);
+    color: var(--light-grey);
+
+    &::before {
+      background: var(--light-grey);
+      box-shadow: 0 0 0 2px var(--text), 0 0.5em 0 0 var(--text);
+    }
+  }
+}
+
+.btn-primary {
+  @include btn(
+    var(--background),
+    var(--primary-dark),
+    var(--primary-light),
+    var(--outline),
+    var(--primary),
+    var(--secondary-dark),
+    var(--tertiary)
+  );
+}
+
+.btn-secondary {
+  @include btn(
+    var(--primary-light),
+    var(--primary-dark),
+    var(--primary),
+    var(--outline),
+    var(--primary-dark),
+    var(--secondary-dark),
+    var(--tertiary)
+  );
+}

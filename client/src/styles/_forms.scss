@@ -1,0 +1,28 @@
+button,
+input {
+  padding: 1rem;
+}
+
+.formItem {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  background-color: var(--background);
+  border-radius: 0.75em;
+  border: 2px solid var(--outline);
+  color: var(--primary);
+  font-family: var(--font-primary);
+  letter-spacing: 1px;
+  font-size: 1rem;
+}
+
+label {
+  margin: 1rem;
+}
+
+form {
+  @include card;
+}

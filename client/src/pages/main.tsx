@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import Game from "../components/game/game";
 import JoinRoom from "../components/joinRoom/joinRoom";
+import Header from "../components/header/header";
 import GameContext, { IGameContextProps } from "../gameContext";
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
@@ -86,11 +87,7 @@ function Main() {
   return (
     <GameContext.Provider value={gameContextValue}>
       <div className="App">
-        <header>
-          <nav>
-            <h1>Hello Agile Penny 👋</h1>
-          </nav>
-        </header>
+        <Header />
         <main className="App-header">
           {/* TODO something feels wrong here with passing whole context here*/}
           {!isInRoom ? (

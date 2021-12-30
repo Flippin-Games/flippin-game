@@ -41,18 +41,25 @@ function JoinRoom(props: IJoinRoomProps) {
   return (
     <div>
       <form onSubmit={joinRoom}>
-        <h2>Enter room id:</h2>
-        <input
-          placeholder="Username"
-          value={username}
-          onChange={handleUsernameChange}
-        />
-        <input
-          placeholder="Room Id To Join Game"
-          value={roomName}
-          onChange={handleRoomNameChange}
-        />
-        <button type="submit" disabled={isJoining}>
+        <div className="formItem">
+          <label htmlFor="name">Name</label>
+          <input
+            id="name"
+            placeholder="Username"
+            value={username}
+            onChange={handleUsernameChange}
+          />
+        </div>
+        <div className="formItem">
+          <label htmlFor="room">Room ID</label>
+          <input
+            id="room"
+            placeholder="Room Id To Join Game"
+            value={roomName}
+            onChange={handleRoomNameChange}
+          />
+        </div>
+        <button type="submit" disabled={isJoining} className="btn btn-primary">
           {isJoining ? "Joining..." : "Join"}
         </button>
       </form>
