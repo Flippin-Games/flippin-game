@@ -43,6 +43,13 @@ function Admin() {
     }
   };
 
+  const handleEndGame = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (code && socketService.socket) {
+      gameService.endGame(socketService.socket, code);
+    }
+  };
+
   const handleGameUpdate = () => {
     if (socketService.socket) {
       gameService.onGameUpdate(socketService.socket, updateContext);
@@ -128,6 +135,16 @@ function Admin() {
                 </button>
               </form>
             </>
+          )}
+
+          {started && (
+            <button
+              type="submit"
+              onClick={handleEndGame}
+              className="btn btn-primary"
+            >
+              End Game
+            </button>
           )}
 
           {users && (

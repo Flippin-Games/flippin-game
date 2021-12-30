@@ -32,6 +32,7 @@ class GameService {
   // TODO fix any type
   public async onGameUpdate(socket: Socket, listener: (state: any) => void) {
     socket.on("on_game_update", (state) => {
+      console.log("hello");
       listener(state);
     });
   }
@@ -62,6 +63,18 @@ class GameService {
       socket.on("game_start_error", ({ error }) => {
         reject(error);
       });
+    });
+  }
+
+  public async endGame(socket: Socket, roomId: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      socket.emit("end_game", { roomId });
+      // socket.on("game_started", () => {
+      //   resolve(true);
+      // });
+      // socket.on("game_start_error", ({ error }) => {
+      //   reject(error);
+      // });
     });
   }
 

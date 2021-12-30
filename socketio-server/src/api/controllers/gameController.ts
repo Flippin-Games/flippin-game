@@ -6,6 +6,7 @@ import {
   SocketIO,
 } from "socket-controllers";
 import { Server, Socket } from "socket.io";
+import Room from "../../modules/room";
 
 // TODO move interface to separate files
 interface IUser {
@@ -14,16 +15,8 @@ interface IUser {
   flipped: number;
 }
 
-export interface Iroom {
-  id: string;
-  users: IUser[];
-  settings: { autoMoveCoins: boolean; batchSize: number }; // TODO
-  counter?: number;
-  started?: boolean; // TODO: shouldn't be optional
-}
-
 interface IGameState {
-  rooms: Iroom[];
+  rooms: Room[];
 }
 @SocketController()
 export class GameController {
@@ -66,15 +59,23 @@ export class GameController {
     return room.counter;
   }
 
-  // public addUser(roomId) { }
   static removeUser(roomId: string, username: string): void {
     const room = GameController.getRoomFromState(roomId);
 
     room.users = room.users.filter((user) => user.username !== username);
   }
 
+  static stopTimer = (roomId: string): void => {
+    const room = GameController.getRoomFromState(roomId);
+
+    if (room.timer) {
+      console.log("STOPPING TIME AT ", room.endTime);
+      room.clearInterval();
+    }
+  };
+
   static emitUpateGame(@SocketIO() io: Server, gameRoom: string): void {
-    console.log(GameController.getRoomFromState(gameRoom));
+    console.log("EMIT UPDATE GAME");
     io.to(gameRoom).emit(
       "on_game_update",
       GameController.getRoomFromState(gameRoom)
@@ -101,12 +102,12 @@ export class GameController {
   public async updateGame(
     @SocketIO() io: Server,
     @ConnectedSocket() socket: Socket
-    // @MessageBody() message: any
   ) {
-    const gameRoom = this.getSocketGameRoom(socket);
-    this.updateCounter(gameRoom);
+    const gameRoomId = this.getSocketGameRoom(socket);
+    const room = GameController.getRoomFromState(gameRoomId);
+    room.updateCounter();
 
-    GameController.emitUpateGame(io, gameRoom);
+    // GameController.emitUpateGame(io, gameRoomId);
   }
 
   @OnMessage("update_local_counter")
@@ -131,7 +132,9 @@ export class GameController {
         (user) => user.username === message.username
       );
       const nextUser = roomFromState.users[currentUserIndex + 1];
-      this.updateCoinsTaken(gameRoom, message.username, nextUser.username);
+      if (nextUser) {
+        this.updateCoinsTaken(gameRoom, message.username, nextUser.username);
+      }
     }
 
     GameController.emitUpateGame(io, gameRoom);

@@ -6,7 +6,8 @@ import {
   SocketIO,
 } from "socket-controllers";
 import { Server, Socket } from "socket.io";
-import { GameController, Iroom } from "./gameController";
+import { GameController } from "./gameController";
+import Room from "../../modules/room";
 
 @SocketController()
 export class AdminController {
@@ -24,12 +25,10 @@ export class AdminController {
 
     // TODO check if toom already exists, move logic from join_room ?
     const roomId = getRandomInt(1000, 9999);
-    const room: Iroom = {
-      id: roomId.toString(),
-      users: [],
-      counter: 0,
-      settings: { batchSize: 20, autoMoveCoins: true },
-    };
+    const room = new Room(roomId.toString(), [], 0, {
+      batchSize: 20,
+      autoMoveCoins: true,
+    });
     await socket.join(room.id);
     GameController.gameState.rooms.push(room);
     socket.emit("created_room", room.id);
@@ -40,7 +39,6 @@ export class AdminController {
     @SocketIO() io: Server,
     @ConnectedSocket() socket: Socket,
     @MessageBody() message: any
-    // @MessageBody() settings: any
   ) {
     console.log("Game started! in room: ", message.roomId);
 
@@ -52,6 +50,7 @@ export class AdminController {
       room.started = true;
       socket.emit("game_started");
       GameController.emitUpateGame(io, message.roomId);
+      room.startTimer(io);
     } else {
       socket.emit("game_start_error", {
         error: "Not enough players to start the game",
@@ -59,12 +58,19 @@ export class AdminController {
     }
   }
 
-  @OnMessage("remove_user")
-  public async removeUser(
-    @SocketIO() io: Server,
-    @ConnectedSocket() socket: Socket,
+  @OnMessage("end_game")
+  public async endGame(
+    // @SocketIO() io: Server,
+    // @ConnectedSocket() socket: Socket,
     @MessageBody() message: any
   ) {
+    console.log("Game ended! in room: ", message.roomId);
+
+    GameController.stopTimer(message.roomId);
+  }
+
+  @OnMessage("remove_user")
+  public async removeUser(@SocketIO() io: Server, @MessageBody() message: any) {
     GameController.removeUser(message.roomId, message.username);
     GameController.emitUpateGame(io, message.roomId);
   }
