@@ -1,8 +1,8 @@
-@mixin card {
+@mixin card($padding: 4rem) {
   background-color: var(--background);
   border-radius: 0.75em;
   border: 2px solid var(--outline);
-  padding: 4rem;
+  padding: $padding;
   position: relative;
 
   &::before {

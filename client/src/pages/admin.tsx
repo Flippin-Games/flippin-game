@@ -88,37 +88,46 @@ function Admin() {
       </nav>
       <main className="App-header">
         <div>
-          <button
-            type="submit"
-            onClick={handleGenerateRoom}
-            disabled={code.length > 0}
-          >
-            Generate Room
-          </button>
-          <h2>{code}</h2>
+          {!code && code.length === 0 && (
+            <button
+              type="submit"
+              onClick={handleGenerateRoom}
+              disabled={code.length > 0}
+              className="btn btn-primary"
+            >
+              Generate Room
+            </button>
+          )}
           {code && (
-            // TODO
-            <form onSubmit={handleStartGame}>
-              <div>
-                <label>Enter batch size:</label>
-                <input
-                  type="number"
-                  value={batchSize}
-                  onChange={handleBatchSize}
-                />
-              </div>
-              <div>
-                <label>Auto move coins to next user:</label>
-                <input
-                  type="checkbox"
-                  checked={autoMoveCoins}
-                  onChange={handleAutoMoveCoins}
-                />
-              </div>
-              <button type="submit" disabled={started}>
-                Start Game
-              </button>
-            </form>
+            <>
+              <h2>Your room ID: {code}</h2>
+              {/* // TODO */}
+              <form onSubmit={handleStartGame}>
+                <div>
+                  <label>Enter batch size:</label>
+                  <input
+                    type="number"
+                    value={batchSize}
+                    onChange={handleBatchSize}
+                  />
+                </div>
+                <div>
+                  <label>Auto move coins to next user:</label>
+                  <input
+                    type="checkbox"
+                    checked={autoMoveCoins}
+                    onChange={handleAutoMoveCoins}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={started}
+                  className="btn btn-primary"
+                >
+                  Start Game
+                </button>
+              </form>
+            </>
           )}
 
           {users && (
@@ -126,7 +135,11 @@ function Admin() {
               {users.map((user) => (
                 <li key={user.username}>
                   {user.username}
-                  <button data-username={user.username} onClick={handleRemove}>
+                  <button
+                    data-username={user.username}
+                    onClick={handleRemove}
+                    className="btn btn-primary"
+                  >
                     Remove
                   </button>
                 </li>

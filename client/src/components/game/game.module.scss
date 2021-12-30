@@ -1,0 +1,7 @@
+@import "../../styles/_mixins.scss";
+
+.wrapper {
+  @include card(2rem);
+
+  margin: 1rem;
+}
