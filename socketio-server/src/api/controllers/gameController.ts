@@ -93,16 +93,24 @@ export class GameController {
     const room = GameController.getRoomFromState(roomId);
     const lastUser = room.users[room.users.length - 1];
 
-    return lastUser.flipped === room.settings.batchSize;
+    return lastUser.flipped === room.settings.startAmount;
   }
 
   // TODO should this be async?
   public updateCoinsTaken(roomId, from, to): void {
     // TODO error handle and checks
+
+    const room = GameController.getRoomFromState(roomId);
     const userToTakeFrom = GameController.getUser(roomId, from);
     const userToGiveTo = GameController.getUser(roomId, to);
-    userToTakeFrom.flipped = userToTakeFrom.flipped - 5;
-    userToGiveTo.localCounter = userToGiveTo.localCounter + 5;
+
+    console.log(
+      typeof userToGiveTo.localCounter,
+      typeof room.settings.batchSize
+    );
+    userToTakeFrom.flipped = userToTakeFrom.flipped - room.settings.batchSize;
+    userToGiveTo.localCounter =
+      userToGiveTo.localCounter + room.settings.batchSize;
   }
 
   @OnMessage("update_game")
@@ -133,7 +141,10 @@ export class GameController {
 
     const roomFromState = GameController.getRoomFromState(gameRoom);
     // TODO create getter for game state
-    if (user.flipped >= 5 && roomFromState.settings.autoMoveCoins) {
+    if (
+      user.flipped >= roomFromState.settings.batchSize &&
+      roomFromState.settings.autoMoveCoins
+    ) {
       // get next user
       const currentUserIndex = roomFromState.users.findIndex(
         (user) => user.username === message.username

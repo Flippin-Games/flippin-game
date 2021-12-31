@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
-import { io, Socket } from "socket.io-client";
 
 function Admin() {
   const [code, setCode] = useState<string>("");
   const [started, setStarted] = useState<boolean>(false);
   const [users, setUsers] = useState<any[]>([]);
-  const [batchSize, setBatchSize] = useState<number>(20);
-  const [autoMoveCoins, setAutoMoveCoins] = useState<boolean>(true);
+  const [startAmount, setStartAmount] = useState<number>(20);
+  const [batchSize, setBatchSize] = useState<number>(5);
+  const [autoMoveCoins, setAutoMoveCoins] = useState<boolean>(false);
 
   const connectSocket = async () => {
     await socketService
@@ -31,7 +31,7 @@ function Admin() {
   const handleStartGame = async (e: React.FormEvent) => {
     e.preventDefault();
     const socket = socketService.socket;
-    const settings = { batchSize, autoMoveCoins };
+    const settings = { startAmount, autoMoveCoins, batchSize };
     if (!socket) return;
 
     const hasStarted = await gameService
@@ -74,8 +74,13 @@ function Admin() {
   };
 
   const handleBatchSize = (e: any) => {
-    setBatchSize(e.target.value);
+    setBatchSize(parseInt(e.target.value));
   };
+
+  const handleStartAmount = (e: any) => {
+    setStartAmount(parseInt(e.target.value));
+  };
+
   const handleAutoMoveCoins = (e: any) => {
     setAutoMoveCoins(!autoMoveCoins);
   };
@@ -108,19 +113,34 @@ function Admin() {
           {code && (
             <>
               <h2>Your room ID: {code}</h2>
-              {/* // TODO */}
+              {/* // TODO form as separate component, card as it's wrapper */}
               <form onSubmit={handleStartGame}>
                 <div>
-                  <label>Enter batch size:</label>
+                  <label htmlFor="startAmount">
+                    Enter start amount of coins:
+                  </label>
                   <input
+                    id="startAmount"
+                    type="number"
+                    value={startAmount}
+                    onChange={handleStartAmount}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="batchSize">Enter start batch size:</label>
+                  <input
+                    id="batchSize"
                     type="number"
                     value={batchSize}
                     onChange={handleBatchSize}
                   />
                 </div>
                 <div>
-                  <label>Auto move coins to next user:</label>
+                  <label htmlFor="autoMoveCoins">
+                    Auto move coins to next user:
+                  </label>
                   <input
+                    id="autoMoveCoins"
                     type="checkbox"
                     checked={autoMoveCoins}
                     onChange={handleAutoMoveCoins}

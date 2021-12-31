@@ -45,11 +45,12 @@ function Game(props: IGame) {
       {/* TODO take this out, it looks like a mess */}
       {props.previousUser?.username && props.activeUser && (
         <>
-          {props.previousUser?.flipped >= 5 && !settings.autoMoveCoins && (
-            <button onClick={handleTakeCoins} className="btn btn-primary">
-              Take coins from {props.previousUser.username}
-            </button>
-          )}
+          {props.previousUser?.flipped >= settings.batchSize &&
+            !settings.autoMoveCoins && (
+              <button onClick={handleTakeCoins} className="btn btn-primary">
+                Take coins from {props.previousUser.username}
+              </button>
+            )}
         </>
       )}
       <hr />

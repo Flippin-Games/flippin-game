@@ -26,7 +26,7 @@ export class AdminController {
     // TODO check if toom already exists, move logic from join_room ?
     const roomId = getRandomInt(1000, 9999);
     const room = new Room(roomId.toString(), [], 0, {
-      batchSize: 20,
+      startAmount: 20,
       autoMoveCoins: true,
     });
     await socket.join(room.id);
@@ -46,7 +46,7 @@ export class AdminController {
 
     if (room.users.length > 1) {
       room.settings = message.settings;
-      room.users[0].localCounter = message.settings.batchSize || 20;
+      room.users[0].localCounter = message.settings.startAmount || 20;
       room.started = true;
       socket.emit("game_started");
       GameController.emitUpateGame(io, message.roomId);
