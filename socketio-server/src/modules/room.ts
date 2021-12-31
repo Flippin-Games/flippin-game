@@ -13,7 +13,7 @@ class Room {
   counter?: number;
   started?: boolean; // TODO: shouldn't be optional
   startTime?: number;
-  endTime?: number;
+  time?: number;
   timer: any; // TODO
 
   constructor(id, users, counter, settings) {
@@ -22,7 +22,7 @@ class Room {
     this.counter = counter;
     this.settings = settings;
     this.startTime = 0;
-    this.endTime = 0;
+    this.time = 0;
     this.timer = null;
   }
 
@@ -31,7 +31,7 @@ class Room {
     console.log("==== START TIMER ====");
     this.timer = setInterval(
       function () {
-        this.endTime = Date.now();
+        this.time = Date.now() - this.startTime;
         GameController.emitUpateGame(io, this.id);
       }.bind(this),
       200

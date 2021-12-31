@@ -8,10 +8,12 @@ import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 
 function Main() {
+  // TODO: use reducer ???
   const [isInRoom, setIsInRoom] = useState(false);
   const [counter, setCounter] = useState<number>(0);
   const [username, setUsername] = useState("");
   const [users, setUsers] = useState([]);
+  const [time, setTime] = useState("");
   const [localCounter, setLocalCounter] = useState<number>(0);
   const [previousUser, setPerviousUser] = useState({}); // TODO do i need it in context?
   const [settings, setSettings] = useState({}); // TODO do i need it in context?
@@ -42,6 +44,8 @@ function Main() {
     setLocalCounter,
     settings,
     setSettings,
+    time,
+    setTime,
   };
 
   const handleGameUpdate = () => {
@@ -55,6 +59,8 @@ function Main() {
     setUsers(state.users);
     setCounter(state.counter);
     setSettings(state.settings);
+    const formatTime = new Date(state.time).toISOString().substr(11, 8);
+    setTime(formatTime);
   };
 
   useEffect(() => {
@@ -65,7 +71,8 @@ function Main() {
   }, []);
 
   useEffect(() => {
-    console.log(gameContextValue);
+    // console.log(gameContextValue);
+    console.log(gameContextValue?.time);
     // TODO return () => {
     //   cleanup
     // }
@@ -88,6 +95,7 @@ function Main() {
     <GameContext.Provider value={gameContextValue}>
       <div className="App">
         <Header />
+        {gameContextValue?.time?.length && <h2>{gameContextValue?.time}</h2>}
         <main className="App-header">
           {/* TODO something feels wrong here with passing whole context here*/}
           {!isInRoom ? (

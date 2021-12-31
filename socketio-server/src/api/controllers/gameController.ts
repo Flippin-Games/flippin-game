@@ -69,7 +69,7 @@ export class GameController {
     const room = GameController.getRoomFromState(roomId);
 
     if (room.timer) {
-      console.log("STOPPING TIME AT ", room.endTime);
+      console.log("STOPPING TIME AT ", room.time);
       room.clearInterval();
     }
   };
