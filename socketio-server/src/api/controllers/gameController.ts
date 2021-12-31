@@ -89,6 +89,13 @@ export class GameController {
     return room.counter;
   }
 
+  static didGameEnd(roomId: string): boolean {
+    const room = GameController.getRoomFromState(roomId);
+    const lastUser = room.users[room.users.length - 1];
+
+    return lastUser.flipped === room.settings.batchSize;
+  }
+
   // TODO should this be async?
   public updateCoinsTaken(roomId, from, to): void {
     // TODO error handle and checks

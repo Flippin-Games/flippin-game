@@ -133,18 +133,18 @@ function Admin() {
                 >
                   Start Game
                 </button>
+
+                {started && (
+                  <button
+                    type="submit"
+                    onClick={handleEndGame}
+                    className="btn btn-primary"
+                  >
+                    End Game
+                  </button>
+                )}
               </form>
             </>
-          )}
-
-          {started && (
-            <button
-              type="submit"
-              onClick={handleEndGame}
-              className="btn btn-primary"
-            >
-              End Game
-            </button>
           )}
 
           {users && (

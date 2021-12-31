@@ -32,6 +32,12 @@ class Room {
     this.timer = setInterval(
       function () {
         this.time = Date.now() - this.startTime;
+
+        if (GameController.didGameEnd(this.id)) {
+          GameController.stopTimer(this.id);
+          return;
+        }
+
         GameController.emitUpateGame(io, this.id);
       }.bind(this),
       200
