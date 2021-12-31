@@ -7,6 +7,9 @@ import GameContext, { IGameContextProps } from "../gameContext";
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 
+// TODO: idea, it should take time to flip the coin - admin can set time
+// TODO: fix - att he moment batch size must be even! it must be dividable
+
 function Main() {
   // TODO: use reducer ???
   const [isInRoom, setIsInRoom] = useState(false);
@@ -95,7 +98,9 @@ function Main() {
     <GameContext.Provider value={gameContextValue}>
       <div className="App">
         <Header />
-        {gameContextValue?.time?.length && <h2>{gameContextValue?.time}</h2>}
+        {gameContextValue?.time?.length ? (
+          <h2>{gameContextValue?.time}</h2>
+        ) : null}
         <main className="App-header">
           {/* TODO something feels wrong here with passing whole context here*/}
           {!isInRoom ? (
