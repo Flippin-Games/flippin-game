@@ -109,18 +109,6 @@ export class GameController {
       userToGiveTo.localCounter + room.settings.batchSize;
   }
 
-  @OnMessage("update_game")
-  public async updateGame(
-    @SocketIO() io: Server,
-    @ConnectedSocket() socket: Socket
-  ) {
-    const gameRoomId = this.getSocketGameRoom(socket);
-    const room = GameController.getRoomFromState(gameRoomId);
-    room.updateCounter();
-
-    // GameController.emitUpateGame(io, gameRoomId);
-  }
-
   @OnMessage("update_local_counter")
   public async updateLocalCounter(
     @SocketIO() io: Server,
@@ -129,23 +117,26 @@ export class GameController {
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
     const user = GameController.getUser(gameRoom, message.username);
+    const roomFromState = GameController.getRoomFromState(gameRoom);
+    const currentUserIndex = roomFromState.users.findIndex(
+      (user) => user.username === message.username
+    );
+
+    if (currentUserIndex === 0 && roomFromState.started) {
+      roomFromState.startTimer(io);
+    }
 
     if (user.localCounter > 0) {
       user.localCounter = user.localCounter - 1;
       user.flipped = user.flipped + 1;
     }
 
-    const roomFromState = GameController.getRoomFromState(gameRoom);
     // TODO create getter for game state
     if (
-      // TODO get rid of parse int - front could send number
       user.flipped >= roomFromState.settings.batchSize &&
       roomFromState.settings.autoMoveCoins
     ) {
       // get next user
-      const currentUserIndex = roomFromState.users.findIndex(
-        (user) => user.username === message.username
-      );
       const nextUser = roomFromState.users[currentUserIndex + 1];
       if (nextUser) {
         this.updateCoinsTaken(gameRoom, message.username, nextUser.username);

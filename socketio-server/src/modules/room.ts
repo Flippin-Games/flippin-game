@@ -49,10 +49,6 @@ class Room {
   };
 
   clearInterval = () => clearInterval(this.timer);
-
-  updateCounter(): void {
-    this.counter = this.counter + 1;
-  }
 }
 
 export default Room;
