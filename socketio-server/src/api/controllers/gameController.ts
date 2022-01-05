@@ -93,7 +93,8 @@ export class GameController {
     const room = GameController.getRoomFromState(roomId);
     const lastUser = room.users[room.users.length - 1];
 
-    return lastUser.flipped === room.settings.startAmount;
+    // TODO: again issue with types, had to change === to ==
+    return lastUser.flipped == room.settings.startAmount;
   }
 
   // TODO should this be async?
@@ -108,9 +109,12 @@ export class GameController {
       typeof userToGiveTo.localCounter,
       typeof room.settings.batchSize
     );
-    userToTakeFrom.flipped = userToTakeFrom.flipped - room.settings.batchSize;
+
+    // TODO
+    userToTakeFrom.flipped =
+      userToTakeFrom.flipped - parseInt(room.settings.batchSize);
     userToGiveTo.localCounter =
-      userToGiveTo.localCounter + room.settings.batchSize;
+      userToGiveTo.localCounter + parseInt(room.settings.batchSize);
   }
 
   @OnMessage("update_game")
@@ -142,7 +146,8 @@ export class GameController {
     const roomFromState = GameController.getRoomFromState(gameRoom);
     // TODO create getter for game state
     if (
-      user.flipped >= roomFromState.settings.batchSize &&
+      // TODO get rid of parse int - front could send number
+      user.flipped >= parseInt(roomFromState.settings.batchSize) &&
       roomFromState.settings.autoMoveCoins
     ) {
       // get next user

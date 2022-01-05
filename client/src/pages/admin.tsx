@@ -1,14 +1,31 @@
 import { useEffect, useState } from "react";
+
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 
+import Form from "../components/form/form";
+import FormField from "../components/form/formField/formField";
+
+const initialFormState = {
+  startAmount: 20,
+  batchSize: 5,
+  autoMoveCoins: false,
+};
+
+// TODO: make sure start amount and batch size come out as numbers!
+
 function Admin() {
-  const [code, setCode] = useState<string>("");
+  const [formValues, setFormValues] = useState(initialFormState);
+  const [roomId, setRoomId] = useState<string>("");
   const [started, setStarted] = useState<boolean>(false);
   const [users, setUsers] = useState<any[]>([]);
-  const [startAmount, setStartAmount] = useState<number>(20);
-  const [batchSize, setBatchSize] = useState<number>(5);
-  const [autoMoveCoins, setAutoMoveCoins] = useState<boolean>(false);
+
+  const handleChange = (e: any) => {
+    setFormValues({
+      ...formValues,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const connectSocket = async () => {
     await socketService
@@ -25,17 +42,17 @@ function Admin() {
 
     // TODO: handle errors
     const room = await gameService.createRoom(socket);
-    setCode(room);
+    setRoomId(room);
   };
 
   const handleStartGame = async (e: React.FormEvent) => {
     e.preventDefault();
     const socket = socketService.socket;
-    const settings = { startAmount, autoMoveCoins, batchSize };
+    const settings = formValues;
     if (!socket) return;
 
     const hasStarted = await gameService
-      .startGame(socket, code, settings)
+      .startGame(socket, roomId, settings)
       .catch((error) => alert(error));
 
     if (hasStarted) {
@@ -45,8 +62,8 @@ function Admin() {
 
   const handleEndGame = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (code && socketService.socket) {
-      gameService.endGame(socketService.socket, code);
+    if (roomId && socketService.socket) {
+      gameService.endGame(socketService.socket, roomId);
     }
   };
 
@@ -62,7 +79,7 @@ function Admin() {
     if (socketService.socket) {
       gameService.removeUser(
         socketService.socket,
-        code,
+        roomId,
         e.target.dataset.username
       );
     }
@@ -71,18 +88,6 @@ function Admin() {
   // TODO fix any
   const updateContext = (state: any) => {
     setUsers(state.users);
-  };
-
-  const handleBatchSize = (e: any) => {
-    setBatchSize(parseInt(e.target.value));
-  };
-
-  const handleStartAmount = (e: any) => {
-    setStartAmount(parseInt(e.target.value));
-  };
-
-  const handleAutoMoveCoins = (e: any) => {
-    setAutoMoveCoins(!autoMoveCoins);
   };
 
   useEffect(() => {
@@ -100,52 +105,48 @@ function Admin() {
       </nav>
       <main className="App-header">
         <div>
-          {!code && code.length === 0 && (
+          {!roomId && roomId.length === 0 && (
             <button
               type="submit"
               onClick={handleGenerateRoom}
-              disabled={code.length > 0}
+              disabled={roomId.length > 0}
               className="btn btn-primary"
             >
               Generate Room
             </button>
           )}
-          {code && (
+          {roomId && (
             <>
-              <h2>Your room ID: {code}</h2>
-              {/* // TODO form as separate component, card as it's wrapper */}
-              <form onSubmit={handleStartGame}>
-                <div>
-                  <label htmlFor="startAmount">
-                    Enter start amount of coins:
-                  </label>
-                  <input
-                    id="startAmount"
-                    type="number"
-                    value={startAmount}
-                    onChange={handleStartAmount}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="batchSize">Enter start batch size:</label>
-                  <input
-                    id="batchSize"
-                    type="number"
-                    value={batchSize}
-                    onChange={handleBatchSize}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="autoMoveCoins">
-                    Auto move coins to next user:
-                  </label>
-                  <input
-                    id="autoMoveCoins"
-                    type="checkbox"
-                    checked={autoMoveCoins}
-                    onChange={handleAutoMoveCoins}
-                  />
-                </div>
+              <h2>Your room ID: {roomId}</h2>
+              <Form onSubmit={handleStartGame} errorMessage="">
+                <FormField
+                  id="startAmount"
+                  type="number"
+                  value={formValues.startAmount}
+                  onChange={handleChange}
+                  label="Enter start amount of coins"
+                  placeholder=""
+                  required
+                />
+                <FormField
+                  id="batchSize"
+                  type="number"
+                  value={formValues.batchSize}
+                  onChange={handleChange}
+                  label="Enter start batch size"
+                  placeholder=""
+                  required
+                />
+                <FormField
+                  id="autoMoveCoins"
+                  type="checkbox"
+                  checked={formValues.autoMoveCoins}
+                  onChange={handleChange}
+                  label="Auto move coins to next user"
+                  placeholder=""
+                  required={false}
+                />
+
                 <button
                   type="submit"
                   disabled={started}
@@ -163,7 +164,7 @@ function Admin() {
                     End Game
                   </button>
                 )}
-              </form>
+              </Form>
             </>
           )}
 

@@ -9,7 +9,11 @@ interface IUser {
 class Room {
   id: string;
   users: IUser[];
-  settings: { autoMoveCoins: boolean; startAmount: number; batchSize: number }; // TODO
+  settings: {
+    autoMoveCoins: boolean;
+    startAmount: number;
+    batchSize: string;
+  }; // TODO
   counter?: number;
   started?: boolean; // TODO: shouldn't be optional
   startTime?: number;
