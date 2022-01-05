@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import SettingsForm from "../components/settingsForm/settingsForm";
 
 import gameService from "../services/gameService";
@@ -10,16 +10,40 @@ const initialFormState = {
   autoMoveCoins: false,
 };
 
+const formReducer = (state: any, action: any) => {
+  const { data } = action;
+
+  switch (action.type) {
+    case "number":
+      return {
+        ...state,
+        [data.name]: parseInt(data.value),
+      };
+    case "checkbox":
+      return {
+        ...state,
+        [data.name]: !state[data.name],
+      };
+    case "text":
+      return {
+        ...state,
+        [data.name]: data.value,
+      };
+    default:
+      return state;
+  }
+};
+
 function Admin() {
   const [roomId, setRoomId] = useState<string>("");
   const [started, setStarted] = useState<boolean>(false);
   const [users, setUsers] = useState<any[]>([]);
-  const [formValues, setFormValues] = useState(initialFormState);
+  const [formValues, dispatch] = useReducer(formReducer, initialFormState);
 
   const handleChange = (e: any) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.value,
+    dispatch({
+      type: e.target.type,
+      data: { value: e.target.value, name: e.target.name },
     });
   };
 
