@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
+import SettingsForm from "../components/settingsForm/settingsForm";
 
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
-
-import Form from "../components/form/form";
-import FormField from "../components/form/formField/formField";
 
 const initialFormState = {
   startAmount: 20,
@@ -12,13 +10,11 @@ const initialFormState = {
   autoMoveCoins: false,
 };
 
-// TODO: make sure start amount and batch size come out as numbers!
-
 function Admin() {
-  const [formValues, setFormValues] = useState(initialFormState);
   const [roomId, setRoomId] = useState<string>("");
   const [started, setStarted] = useState<boolean>(false);
   const [users, setUsers] = useState<any[]>([]);
+  const [formValues, setFormValues] = useState(initialFormState);
 
   const handleChange = (e: any) => {
     setFormValues({
@@ -115,57 +111,27 @@ function Admin() {
               Generate Room
             </button>
           )}
+
           {roomId && (
             <>
               <h2>Your room ID: {roomId}</h2>
-              <Form onSubmit={handleStartGame} errorMessage="">
-                <FormField
-                  id="startAmount"
-                  type="number"
-                  value={formValues.startAmount}
-                  onChange={handleChange}
-                  label="Enter start amount of coins"
-                  placeholder=""
-                  required
-                />
-                <FormField
-                  id="batchSize"
-                  type="number"
-                  value={formValues.batchSize}
-                  onChange={handleChange}
-                  label="Enter start batch size"
-                  placeholder=""
-                  required
-                />
-                <FormField
-                  id="autoMoveCoins"
-                  type="checkbox"
-                  checked={formValues.autoMoveCoins}
-                  onChange={handleChange}
-                  label="Auto move coins to next user"
-                  placeholder=""
-                  required={false}
-                />
-
-                <button
-                  type="submit"
-                  disabled={started}
-                  className="btn btn-primary"
-                >
-                  Start Game
-                </button>
-
-                {started && (
-                  <button
-                    type="submit"
-                    onClick={handleEndGame}
-                    className="btn btn-primary"
-                  >
-                    End Game
-                  </button>
-                )}
-              </Form>
+              <SettingsForm
+                formValues={formValues}
+                handleChange={handleChange}
+                handleStartGame={handleStartGame}
+                started={started}
+              />
             </>
+          )}
+
+          {started && (
+            <button
+              type="submit"
+              onClick={handleEndGame}
+              className="btn btn-primary"
+            >
+              End Game
+            </button>
           )}
 
           {users && (

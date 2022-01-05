@@ -105,11 +105,6 @@ export class GameController {
     const userToTakeFrom = GameController.getUser(roomId, from);
     const userToGiveTo = GameController.getUser(roomId, to);
 
-    console.log(
-      typeof userToGiveTo.localCounter,
-      typeof room.settings.batchSize
-    );
-
     // TODO
     userToTakeFrom.flipped =
       userToTakeFrom.flipped - parseInt(room.settings.batchSize);
