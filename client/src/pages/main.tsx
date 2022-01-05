@@ -59,6 +59,7 @@ function Main() {
 
   // TODO fix any
   const updateContext = (state: any) => {
+    console.log(state);
     setUsers(state.users);
     setCounter(state.counter);
     setSettings(state.settings);
@@ -68,17 +69,10 @@ function Main() {
 
   useEffect(() => {
     handleGameUpdate();
-    // TODO return () => {
-    //   cleanup
-    // }
   }, []);
 
   useEffect(() => {
-    // console.log(gameContextValue);
-    console.log(gameContextValue?.time);
-    // TODO return () => {
-    //   cleanup
-    // }
+    console.log(gameContextValue);
   }, [gameContextValue]);
 
   useEffect(() => {

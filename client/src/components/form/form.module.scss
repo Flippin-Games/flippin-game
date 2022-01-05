@@ -1,0 +1,9 @@
+@import "../../styles/_mixins.scss"; // TODO
+
+form {
+  @include card;
+}
+
+.error {
+  color: var(--error);
+}

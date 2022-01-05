@@ -1,26 +1,30 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
+
 import gameContext from "../../gameContext";
 import socketService from "../../services/socketService";
 import gameService from "../../services/gameService";
 
-// TODO: display feedback that something is wrong with form
+import Form from "../form/form";
+import FormField from "../form/formField/formField";
+
+const initialFormState = {
+  name: "",
+  room: "",
+};
 
 function JoinRoom() {
-  const [roomName, setRoomName] = useState("");
+  const [formValues, setFormValues] = useState(initialFormState);
   const [isJoining, setIsJoining] = useState(false);
+  const [error, setError] = useState("");
 
-  const { setIsInRoom, username, setUsername } = useContext(gameContext);
+  const { setIsInRoom, setUsername } = useContext(gameContext);
 
-  const handleRoomNameChange = (e: React.ChangeEvent<any>) => {
-    const value = e.target.value;
-
-    setRoomName(value);
-  };
-
-  const handleUsernameChange = (e: React.ChangeEvent<any>) => {
-    const value = e.target.value;
-
-    setUsername(value);
+  // TODO
+  const handleChange = (e: any) => {
+    setFormValues({
+      ...formValues,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const joinRoom = async (e: React.FormEvent) => {
@@ -29,7 +33,7 @@ function JoinRoom() {
 
     if (!socket) return;
 
-    if (!roomName || roomName.trim() === "") {
+    if (!formValues.room || formValues.room.trim() === "") {
       alert("Please provide required fields.");
       return;
     }
@@ -37,10 +41,11 @@ function JoinRoom() {
     setIsJoining(true);
 
     const joined = await gameService
-      .joinGameRoom(socket, roomName, username)
-      .catch((err) => alert(err));
+      .joinGameRoom(socket, formValues.room, formValues.name)
+      .catch((err) => setError(err));
 
     if (joined) {
+      setUsername(formValues.name);
       setIsInRoom(true);
     }
 
@@ -48,29 +53,29 @@ function JoinRoom() {
   };
 
   return (
-    <form onSubmit={joinRoom}>
-      <div className="formItem">
-        <label htmlFor="name">Name</label>
-        <input
-          id="name"
-          placeholder="Username"
-          value={username}
-          onChange={handleUsernameChange}
-        />
-      </div>
-      <div className="formItem">
-        <label htmlFor="room">Room ID</label>
-        <input
-          id="room"
-          placeholder="Room Id To Join Game"
-          value={roomName}
-          onChange={handleRoomNameChange}
-        />
-      </div>
+    <Form onSubmit={joinRoom} errorMessage={error}>
+      <FormField
+        id="name"
+        placeholder="Username"
+        value={formValues.name}
+        onChange={handleChange}
+        type="text"
+        label="Name"
+        required={true}
+      />
+      <FormField
+        id="room"
+        placeholder="Room Id To Join Game"
+        value={formValues.room}
+        onChange={handleChange}
+        type="text"
+        label="Room ID"
+        required={true}
+      />
       <button type="submit" disabled={isJoining} className="btn btn-primary">
         {isJoining ? "Joining..." : "Join"}
       </button>
-    </form>
+    </Form>
   );
 }
 

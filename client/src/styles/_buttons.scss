@@ -21,6 +21,7 @@
   transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
     background 150ms cubic-bezier(0, 0, 0.58, 1);
   margin: 1rem;
+  padding: 1rem;
 
   &::before {
     background: $bottom;

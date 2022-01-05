@@ -1,15 +1,11 @@
-button,
-input {
-  padding: 1rem;
-}
-
-.formItem {
+.formField {
   margin: 1rem;
   display: flex;
   flex-direction: column;
+  border: 0;
 }
 
-input {
+.input {
   background-color: var(--background);
   border-radius: 0.75em;
   border: 2px solid var(--outline);
@@ -17,12 +13,9 @@ input {
   font-family: var(--font-primary);
   letter-spacing: 1px;
   font-size: 1rem;
+  padding: 1rem;
 }
 
-label {
+.label {
   margin: 1rem;
-}
-
-form {
-  @include card;
 }
