@@ -40,19 +40,19 @@ function Admin() {
   const [users, setUsers] = useState<any[]>([]);
   const [formValues, dispatch] = useReducer(formReducer, initialFormState);
 
-  const handleChange = (e: any) => {
-    dispatch({
-      type: e.target.type,
-      data: { value: e.target.value, name: e.target.name },
-    });
-  };
-
   const connectSocket = async () => {
     await socketService
       .connect(`${process.env.REACT_APP_PUBLIC_URL}:9000`)
       .catch((err) => {
         console.log("Error: ", err);
       });
+  };
+
+  const handleChange = (e: any) => {
+    dispatch({
+      type: e.target.type,
+      data: { value: e.target.value, name: e.target.name },
+    });
   };
 
   const handleGenerateRoom = async (e: React.FormEvent) => {

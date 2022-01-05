@@ -4,10 +4,6 @@ import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
 import styles from "./game.module.scss";
 
-// TODO
-// restar game
-// change options during the game
-// add coins to user
 interface IGame {
   name?: any;
   activeUser: boolean;
@@ -27,8 +23,6 @@ function Game(props: IGame) {
   };
 
   const handleTakeCoins = (e: MouseEvent<HTMLButtonElement>) => {
-    console.log("take coins from", props.previousUser.username);
-
     if (socketService.socket) {
       gameService.takeCoins(
         socketService.socket,

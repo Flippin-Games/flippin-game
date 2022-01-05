@@ -12,7 +12,7 @@ class Room {
   settings: {
     autoMoveCoins: boolean;
     startAmount: number;
-    batchSize: string;
+    batchSize: number;
   }; // TODO
   counter?: number;
   started?: boolean; // TODO: shouldn't be optional
