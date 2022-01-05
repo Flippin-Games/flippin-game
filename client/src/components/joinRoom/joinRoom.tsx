@@ -3,9 +3,9 @@ import gameContext from "../../gameContext";
 import socketService from "../../services/socketService";
 import gameService from "../../services/gameService";
 
-interface IJoinRoomProps {}
+// TODO: display feedback that something is wrong with form
 
-function JoinRoom(props: IJoinRoomProps) {
+function JoinRoom() {
   const [roomName, setRoomName] = useState("");
   const [isJoining, setIsJoining] = useState(false);
 
@@ -13,17 +13,26 @@ function JoinRoom(props: IJoinRoomProps) {
 
   const handleRoomNameChange = (e: React.ChangeEvent<any>) => {
     const value = e.target.value;
+
     setRoomName(value);
   };
+
   const handleUsernameChange = (e: React.ChangeEvent<any>) => {
     const value = e.target.value;
+
     setUsername(value);
   };
 
   const joinRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     const socket = socketService.socket;
-    if (!roomName || roomName.trim() === "" || !socket) return;
+
+    if (!socket) return;
+
+    if (!roomName || roomName.trim() === "") {
+      alert("Please provide required fields.");
+      return;
+    }
 
     setIsJoining(true);
 
@@ -39,31 +48,29 @@ function JoinRoom(props: IJoinRoomProps) {
   };
 
   return (
-    <div>
-      <form onSubmit={joinRoom}>
-        <div className="formItem">
-          <label htmlFor="name">Name</label>
-          <input
-            id="name"
-            placeholder="Username"
-            value={username}
-            onChange={handleUsernameChange}
-          />
-        </div>
-        <div className="formItem">
-          <label htmlFor="room">Room ID</label>
-          <input
-            id="room"
-            placeholder="Room Id To Join Game"
-            value={roomName}
-            onChange={handleRoomNameChange}
-          />
-        </div>
-        <button type="submit" disabled={isJoining} className="btn btn-primary">
-          {isJoining ? "Joining..." : "Join"}
-        </button>
-      </form>
-    </div>
+    <form onSubmit={joinRoom}>
+      <div className="formItem">
+        <label htmlFor="name">Name</label>
+        <input
+          id="name"
+          placeholder="Username"
+          value={username}
+          onChange={handleUsernameChange}
+        />
+      </div>
+      <div className="formItem">
+        <label htmlFor="room">Room ID</label>
+        <input
+          id="room"
+          placeholder="Room Id To Join Game"
+          value={roomName}
+          onChange={handleRoomNameChange}
+        />
+      </div>
+      <button type="submit" disabled={isJoining} className="btn btn-primary">
+        {isJoining ? "Joining..." : "Join"}
+      </button>
+    </form>
   );
 }
 

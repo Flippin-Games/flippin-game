@@ -59,11 +59,7 @@ export class AdminController {
   }
 
   @OnMessage("end_game")
-  public async endGame(
-    // @SocketIO() io: Server,
-    // @ConnectedSocket() socket: Socket,
-    @MessageBody() message: any
-  ) {
+  public async endGame(@MessageBody() message: any) {
     console.log("Game ended! in room: ", message.roomId);
 
     GameController.stopTimer(message.roomId);
