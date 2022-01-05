@@ -11,8 +11,9 @@ class Room {
   users: IUser[];
   settings: {
     autoMoveCoins: boolean;
-    startAmount: number;
+    amountOfBatches: number;
     batchSize: number;
+    startAmount: number;
   }; // TODO
   counter?: number;
   started?: boolean; // TODO: shouldn't be optional

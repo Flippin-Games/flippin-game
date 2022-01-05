@@ -27,6 +27,7 @@ export class AdminController {
     const roomId = getRandomInt(1000, 9999);
     const room = new Room(roomId.toString(), [], 0, {
       startAmount: 20,
+      amountOfBatches: 5,
       autoMoveCoins: true,
     });
     await socket.join(room.id);
@@ -46,10 +47,14 @@ export class AdminController {
 
     if (room.users.length > 1) {
       room.settings = message.settings;
-      room.users[0].localCounter = message.settings.startAmount || 20;
+      room.settings.startAmount =
+        message.settings.amountOfBatches * message.settings.batchSize;
+
+      room.users[0].localCounter = room.settings.startAmount || 20;
       room.started = true;
       socket.emit("game_started");
       GameController.emitUpateGame(io, message.roomId);
+      console.log(room.settings);
     } else {
       socket.emit("game_start_error", {
         error: "Not enough players to start the game",

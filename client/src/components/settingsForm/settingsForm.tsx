@@ -5,20 +5,20 @@ function SettingsForm(props: any) {
   return (
     <Form onSubmit={props.handleStartGame} errorMessage="">
       <FormField
-        id="startAmount"
-        type="number"
-        value={props.formValues.startAmount}
-        onChange={props.handleChange}
-        label="Enter start amount of coins"
-        placeholder=""
-        required
-      />
-      <FormField
         id="batchSize"
         type="number"
         value={props.formValues.batchSize}
         onChange={props.handleChange}
-        label="Enter start batch size"
+        label="Enter batch size"
+        placeholder=""
+        required
+      />
+      <FormField
+        id="amountOfBatches"
+        type="number"
+        value={props.formValues.amountOfBatches}
+        onChange={props.handleChange}
+        label="Enter amount of batches"
         placeholder=""
         required
       />

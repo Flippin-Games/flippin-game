@@ -5,7 +5,7 @@ import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 
 const initialFormState = {
-  startAmount: 20,
+  amountOfBatches: 4,
   batchSize: 5,
   autoMoveCoins: false,
 };

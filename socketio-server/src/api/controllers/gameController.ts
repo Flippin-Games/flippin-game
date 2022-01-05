@@ -122,7 +122,11 @@ export class GameController {
       (user) => user.username === message.username
     );
 
-    if (currentUserIndex === 0 && roomFromState.started) {
+    if (
+      currentUserIndex === 0 &&
+      roomFromState.started &&
+      user.localCounter === roomFromState.settings.startAmount
+    ) {
       roomFromState.startTimer(io);
     }
 
