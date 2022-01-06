@@ -15,6 +15,8 @@ export interface IGameContextProps {
   setSettings: (settings: any) => void;
   time: any;
   setTime: (time: any) => void;
+  timestamp: any;
+  setTimestamp: (time: any) => void;
 }
 
 const defaultState: IGameContextProps = {
@@ -32,6 +34,8 @@ const defaultState: IGameContextProps = {
   setSettings: () => {},
   time: 0,
   setTime: () => {},
+  timestamp: 0,
+  setTimestamp: () => {},
 };
 
 export default React.createContext(defaultState);

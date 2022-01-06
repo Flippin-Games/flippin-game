@@ -109,6 +109,8 @@ export class GameController {
       userToGiveTo.localCounter + room.settings.batchSize;
   }
 
+  // TODO create getter for game state
+
   @OnMessage("update_local_counter")
   public async updateLocalCounter(
     @SocketIO() io: Server,
@@ -122,6 +124,9 @@ export class GameController {
       (user) => user.username === message.username
     );
 
+    console.log("== UPDATE LOCAL COUNTER ==");
+
+    // Start timer if it's first flip -> TODO: each comment could be separate func?
     if (
       currentUserIndex === 0 &&
       roomFromState.started &&
@@ -130,12 +135,13 @@ export class GameController {
       roomFromState.startTimer(io);
     }
 
+    // flip
     if (user.localCounter > 0) {
       user.localCounter = user.localCounter - 1;
       user.flipped = user.flipped + 1;
     }
 
-    // TODO create getter for game state
+    // If automove coins is on, move coins
     if (
       user.flipped >= roomFromState.settings.batchSize &&
       roomFromState.settings.autoMoveCoins
@@ -145,6 +151,14 @@ export class GameController {
       if (nextUser) {
         this.updateCoinsTaken(gameRoom, message.username, nextUser.username);
       }
+    }
+
+    // timestamp
+    if (
+      currentUserIndex + 1 === roomFromState.users.length &&
+      user.flipped === roomFromState.settings.batchSize
+    ) {
+      roomFromState.setTimestamp();
     }
 
     GameController.emitUpateGame(io, gameRoom);

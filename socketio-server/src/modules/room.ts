@@ -20,6 +20,7 @@ class Room {
   startTime?: number;
   time?: number;
   timer: any; // TODO
+  timestamp?: number;
 
   constructor(id, users, counter, settings) {
     this.id = id;
@@ -31,7 +32,7 @@ class Room {
     this.timer = null;
   }
 
-  startTimer = (io) => {
+  startTimer = (io): void => {
     this.startTime = Date.now();
     console.log("==== START TIMER ====");
     this.timer = setInterval(
@@ -47,6 +48,10 @@ class Room {
       }.bind(this),
       200
     );
+  };
+
+  setTimestamp = () => {
+    this.timestamp = Date.now() - this.startTime;
   };
 
   clearInterval = () => clearInterval(this.timer);
