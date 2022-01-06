@@ -14,7 +14,8 @@ interface IGame {
 }
 
 function Game(props: IGame) {
-  const { username, settings } = useContext(gameContext);
+  const { state } = useContext(gameContext);
+  const { username, settings } = state;
 
   const handleLocalCounter = (e: MouseEvent<HTMLButtonElement>) => {
     if (socketService.socket) {

@@ -17,7 +17,7 @@ function JoinRoom() {
   const [isJoining, setIsJoining] = useState(false);
   const [error, setError] = useState("");
 
-  const { setIsInRoom, setUsername } = useContext(gameContext);
+  const { dispatch } = useContext(gameContext);
 
   // TODO
   const handleChange = (e: any) => {
@@ -45,8 +45,14 @@ function JoinRoom() {
       .catch((err) => setError(err));
 
     if (joined) {
-      setUsername(formValues.name);
-      setIsInRoom(true);
+      dispatch({
+        type: "username",
+        data: formValues.name,
+      });
+      dispatch({
+        type: "isInRoom",
+        data: true,
+      });
     }
 
     setIsJoining(false);

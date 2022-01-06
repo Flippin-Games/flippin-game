@@ -1,41 +1,36 @@
 import React from "react";
 
-export interface IGameContextProps {
-  isInRoom: boolean;
-  setIsInRoom: (inRoom: boolean) => void;
-  counter: number;
-  setCounter: (counter: number) => void;
-  localCounter: number;
-  setLocalCounter: (localCounter: number) => void;
+export interface IUser {
   username: string;
-  setUsername: (username: string) => void;
-  users: { username: string; localCounter: number; flipped: number }[];
-  setUsers: (users: []) => void;
-  settings: any;
-  setSettings: (settings: any) => void;
-  time: any;
-  setTime: (time: any) => void;
-  timestamp: any;
-  setTimestamp: (time: any) => void;
+  localCounter: number;
+  flipped: number;
 }
 
-const defaultState: IGameContextProps = {
+export interface IGameStateProps {
+  isInRoom: boolean;
+  counter: number;
+  localCounter: number;
+  username: string;
+  users: IUser[];
+  //TODO - get rid of any
+  settings: any;
+  time: any;
+  timestamp: any;
+  previousUser?: IUser;
+}
+
+export const defaultState: IGameStateProps = {
   isInRoom: false,
-  setIsInRoom: () => {},
   counter: 0,
-  setCounter: () => {},
   localCounter: 0,
-  setLocalCounter: () => {},
-  username: "Sonny",
-  setUsername: () => {},
+  username: "",
   users: [],
-  setUsers: () => {},
   settings: {},
-  setSettings: () => {},
   time: 0,
-  setTime: () => {},
   timestamp: 0,
-  setTimestamp: () => {},
 };
 
-export default React.createContext(defaultState);
+export default React.createContext({
+  state: defaultState,
+  dispatch: (a: any) => {},
+});
