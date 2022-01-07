@@ -9,6 +9,8 @@ import JoinRoom from "../components/joinRoom/joinRoom";
 import Header from "../components/header/header";
 import Game from "../components/game/game";
 import Time from "../components/time/time";
+import GameInfo from "../components/gameInfo/gameInfo";
+import Footer from "../components/footer/footer";
 
 function Main() {
   const [state, dispatch] = useReducer(mainReducer, defaultState);
@@ -103,11 +105,11 @@ function Main() {
   return (
     <GameContext.Provider value={contextValue}>
       <div className="App">
-        <Header />
-        {state?.currentTime ? <Time /> : null}
-        <main className="App-header">
+        {!state.isInRoom ? <Header /> : <GameInfo />}
+        <main className="main">
           {!state.isInRoom ? <JoinRoom /> : <Game />}
         </main>
+        <Footer />
       </div>
     </GameContext.Provider>
   );

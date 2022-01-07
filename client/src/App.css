@@ -4,17 +4,3 @@
 .App {
   text-align: center;
 }
-
-.App-header {
-  min-height: calc(100vh - 66px);
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-}
-
-.App-link {
-  color: #61dafb;
-}

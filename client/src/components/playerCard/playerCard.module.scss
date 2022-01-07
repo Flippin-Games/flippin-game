@@ -1,7 +1,13 @@
 @import "../../styles/_mixins.scss";
 
 .wrapper {
-  @include card(2rem);
+  @include card(1.5rem);
 
   margin: 1rem;
+  gap: 2rem;
+  min-width: 20vw;
+}
+
+.placeholder {
+  height: 66px;
 }

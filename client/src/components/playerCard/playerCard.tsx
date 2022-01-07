@@ -35,20 +35,24 @@ function PlayerCard(props: TGame) {
     }
   };
 
+  const isPreviousUserAvailable = !!props.previousUser?.username.length;
+  const shouldDisplayButton =
+    props.activeUser &&
+    isPreviousUserAvailable &&
+    props.previousUser?.flipped >= settings.batchSize &&
+    !settings.autoMoveCoins;
+
   return (
     <div className={styles.wrapper}>
       <h1>{props.name || username}</h1>
 
       {/* TODO take this out, it looks like a mess */}
-      {props.previousUser?.username && props.activeUser && (
-        <>
-          {props.previousUser?.flipped >= settings.batchSize &&
-            !settings.autoMoveCoins && (
-              <button onClick={handleTakeCoins} className="btn btn-primary">
-                Take coins from {props.previousUser.username}
-              </button>
-            )}
-        </>
+      {shouldDisplayButton ? (
+        <button onClick={handleTakeCoins} className="btn btn-primary btn-s">
+          Take Coins
+        </button>
+      ) : (
+        <div className={styles.placeholder} />
       )}
       <hr />
       <div>
@@ -56,10 +60,15 @@ function PlayerCard(props: TGame) {
           To flip: {props.localCounter} | Flipped: {props.flipped}
         </p>
         {props.activeUser && props.localCounter ? (
-          <button onClick={handleLocalCounter} className="btn btn-primary">
+          <button
+            onClick={handleLocalCounter}
+            className="btn btn-primary btn-s"
+          >
             Flip Coin
           </button>
-        ) : null}
+        ) : (
+          <div className={styles.placeholder} />
+        )}
       </div>
     </div>
   );

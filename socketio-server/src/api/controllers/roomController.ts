@@ -42,7 +42,7 @@ export class RoomController {
       return;
     }
 
-    if (room.users.length === 4) {
+    if (room.users.length === 8) {
       emitError("Room is full, please use another room!");
 
       return;

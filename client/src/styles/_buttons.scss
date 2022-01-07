@@ -15,7 +15,6 @@
   font-family: var(--font-primary);
   font-weight: 800;
   letter-spacing: 2px;
-  padding: 1.25em 2em;
   text-transform: uppercase;
   transform-style: preserve-3d;
   transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
@@ -66,6 +65,10 @@
       background: var(--light-grey);
       box-shadow: 0 0 0 2px var(--text), 0 0.5em 0 0 var(--text);
     }
+  }
+
+  &.btn-s {
+    padding: 0.8rem;
   }
 }
 

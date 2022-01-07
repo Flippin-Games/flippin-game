@@ -7,6 +7,8 @@ import gameService from "../../services/gameService";
 import Form from "../form/form";
 import FormField from "../form/formField/formField";
 
+import styles from "./joinRoom.module.scss";
+
 const initialFormState = {
   name: "",
   room: "",
@@ -59,29 +61,31 @@ function JoinRoom() {
   };
 
   return (
-    <Form onSubmit={joinRoom} errorMessage={error}>
-      <FormField
-        id="name"
-        placeholder="Username"
-        value={formValues.name}
-        onChange={handleChange}
-        type="text"
-        label="Name"
-        required={true}
-      />
-      <FormField
-        id="room"
-        placeholder="Room Id To Join Game"
-        value={formValues.room}
-        onChange={handleChange}
-        type="text"
-        label="Room ID"
-        required={true}
-      />
-      <button type="submit" disabled={isJoining} className="btn btn-primary">
-        {isJoining ? "Joining..." : "Join"}
-      </button>
-    </Form>
+    <section className={styles.wrapper}>
+      <Form onSubmit={joinRoom} errorMessage={error}>
+        <FormField
+          id="name"
+          placeholder="Username"
+          value={formValues.name}
+          onChange={handleChange}
+          type="text"
+          label="Name"
+          required={true}
+        />
+        <FormField
+          id="room"
+          placeholder="Room Id To Join Game"
+          value={formValues.room}
+          onChange={handleChange}
+          type="text"
+          label="Room ID"
+          required={true}
+        />
+        <button type="submit" disabled={isJoining} className="btn btn-primary">
+          {isJoining ? "Joining..." : "Join"}
+        </button>
+      </Form>
+    </section>
   );
 }
 
