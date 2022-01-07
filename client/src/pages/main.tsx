@@ -37,6 +37,7 @@ function Main() {
 
   // TODO fix any
   const updateContext = (backendState: any) => {
+    console.log(backendState);
     if (backendState.users) {
       dispatch({
         type: "users",
@@ -55,19 +56,27 @@ function Main() {
         data: backendState.counter,
       });
     }
-    if (backendState.time && backendState.time !== state.time) {
-      console.log(backendState.time, state.time);
+    if (
+      backendState.time.currentTime &&
+      backendState.time.currentTime !== state.currentTime
+    ) {
+      console.log(backendState.time.currentTime, state.currentTime);
       dispatch({
-        type: "time",
-        data: backendState.time,
+        type: "currentTime",
+        data: backendState.time.currentTime,
       });
     }
-    if (backendState?.timestamp && backendState.timestamp !== state.timestamp) {
+    if (
+      backendState?.time.timestampBatch &&
+      backendState.time.timestampBatch !== state.timestampBatch
+    ) {
       dispatch({
-        type: "timestamp",
-        data: backendState.timestamp,
+        type: "timestampBatch",
+        data: backendState.time.timestampBatch,
       });
     }
+
+    console.log(state);
   };
 
   useEffect(() => {
@@ -95,7 +104,7 @@ function Main() {
     <GameContext.Provider value={contextValue}>
       <div className="App">
         <Header />
-        {state?.time ? <Time /> : null}
+        {state?.currentTime ? <Time /> : null}
         <main className="App-header">
           {!state.isInRoom ? <JoinRoom /> : <Game />}
         </main>

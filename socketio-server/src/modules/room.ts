@@ -17,27 +17,34 @@ class Room {
   }; // TODO
   counter?: number;
   started?: boolean; // TODO: shouldn't be optional
-  startTime?: number;
-  time?: number;
-  timer: any; // TODO
-  timestamp?: number;
+  time?: {
+    startTime: number;
+    currentTime: number;
+    timestampBatch: number;
+    timestampFive: number;
+    timer: any; // TODO
+  };
 
   constructor(id, users, counter, settings) {
     this.id = id;
     this.users = users;
     this.counter = counter;
     this.settings = settings;
-    this.startTime = 0;
-    this.time = 0;
-    this.timer = null;
+    this.time = {
+      startTime: 0,
+      currentTime: 0,
+      timestampBatch: 0,
+      timestampFive: 0,
+      timer: null,
+    };
   }
 
   startTimer = (io): void => {
-    this.startTime = Date.now();
+    this.time.startTime = Date.now();
     console.log("==== START TIMER ====");
-    this.timer = setInterval(
+    this.time.timer = setInterval(
       function () {
-        this.time = Date.now() - this.startTime;
+        this.time.currentTime = Date.now() - this.time.startTime;
 
         if (GameController.didGameEnd(this.id)) {
           GameController.stopTimer(this.id);
@@ -51,10 +58,10 @@ class Room {
   };
 
   setTimestamp = () => {
-    this.timestamp = Date.now() - this.startTime;
+    this.time.timestampBatch = Date.now() - this.time.startTime;
   };
 
-  clearInterval = () => clearInterval(this.timer);
+  clearInterval = () => clearInterval(this.time.timer);
 }
 
 export default Room;

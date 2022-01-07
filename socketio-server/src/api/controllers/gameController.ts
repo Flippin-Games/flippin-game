@@ -68,8 +68,8 @@ export class GameController {
   static stopTimer = (roomId: string): void => {
     const room = GameController.getRoomFromState(roomId);
 
-    if (room.timer) {
-      console.log("STOPPING TIME AT ", room.time);
+    if (room.time.currentTime) {
+      console.log("STOPPING TIME AT ", room.time.currentTime);
       room.clearInterval();
     }
   };
@@ -153,7 +153,7 @@ export class GameController {
       }
     }
 
-    // timestamp
+    // timestampBatch
     if (
       currentUserIndex + 1 === roomFromState.users.length &&
       user.flipped === roomFromState.settings.batchSize

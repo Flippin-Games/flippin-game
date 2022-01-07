@@ -6,8 +6,8 @@ function Time() {
 
   return (
     <section>
-      <h2>Time since game started: {state.time}</h2>
-      <h2>Time first batch got delivered: {state.timestamp}</h2>
+      <h2>Time since game started: {state.currentTime}</h2>
+      <h2>Time first batch got delivered: {state.timestampBatch}</h2>
     </section>
   );
 }

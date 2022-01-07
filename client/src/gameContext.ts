@@ -14,8 +14,8 @@ export interface IGameStateProps {
   users: IUser[];
   //TODO - get rid of any
   settings: any;
-  time: any;
-  timestamp: any;
+  currentTime: any;
+  timestampBatch: any;
   previousUser?: IUser;
 }
 
@@ -26,8 +26,8 @@ export const defaultState: IGameStateProps = {
   username: "",
   users: [],
   settings: {},
-  time: 0,
-  timestamp: 0,
+  currentTime: 0,
+  timestampBatch: 0,
 };
 
 export default React.createContext({
