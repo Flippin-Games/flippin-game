@@ -30,6 +30,7 @@ export class AdminController {
       amountOfBatches: 5,
       autoMoveCoins: true,
     });
+
     await socket.join(room.id);
     GameController.gameState.rooms.push(room);
     socket.emit("created_room", room.id);
@@ -75,6 +76,7 @@ export class AdminController {
   @OnMessage("remove_user")
   public async removeUser(@SocketIO() io: Server, @MessageBody() message: any) {
     const room = GameController.getRoomFromState(message.roomId);
+
     room.removeUser(message.username);
     GameController.emitUpateGame(io, message.roomId);
   }

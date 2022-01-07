@@ -5,6 +5,8 @@ class User {
 
   constructor(username) {
     this.username = username;
+    this.localCounter = 0;
+    this.flipped = 0;
   }
 }
 

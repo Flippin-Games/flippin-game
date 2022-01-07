@@ -8,8 +8,6 @@ import {
 import { Server, Socket } from "socket.io";
 import Room from "../../modules/room";
 
-// TODO move interface to separate files
-
 interface IGameState {
   rooms: Room[];
 }
@@ -36,7 +34,8 @@ export class GameController {
   }
 
   static emitUpateGame(@SocketIO() io: Server, gameRoom: string): void {
-    console.log("EMIT UPDATE GAME");
+    console.log("=== EMIT UPDATE GAME ===");
+
     io.to(gameRoom).emit(
       "on_game_update",
       GameController.getRoomFromState(gameRoom)
@@ -50,32 +49,26 @@ export class GameController {
     return lastUser.flipped === room.settings.startAmount;
   }
 
-  // TODO create getter for game state
-
   @OnMessage("update_local_counter")
   public async updateLocalCounter(
     @SocketIO() io: Server,
     @ConnectedSocket() socket: Socket,
     @MessageBody() message: any
   ) {
-    console.log(message);
     const gameRoom = this.getSocketGameRoom(socket);
     const room = GameController.getRoomFromState(gameRoom);
     const user = room.getUser(message.username);
-    const roomFromState = GameController.getRoomFromState(gameRoom);
-    const currentUserIndex = roomFromState.users.findIndex(
-      (user) => user.username === message.username
-    );
+    const currentUserIndex = room.getUserIndex(message.username);
 
     console.log("== UPDATE LOCAL COUNTER ==");
 
     // Start timer if it's first flip -> TODO: each comment could be separate func?
     if (
       currentUserIndex === 0 &&
-      roomFromState.started &&
-      user.localCounter === roomFromState.settings.startAmount
+      room.started &&
+      user.localCounter === room.settings.startAmount
     ) {
-      roomFromState.time.startTimer(io);
+      room.time.startTimer(io);
     }
 
     // flip
@@ -86,11 +79,11 @@ export class GameController {
 
     // If automove coins is on, move coins
     if (
-      user.flipped >= roomFromState.settings.batchSize &&
-      roomFromState.settings.autoMoveCoins
+      user.flipped >= room.settings.batchSize &&
+      room.settings.autoMoveCoins
     ) {
       // get next user
-      const nextUser = roomFromState.users[currentUserIndex + 1];
+      const nextUser = room.users[currentUserIndex + 1];
       if (nextUser) {
         room.updateCoinsTaken(message.username, nextUser.username);
       }
@@ -98,10 +91,10 @@ export class GameController {
 
     // timestampBatch
     if (
-      currentUserIndex + 1 === roomFromState.users.length &&
-      user.flipped === roomFromState.settings.batchSize
+      currentUserIndex + 1 === room.users.length &&
+      user.flipped === room.settings.batchSize
     ) {
-      roomFromState.time.setTimestamp();
+      room.time.setTimestamp();
     }
 
     GameController.emitUpateGame(io, gameRoom);
@@ -115,8 +108,8 @@ export class GameController {
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
     const room = GameController.getRoomFromState(gameRoom);
-    room.updateCoinsTaken(message.from, message.to);
 
+    room.updateCoinsTaken(message.from, message.to);
     GameController.emitUpateGame(io, gameRoom);
   }
 }

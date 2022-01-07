@@ -33,12 +33,20 @@ class Room {
     return user;
   }
 
-  getCounter(): number {
-    return this.counter;
+  addUser(user: User): void {
+    this.users.push(user);
   }
 
   removeUser(username: string): void {
     this.users = this.users.filter((user) => user.username !== username);
+  }
+
+  getUserIndex(username: string): number {
+    return this.users.findIndex((user) => user.username === username);
+  }
+
+  getCounter(): number {
+    return this.counter;
   }
 
   updateCounter(): number {

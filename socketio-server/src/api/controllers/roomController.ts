@@ -6,6 +6,7 @@ import {
   SocketIO,
 } from "socket-controllers";
 import { Server, Socket } from "socket.io";
+import User from "../../modules/user";
 import { GameController } from "./gameController";
 
 // TODO:
@@ -66,11 +67,9 @@ export class RoomController {
 
     await socket.join(message.roomId);
     socket.data = message;
-    room.users.push({
-      username: message.username,
-      localCounter: 0,
-      flipped: 0,
-    });
+
+    const user = new User(message.username);
+    room.addUser(user);
 
     socket.emit("room_joined");
 

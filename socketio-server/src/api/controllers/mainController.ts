@@ -23,16 +23,11 @@ export class MainController {
     @ConnectedSocket() socket: Socket,
     @SocketIO() io: Server
   ) {
-    const connectionMessage =
-      socket.data.username +
-      " Disconnected from Socket " +
-      socket.id +
-      " and room: " +
-      socket.data.roomId;
-
     const room = GameController.getRoomFromState(socket.data.roomId);
     room.removeUser(socket.data.username);
     GameController.emitUpateGame(io, socket.data.roomId);
+
+    const connectionMessage = `${socket.data.username} Disconnected from Socket  ${socket.id} and room: ${socket.data.roomId}`;
     console.log(connectionMessage);
   }
 }
