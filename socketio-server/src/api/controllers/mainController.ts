@@ -29,7 +29,9 @@ export class MainController {
       socket.id +
       " and room: " +
       socket.data.roomId;
-    GameController.removeUser(socket.data.roomId, socket.data.username);
+
+    const room = GameController.getRoomFromState(socket.data.roomId);
+    room.removeUser(socket.data.username);
     GameController.emitUpateGame(io, socket.data.roomId);
     console.log(connectionMessage);
   }

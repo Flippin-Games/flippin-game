@@ -45,6 +45,7 @@ export class AdminController {
 
     const room = GameController.getRoomFromState(message.roomId);
 
+    // TODO this is very ugly
     if (room.users.length > 1) {
       room.settings = message.settings;
       room.settings.startAmount =
@@ -73,7 +74,8 @@ export class AdminController {
 
   @OnMessage("remove_user")
   public async removeUser(@SocketIO() io: Server, @MessageBody() message: any) {
-    GameController.removeUser(message.roomId, message.username);
+    const room = GameController.getRoomFromState(message.roomId);
+    room.removeUser(message.username);
     GameController.emitUpateGame(io, message.roomId);
   }
 }

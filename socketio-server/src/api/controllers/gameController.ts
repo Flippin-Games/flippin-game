@@ -9,11 +9,6 @@ import { Server, Socket } from "socket.io";
 import Room from "../../modules/room";
 
 // TODO move interface to separate files
-interface IUser {
-  username: string;
-  localCounter: number;
-  flipped: number;
-}
 
 interface IGameState {
   rooms: Room[];
@@ -22,6 +17,7 @@ interface IGameState {
 export class GameController {
   static gameState: IGameState = { rooms: [] };
 
+  // Use when don't know room ID
   private getSocketGameRoom(socket: Socket): string {
     const socketRooms = Array.from(socket.rooms.values()).filter(
       (room) => room !== socket.id
@@ -39,32 +35,6 @@ export class GameController {
     return room;
   }
 
-  static getUsers(roomId: string) {
-    const room = GameController.getRoomFromState(roomId);
-
-    return room.users;
-  }
-
-  static getUser(roomId: string, username: string) {
-    const user = GameController.getUsers(roomId).find(
-      (user) => user.username === username
-    );
-
-    return user;
-  }
-
-  static getCounter(roomId: string): number {
-    const room = GameController.getRoomFromState(roomId);
-
-    return room.counter;
-  }
-
-  static removeUser(roomId: string, username: string): void {
-    const room = GameController.getRoomFromState(roomId);
-
-    room.users = room.users.filter((user) => user.username !== username);
-  }
-
   static emitUpateGame(@SocketIO() io: Server, gameRoom: string): void {
     console.log("EMIT UPDATE GAME");
     io.to(gameRoom).emit(
@@ -73,31 +43,11 @@ export class GameController {
     );
   }
 
-  public updateCounter(roomId: string): number {
-    const room = GameController.getRoomFromState(roomId);
-
-    room.counter = room.counter + 1;
-    return room.counter;
-  }
-
   static didGameEnd(roomId: string): boolean {
     const room = GameController.getRoomFromState(roomId);
     const lastUser = room.users[room.users.length - 1];
 
     return lastUser.flipped === room.settings.startAmount;
-  }
-
-  // TODO should this be async?
-  public updateCoinsTaken(roomId, from, to): void {
-    // TODO error handle and checks
-
-    const room = GameController.getRoomFromState(roomId);
-    const userToTakeFrom = GameController.getUser(roomId, from);
-    const userToGiveTo = GameController.getUser(roomId, to);
-
-    userToTakeFrom.flipped = userToTakeFrom.flipped - room.settings.batchSize;
-    userToGiveTo.localCounter =
-      userToGiveTo.localCounter + room.settings.batchSize;
   }
 
   // TODO create getter for game state
@@ -108,8 +58,10 @@ export class GameController {
     @ConnectedSocket() socket: Socket,
     @MessageBody() message: any
   ) {
+    console.log(message);
     const gameRoom = this.getSocketGameRoom(socket);
-    const user = GameController.getUser(gameRoom, message.username);
+    const room = GameController.getRoomFromState(gameRoom);
+    const user = room.getUser(message.username);
     const roomFromState = GameController.getRoomFromState(gameRoom);
     const currentUserIndex = roomFromState.users.findIndex(
       (user) => user.username === message.username
@@ -140,7 +92,7 @@ export class GameController {
       // get next user
       const nextUser = roomFromState.users[currentUserIndex + 1];
       if (nextUser) {
-        this.updateCoinsTaken(gameRoom, message.username, nextUser.username);
+        room.updateCoinsTaken(message.username, nextUser.username);
       }
     }
 
@@ -162,7 +114,8 @@ export class GameController {
     @MessageBody() message: any
   ) {
     const gameRoom = this.getSocketGameRoom(socket);
-    this.updateCoinsTaken(gameRoom, message.from, message.to);
+    const room = GameController.getRoomFromState(gameRoom);
+    room.updateCoinsTaken(message.from, message.to);
 
     GameController.emitUpateGame(io, gameRoom);
   }
