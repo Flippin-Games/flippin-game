@@ -44,8 +44,12 @@ class Time {
     );
   };
 
-  setTimestamp = () => {
+  setTimestampBatch = () => {
     this.timestampBatch = Date.now() - this.startTime;
+  };
+
+  setTimestampFive = () => {
+    this.timestampFive = Date.now() - this.startTime;
   };
 
   stopTime = () => clearInterval(this.timer);

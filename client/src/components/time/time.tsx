@@ -9,7 +9,12 @@ function Time() {
   return (
     <ul className={styles.wrapper}>
       <li>Time since game started: {state.currentTime}</li>
-      <li>Time first batch got delivered: {state.timestampBatch}</li>
+      {state.timestampBatch !== 0 && (
+        <li>Time first batch got delivered: {state.timestampBatch}</li>
+      )}
+      {state.timestampFive !== 0 && (
+        <li>Time first 5 got delivered: {state.timestampFive}</li>
+      )}
     </ul>
   );
 }

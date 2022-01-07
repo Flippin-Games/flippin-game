@@ -3,8 +3,8 @@ const mainReducer = (state: any, action: any) => {
 
   switch (action.type) {
     case "timestampBatch":
+    case "timestampFive":
     case "currentTime":
-      console.log(action.type, data);
       return {
         ...state,
         [action.type]: new Date(data).toISOString().substr(11, 8),

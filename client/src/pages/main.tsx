@@ -8,7 +8,6 @@ import socketService from "../services/socketService";
 import JoinRoom from "../components/joinRoom/joinRoom";
 import Header from "../components/header/header";
 import Game from "../components/game/game";
-import Time from "../components/time/time";
 import GameInfo from "../components/gameInfo/gameInfo";
 import Footer from "../components/footer/footer";
 
@@ -75,6 +74,15 @@ function Main() {
       dispatch({
         type: "timestampBatch",
         data: backendState.time.timestampBatch,
+      });
+    }
+    if (
+      backendState?.time.timestampFive &&
+      backendState.time.timestampFive !== state.timestampFive
+    ) {
+      dispatch({
+        type: "timestampFive",
+        data: backendState.time.timestampFive,
       });
     }
 

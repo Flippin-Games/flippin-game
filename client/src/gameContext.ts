@@ -16,6 +16,7 @@ export interface IGameStateProps {
   settings: any;
   currentTime: any;
   timestampBatch: any;
+  timestampFive: any;
   previousUser?: IUser;
 }
 
@@ -28,6 +29,7 @@ export const defaultState: IGameStateProps = {
   settings: {},
   currentTime: 0,
   timestampBatch: 0,
+  timestampFive: 0,
 };
 
 export default React.createContext({
