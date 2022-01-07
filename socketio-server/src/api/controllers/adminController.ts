@@ -64,9 +64,11 @@ export class AdminController {
 
   @OnMessage("end_game")
   public async endGame(@MessageBody() message: any) {
-    console.log("Game ended! in room: ", message.roomId);
+    // console.log("Game ended! in room: ", message.roomId);
 
-    GameController.stopTimer(message.roomId);
+    console.log("THIS DOESNT WORK AT THE MOMENT");
+
+    // GameController.stopTimer(message.roomId);
   }
 
   @OnMessage("remove_user")

@@ -65,15 +65,6 @@ export class GameController {
     room.users = room.users.filter((user) => user.username !== username);
   }
 
-  static stopTimer = (roomId: string): void => {
-    const room = GameController.getRoomFromState(roomId);
-
-    if (room.time.currentTime) {
-      console.log("STOPPING TIME AT ", room.time.currentTime);
-      room.clearInterval();
-    }
-  };
-
   static emitUpateGame(@SocketIO() io: Server, gameRoom: string): void {
     console.log("EMIT UPDATE GAME");
     io.to(gameRoom).emit(
@@ -132,7 +123,7 @@ export class GameController {
       roomFromState.started &&
       user.localCounter === roomFromState.settings.startAmount
     ) {
-      roomFromState.startTimer(io);
+      roomFromState.time.startTimer(io);
     }
 
     // flip
@@ -158,7 +149,7 @@ export class GameController {
       currentUserIndex + 1 === roomFromState.users.length &&
       user.flipped === roomFromState.settings.batchSize
     ) {
-      roomFromState.setTimestamp();
+      roomFromState.time.setTimestamp();
     }
 
     GameController.emitUpateGame(io, gameRoom);
