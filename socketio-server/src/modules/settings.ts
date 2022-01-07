@@ -4,11 +4,19 @@ class Settings {
   batchSize: number;
   startAmount: number;
 
-  constructor(autoMoveCoins, amountOfBatches, batchSize, startAmount) {
+  constructor(autoMoveCoins, amountOfBatches, batchSize) {
     this.autoMoveCoins = autoMoveCoins;
     this.amountOfBatches = amountOfBatches;
     this.batchSize = batchSize;
-    this.startAmount = startAmount;
+    this.startAmount = batchSize * amountOfBatches;
+  }
+
+  // TODO
+  update(autoMoveCoins, amountOfBatches, batchSize) {
+    this.autoMoveCoins = autoMoveCoins;
+    this.amountOfBatches = amountOfBatches;
+    this.batchSize = batchSize;
+    this.startAmount = batchSize * amountOfBatches;
   }
 }
 

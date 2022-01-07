@@ -33,12 +33,12 @@ export class GameController {
     return room;
   }
 
-  static emitUpateGame(@SocketIO() io: Server, gameRoom: string): void {
+  static emitUpateGame(@SocketIO() io: Server, roomId: string): void {
     console.log("=== EMIT UPDATE GAME ===");
 
-    io.to(gameRoom).emit(
+    io.to(roomId).emit(
       "on_game_update",
-      GameController.getRoomFromState(gameRoom)
+      GameController.getRoomFromState(roomId)
     );
   }
 
@@ -49,14 +49,18 @@ export class GameController {
     return lastUser.flipped === room.settings.startAmount;
   }
 
+  static addRoom(room: Room) {
+    GameController.gameState.rooms.push(room);
+  }
+
   @OnMessage("update_local_counter")
   public async updateLocalCounter(
     @SocketIO() io: Server,
     @ConnectedSocket() socket: Socket,
     @MessageBody() message: any
   ) {
-    const gameRoom = this.getSocketGameRoom(socket);
-    const room = GameController.getRoomFromState(gameRoom);
+    const roomId = this.getSocketGameRoom(socket);
+    const room = GameController.getRoomFromState(roomId);
     const user = room.getUser(message.username);
     const currentUserIndex = room.getUserIndex(message.username);
 
@@ -97,7 +101,7 @@ export class GameController {
       room.time.setTimestamp();
     }
 
-    GameController.emitUpateGame(io, gameRoom);
+    GameController.emitUpateGame(io, roomId);
   }
 
   @OnMessage("take_coins")
@@ -106,10 +110,10 @@ export class GameController {
     @ConnectedSocket() socket: Socket,
     @MessageBody() message: any
   ) {
-    const gameRoom = this.getSocketGameRoom(socket);
-    const room = GameController.getRoomFromState(gameRoom);
+    const roomId = this.getSocketGameRoom(socket);
+    const room = GameController.getRoomFromState(roomId);
 
     room.updateCoinsTaken(message.from, message.to);
-    GameController.emitUpateGame(io, gameRoom);
+    GameController.emitUpateGame(io, roomId);
   }
 }

@@ -10,16 +10,12 @@ class Room {
   started?: boolean; // TODO: shouldn't be optional
   time: Time;
 
-  constructor(id, users, counter, settings) {
+  constructor(id, users, counter) {
     this.id = id;
     this.users = users;
     this.counter = counter;
-    this.settings = new Settings(
-      settings.autoMoveCoins,
-      settings.amountOfBatches,
-      settings.batchSize,
-      settings.startAmount
-    );
+    this.started = false;
+    this.settings = new Settings(true, 4, 5);
     this.time = new Time(0, 0, 0, 0, null, this.id);
   }
 
@@ -43,6 +39,14 @@ class Room {
 
   getUserIndex(username: string): number {
     return this.users.findIndex((user) => user.username === username);
+  }
+
+  setFirstUserCounter(): void {
+    this.users[0].localCounter = this.settings.startAmount || 20;
+  }
+
+  setStarted(option: boolean): void {
+    this.started = option;
   }
 
   getCounter(): number {

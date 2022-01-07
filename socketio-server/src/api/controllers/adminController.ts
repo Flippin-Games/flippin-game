@@ -6,33 +6,29 @@ import {
   SocketIO,
 } from "socket-controllers";
 import { Server, Socket } from "socket.io";
+
 import { GameController } from "./gameController";
 import Room from "../../modules/room";
+import { getRandomInt } from "../../utils/utils";
 
 @SocketController()
 export class AdminController {
   @OnMessage("create_room")
   public async createRoom(
-    @SocketIO() io: Server,
+    // @SocketIO() io: Server,
     @ConnectedSocket() socket: Socket
   ) {
-    // TODO: move to utils
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+    // TODO this could be done better
+    let roomId = getRandomInt(1000, 9999).toString();
+    const alreadyExists = GameController.getRoomFromState(roomId);
+
+    if (alreadyExists) {
+      roomId = getRandomInt(1000, 9999).toString();
     }
+    const room = new Room(roomId, [], 0);
 
-    // TODO check if toom already exists, move logic from join_room ?
-    const roomId = getRandomInt(1000, 9999);
-    const room = new Room(roomId.toString(), [], 0, {
-      startAmount: 20,
-      amountOfBatches: 5,
-      autoMoveCoins: true,
-    });
-
-    await socket.join(room.id);
-    GameController.gameState.rooms.push(room);
+    await socket.join(roomId);
+    GameController.addRoom(room);
     socket.emit("created_room", room.id);
   }
 
@@ -46,17 +42,19 @@ export class AdminController {
 
     const room = GameController.getRoomFromState(message.roomId);
 
-    // TODO this is very ugly
     if (room.users.length > 1) {
-      room.settings = message.settings;
-      room.settings.startAmount =
-        message.settings.amountOfBatches * message.settings.batchSize;
+      const { settings } = message;
 
-      room.users[0].localCounter = room.settings.startAmount || 20;
-      room.started = true;
+      room.settings.update(
+        settings.autoMoveCoins,
+        settings.amountOfBatches,
+        settings.batchSize
+      );
+      room.setFirstUserCounter();
+      room.setStarted(true);
+
       socket.emit("game_started");
       GameController.emitUpateGame(io, message.roomId);
-      console.log(room.settings);
     } else {
       socket.emit("game_start_error", {
         error: "Not enough players to start the game",
