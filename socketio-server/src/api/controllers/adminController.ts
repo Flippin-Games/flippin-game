@@ -43,13 +43,9 @@ export class AdminController {
     const room = GameController.getRoomFromState(message.roomId);
 
     if (room.users.length > 1) {
-      const { settings } = message;
+      const { autoMoveCoins, amountOfBatches, batchSize } = message.settings;
 
-      room.settings.update(
-        settings.autoMoveCoins,
-        settings.amountOfBatches,
-        settings.batchSize
-      );
+      room.settings.update(autoMoveCoins, amountOfBatches, batchSize);
       room.setFirstUserCounter();
       room.setStarted(true);
 

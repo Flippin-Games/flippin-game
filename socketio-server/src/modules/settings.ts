@@ -18,6 +18,10 @@ class Settings {
     this.batchSize = batchSize;
     this.startAmount = batchSize * amountOfBatches;
   }
+
+  get() {
+    return this;
+  }
 }
 
 export default Settings;

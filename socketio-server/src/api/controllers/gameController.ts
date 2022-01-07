@@ -44,7 +44,7 @@ export class GameController {
 
   static didGameEnd(roomId: string): boolean {
     const room = GameController.getRoomFromState(roomId);
-    const lastUser = room.users[room.users.length - 1];
+    const lastUser = room.getUsers()[room.users.length - 1];
 
     return lastUser.flipped === room.settings.startAmount;
   }
@@ -63,41 +63,34 @@ export class GameController {
     const room = GameController.getRoomFromState(roomId);
     const user = room.getUser(message.username);
     const currentUserIndex = room.getUserIndex(message.username);
+    const flipped = user.getFlipped();
+    const { batchSize, autoMoveCoins, startAmount } = room.settings.get();
+    const { started, users } = room;
+    const nextIndex = currentUserIndex + 1;
 
     console.log("== UPDATE LOCAL COUNTER ==");
 
     // Start timer if it's first flip -> TODO: each comment could be separate func?
     if (
       currentUserIndex === 0 &&
-      room.started &&
-      user.localCounter === room.settings.startAmount
+      started &&
+      user.localCounter === startAmount
     ) {
       room.time.startTimer(io);
     }
 
-    // flip
-    if (user.localCounter > 0) {
-      user.localCounter = user.localCounter - 1;
-      user.flipped = user.flipped + 1;
-    }
+    user.flip();
 
     // If automove coins is on, move coins
-    if (
-      user.flipped >= room.settings.batchSize &&
-      room.settings.autoMoveCoins
-    ) {
-      // get next user
-      const nextUser = room.users[currentUserIndex + 1];
+    if (flipped >= batchSize && autoMoveCoins) {
+      const nextUser = users[nextIndex];
       if (nextUser) {
         room.updateCoinsTaken(message.username, nextUser.username);
       }
     }
 
     // timestampBatch
-    if (
-      currentUserIndex + 1 === room.users.length &&
-      user.flipped === room.settings.batchSize
-    ) {
+    if (nextIndex === users.length && flipped === batchSize) {
       room.time.setTimestamp();
     }
 
