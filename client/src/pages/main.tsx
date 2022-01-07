@@ -5,9 +5,10 @@ import mainReducer from "../helpers/mainReducer";
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 
-import Game from "../components/game/game";
 import JoinRoom from "../components/joinRoom/joinRoom";
 import Header from "../components/header/header";
+import Game from "../components/game/game";
+import Time from "../components/time/time";
 
 function Main() {
   const [state, dispatch] = useReducer(mainReducer, defaultState);
@@ -94,29 +95,9 @@ function Main() {
     <GameContext.Provider value={contextValue}>
       <div className="App">
         <Header />
-        {state?.time ? (
-          <>
-            <h2>Time since game started: {state?.time}</h2>
-            <h2>Time first batch got delivered: {state?.timestamp}</h2>
-          </>
-        ) : null}
+        {state?.time ? <Time /> : null}
         <main className="App-header">
-          {/* TODO something feels wrong here with passing whole context here*/}
-          {!state.isInRoom ? (
-            <JoinRoom />
-          ) : (
-            state.users?.map((user: any) => (
-              <Game
-                key={user.username}
-                counter={state.counter}
-                localCounter={user.localCounter}
-                flipped={user.flipped}
-                name={user.username}
-                activeUser={user.username === state.username}
-                previousUser={state.previousUser}
-              />
-            ))
-          )}
+          {!state.isInRoom ? <JoinRoom /> : <Game />}
         </main>
       </div>
     </GameContext.Provider>
