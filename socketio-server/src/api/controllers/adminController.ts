@@ -42,7 +42,7 @@ export class AdminController {
 
     const room = GameController.getRoomFromState(message.roomId);
 
-    if (room.users.length > 1) {
+    if (room.getUsers().length > 1) {
       const { autoMoveCoins, amountOfBatches, batchSize } = message.settings;
 
       room.settings.update(autoMoveCoins, amountOfBatches, batchSize);
@@ -60,11 +60,10 @@ export class AdminController {
 
   @OnMessage("end_game")
   public async endGame(@MessageBody() message: any) {
-    // console.log("Game ended! in room: ", message.roomId);
+    const room = GameController.getRoomFromState(message.roomId);
+    room.time.stopTime();
 
-    console.log("THIS DOESNT WORK AT THE MOMENT");
-
-    // GameController.stopTimer(message.roomId);
+    console.log("Game ended! in room: ", message.roomId);
   }
 
   @OnMessage("remove_user")

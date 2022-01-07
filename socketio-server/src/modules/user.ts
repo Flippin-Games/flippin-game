@@ -27,6 +27,18 @@ class User {
       this.flipped = this.flipped + 1;
     }
   }
+
+  removeFlipped(amount: number): void {
+    if (this.flipped - amount >= 0) {
+      this.flipped = this.flipped - amount;
+    } else {
+      this.flipped = 0;
+    }
+  }
+
+  addToLocalCounter(amount: number): void {
+    this.localCounter = this.localCounter + amount;
+  }
 }
 
 export default User;

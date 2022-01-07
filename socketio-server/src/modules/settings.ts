@@ -22,6 +22,10 @@ class Settings {
   get() {
     return this;
   }
+
+  getBatchSize() {
+    return this.batchSize;
+  }
 }
 
 export default Settings;

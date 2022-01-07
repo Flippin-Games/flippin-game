@@ -44,9 +44,13 @@ export class GameController {
 
   static didGameEnd(roomId: string): boolean {
     const room = GameController.getRoomFromState(roomId);
-    const lastUser = room.getUsers()[room.users.length - 1];
+    const lastUser = room.getUserByIndex(room.users.length - 1);
 
-    return lastUser.flipped === room.settings.startAmount;
+    if (lastUser) {
+      return lastUser.flipped === room.settings.startAmount;
+    }
+
+    return false;
   }
 
   static addRoom(room: Room) {
@@ -63,23 +67,22 @@ export class GameController {
     const room = GameController.getRoomFromState(roomId);
     const user = room.getUser(message.username);
     const currentUserIndex = room.getUserIndex(message.username);
-    const flipped = user.getFlipped();
     const { batchSize, autoMoveCoins, startAmount } = room.settings.get();
     const { started, users } = room;
+
     const nextIndex = currentUserIndex + 1;
+    const isFirst = currentUserIndex === 0;
+    const hasMaxCoins = user.getLocalCounter() === startAmount;
 
     console.log("== UPDATE LOCAL COUNTER ==");
 
-    // Start timer if it's first flip -> TODO: each comment could be separate func?
-    if (
-      currentUserIndex === 0 &&
-      started &&
-      user.localCounter === startAmount
-    ) {
+    if (isFirst && started && hasMaxCoins) {
       room.time.startTimer(io);
     }
 
     user.flip();
+
+    const flipped = user.getFlipped();
 
     // If automove coins is on, move coins
     if (flipped >= batchSize && autoMoveCoins) {

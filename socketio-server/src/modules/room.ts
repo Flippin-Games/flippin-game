@@ -29,6 +29,10 @@ class Room {
     return user;
   }
 
+  getUserByIndex(index: number): User {
+    return this.users[index];
+  }
+
   addUser(user: User): void {
     this.users.push(user);
   }
@@ -58,16 +62,13 @@ class Room {
     return this.counter;
   }
 
-  // TODO should this be async?
   updateCoinsTaken(from, to): void {
-    // TODO error handle and checks
-
     const userToTakeFrom = this.getUser(from);
     const userToGiveTo = this.getUser(to);
+    const batchSize = this.settings.getBatchSize();
 
-    userToTakeFrom.flipped = userToTakeFrom.flipped - this.settings.batchSize;
-    userToGiveTo.localCounter =
-      userToGiveTo.localCounter + this.settings.batchSize;
+    userToTakeFrom.removeFlipped(batchSize);
+    userToGiveTo.addToLocalCounter(batchSize);
   }
 }
 
