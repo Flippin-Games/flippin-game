@@ -1,32 +1,19 @@
 import React from "react";
 
-export interface IUser {
-  username: string;
-  localCounter: number;
-  flipped: number;
-}
+import { GameStateProps } from "./helpers/types";
 
-export interface IGameStateProps {
-  isInRoom: boolean;
-  counter: number;
-  localCounter: number;
-  username: string;
-  users: IUser[];
-  //TODO - get rid of any
-  settings: any;
-  currentTime: any;
-  timestampBatch: any;
-  timestampFive: any;
-  previousUser?: IUser;
-}
-
-export const defaultState: IGameStateProps = {
+export const defaultState: GameStateProps = {
   isInRoom: false,
   counter: 0,
   localCounter: 0,
   username: "",
   users: [],
-  settings: {},
+  settings: {
+    autoMoveCoins: false,
+    amountOfBatches: 4,
+    batchSize: 5,
+    startAmount: 20,
+  },
   currentTime: 0,
   timestampBatch: 0,
   timestampFive: 0,
