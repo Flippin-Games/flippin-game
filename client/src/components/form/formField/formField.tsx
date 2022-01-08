@@ -9,34 +9,52 @@ interface IFormField {
   type: string;
   required: boolean;
   checked?: boolean;
+  row?: boolean;
 }
 
-function FormField(props: IFormField) {
+function FormField({
+  id,
+  placeholder,
+  value,
+  label,
+  onChange,
+  type,
+  required,
+  checked,
+  row,
+}: IFormField) {
   return (
-    <fieldset className={styles.formField}>
-      <label className={styles.label} htmlFor={props.id}>
-        {props.label}
+    <fieldset
+      className={`${styles.formField} ${row ? styles.row : ""} ${
+        type === "checkbox" ? styles.checkbox : ""
+      }`}
+    >
+      <label className={styles.label} htmlFor={id}>
+        {label}
       </label>
-      {props.type === "checkbox" ? (
-        <input
-          id={props.id}
-          name={props.id}
-          placeholder={props.placeholder}
-          onChange={props.onChange}
-          type={props.type}
-          required={props.required}
-          className={styles.input}
-          checked={props.checked}
-        />
+      {type === "checkbox" ? (
+        <>
+          <input
+            id={id}
+            name={id}
+            placeholder={placeholder}
+            onChange={onChange}
+            type={type}
+            required={required}
+            className={styles.input}
+            checked={checked}
+          />
+          <span className={styles.checkmark} />
+        </>
       ) : (
         <input
-          id={props.id}
-          name={props.id}
-          placeholder={props.placeholder}
-          value={props.value}
-          onChange={props.onChange}
-          type={props.type}
-          required={props.required}
+          id={id}
+          name={id}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          type={type}
+          required={required}
           className={styles.input}
           min="0"
         />
