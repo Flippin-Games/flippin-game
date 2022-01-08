@@ -1,4 +1,6 @@
 import { useEffect, useState, useReducer } from "react";
+
+import Button from "../components/button/button";
 import SettingsForm from "../components/settingsForm/settingsForm";
 
 import gameService from "../services/gameService";
@@ -100,7 +102,7 @@ function Admin() {
       gameService.removeUser(
         socketService.socket,
         roomId,
-        e.target.dataset.username
+        e.target.dataset.attr
       );
     }
   };
@@ -123,17 +125,16 @@ function Admin() {
       <nav>
         <h1>Hello Admin!</h1>
       </nav>
-      <main className="App-header">
+      <main className="main">
         <div>
           {!roomId && roomId.length === 0 && (
-            <button
+            <Button
               type="submit"
               onClick={handleGenerateRoom}
               disabled={roomId.length > 0}
-              className="btn btn-primary"
-            >
-              Generate Room
-            </button>
+              className="btn-primary"
+              text="Generate Room"
+            />
           )}
 
           {roomId && (
@@ -149,13 +150,12 @@ function Admin() {
           )}
 
           {started && (
-            <button
+            <Button
               type="submit"
               onClick={handleEndGame}
               className="btn btn-primary"
-            >
-              End Game
-            </button>
+              text="End Game"
+            />
           )}
 
           {users && (
@@ -163,13 +163,13 @@ function Admin() {
               {users.map((user) => (
                 <li key={user.username}>
                   {user.username}
-                  <button
-                    data-username={user.username}
+                  <Button
+                    type="button"
+                    dataAtrr={user.username}
                     onClick={handleRemove}
                     className="btn btn-primary"
-                  >
-                    Remove
-                  </button>
+                    text="Remove"
+                  />
                 </li>
               ))}
             </ol>

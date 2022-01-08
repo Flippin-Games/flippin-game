@@ -6,6 +6,7 @@ import gameService from "../../services/gameService";
 
 import Form from "../form/form";
 import FormField from "../form/formField/formField";
+import Button from "../button/button";
 
 import styles from "./joinRoom.module.scss";
 
@@ -81,9 +82,12 @@ function JoinRoom() {
           label="Room ID"
           required={true}
         />
-        <button type="submit" disabled={isJoining} className="btn btn-primary">
-          {isJoining ? "Joining..." : "Join"}
-        </button>
+        <Button
+          type="submit"
+          disabled={isJoining}
+          className="btn-primary"
+          text={isJoining ? "Joining..." : "Join"}
+        />
       </Form>
     </section>
   );

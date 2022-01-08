@@ -3,6 +3,7 @@ import { MouseEvent, useContext } from "react";
 import gameContext from "../../gameContext";
 import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
+import Button from "../button/button";
 
 import styles from "./playerCard.module.scss";
 
@@ -48,9 +49,12 @@ function PlayerCard(props: TGame) {
 
       {/* TODO take this out, it looks like a mess */}
       {shouldDisplayButton ? (
-        <button onClick={handleTakeCoins} className="btn btn-primary btn-s">
-          Take Coins
-        </button>
+        <Button
+          type="button"
+          onClick={handleTakeCoins}
+          className="btn-primary btn-s"
+          text="Take Coins"
+        />
       ) : (
         <div className={styles.placeholder} />
       )}
@@ -60,12 +64,12 @@ function PlayerCard(props: TGame) {
           To flip: {props.localCounter} | Flipped: {props.flipped}
         </p>
         {props.activeUser && props.localCounter ? (
-          <button
+          <Button
+            type="button"
             onClick={handleLocalCounter}
             className="btn btn-primary btn-s"
-          >
-            Flip Coin
-          </button>
+            text="Flip Coin"
+          />
         ) : (
           <div className={styles.placeholder} />
         )}
