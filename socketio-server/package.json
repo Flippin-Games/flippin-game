@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon --exec \"npm run tsnode\"",
-    "tsnode": "ts-node ./src/server"
+    "start": "node build/server.js",
+    "start:prod": "node build/server.js",
+    "tsnode": "node build/server.js",
+    "build": "tsc"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

@@ -44,7 +44,7 @@ function Admin() {
 
   const connectSocket = async () => {
     await socketService
-      .connect(`${process.env.REACT_APP_PUBLIC_URL}:9000`)
+      .connect(`${process.env.REACT_APP_PUBLIC_URL}`)
       .catch((err) => {
         console.log("Error: ", err);
       });
