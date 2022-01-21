@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node build/server.js",
-    "start:prod": "node build/server.js",
-    "tsnode": "node build/server.js",
+    "dev": "nodemon --exec \"npm run tsnode\"",
+    "tsnode": "ts-node ./src/server",
+    "start": "node dist/server.js",
     "build": "tsc"
   },
   "dependencies": {
