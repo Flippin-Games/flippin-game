@@ -1,5 +1,6 @@
 import { useSocketServer } from "socket-controllers";
 import { Server } from "socket.io";
+import { env } from "process";
 
 export default (httpServer) => {
   const io = new Server(httpServer, {
@@ -15,9 +16,11 @@ export default (httpServer) => {
     console.log("connection");
   });
 
-  console.log(__dirname + "/api/controllers/*.js");
+  const extension = env.NODE_ENV === "development" ? "ts" : "js";
 
-  useSocketServer(io, { controllers: [__dirname + "/api/controllers/*.js"] });
+  useSocketServer(io, {
+    controllers: [`${__dirname}/api/controllers/*.${extension}`],
+  });
 
   return io;
 };

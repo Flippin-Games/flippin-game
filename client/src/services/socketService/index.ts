@@ -12,13 +12,9 @@ class SocketService {
         transports: ["websocket", "polling", "flashsocket"],
       });
 
-      console.log("Socket Service");
-
       if (!this.socket) {
         return reject;
       }
-
-      console.log(this.socket);
 
       this.socket.on("connect", () => {
         resolve(this.socket as Socket);
