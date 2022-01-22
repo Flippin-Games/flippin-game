@@ -1,22 +1,8 @@
-import { useState } from "react";
-import Button from "../components/button/button";
+import Button from "../button/button";
 import styles from "./coins.module.scss";
 
-function Coins() {
-  const [amountOfCoins, setAmountOfCoins] = useState(20);
-
-  const [isFliping, setIsFlipping] = useState(false);
-  const [flipped, setFlipped] = useState(0);
-
-  const flipHandler = () => {
-    setAmountOfCoins(amountOfCoins - 1);
-    setIsFlipping(true);
-    setTimeout(() => {
-      setFlipped(flipped + 1);
-      setIsFlipping(false);
-    }, 1700);
-  };
-
+// TODO
+function Coins({ toFlip, flipped, clickHandler, isFliping }: any) {
   const Coin = ({ flip, flipped }: any) => (
     <span
       className={`${styles.coin} ${flip ? styles.flip : ""} ${
@@ -25,12 +11,13 @@ function Coins() {
     ></span>
   );
 
+  console.log("Coins Rerender");
+
   return (
     <>
-      <h1>Hello Coins</h1>
       <div className={styles.wrapper}>
         <div className={styles.box}>
-          {Array(amountOfCoins)
+          {Array(toFlip)
             .fill(0)
             .map(() => (
               <Coin />
@@ -50,10 +37,10 @@ function Coins() {
           </div>
         ) : null}
       </div>
-      {amountOfCoins > 0 ? (
+      {toFlip > 0 ? (
         <Button
           type="button"
-          onClick={flipHandler}
+          onClick={clickHandler}
           text="Flip"
           disabled={isFliping}
           disabledText="Flipping..."

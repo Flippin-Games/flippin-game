@@ -12,6 +12,8 @@ import GameInfo from "../components/gameInfo/gameInfo";
 import Footer from "../components/footer/footer";
 
 function Main() {
+  console.log("Main RERENDER");
+
   const [state, dispatch] = useReducer(mainReducer, defaultState);
 
   const contextValue = useMemo(() => {
@@ -38,8 +40,11 @@ function Main() {
 
   // TODO fix any
   const updateContext = (backendState: any) => {
-    console.log(backendState);
-    if (backendState.users) {
+    if (
+      backendState.users &&
+      JSON.stringify(backendState.users) !== JSON.stringify(state.users)
+    ) {
+      console.log(" ====== IN =====");
       dispatch({
         type: "users",
         data: backendState.users,
@@ -61,7 +66,6 @@ function Main() {
       backendState.time.currentTime &&
       backendState.time.currentTime !== state.currentTime
     ) {
-      console.log(backendState.time.currentTime, state.currentTime);
       dispatch({
         type: "currentTime",
         data: backendState.time.currentTime,

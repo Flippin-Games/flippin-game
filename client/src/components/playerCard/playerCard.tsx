@@ -1,9 +1,11 @@
-import { MouseEvent, useContext } from "react";
+import React from "react";
+import { MouseEvent, useContext, useEffect, useState } from "react";
 
 import gameContext from "../../gameContext";
 import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
 import Button from "../button/button";
+import Coins from "../coins/coins";
 
 import styles from "./playerCard.module.scss";
 
@@ -19,8 +21,13 @@ type TGame = {
 function PlayerCard(props: TGame) {
   const { state } = useContext(gameContext);
   const { username, settings } = state;
+  const [isFliping, setIsFlipping] = useState(false);
 
   const handleLocalCounter = (e: MouseEvent<HTMLButtonElement>) => {
+    setIsFlipping(true);
+    setTimeout(() => {
+      setIsFlipping(false);
+    }, 1700);
     if (socketService.socket) {
       gameService.updateLocalCounter(socketService.socket, username);
     }
@@ -58,12 +65,19 @@ function PlayerCard(props: TGame) {
       ) : (
         <div className={styles.placeholder} />
       )}
-      <hr />
       <div>
+        {props.activeUser ? (
+          <Coins
+            toFlip={props.localCounter}
+            flipped={props.flipped}
+            clickHandler={handleLocalCounter}
+            isFliping={isFliping}
+          />
+        ) : null}
         <p>
           To flip: {props.localCounter} | Flipped: {props.flipped}
         </p>
-        {props.activeUser && props.localCounter ? (
+        {/* {props.activeUser && props.localCounter ? (
           <Button
             type="button"
             onClick={handleLocalCounter}
@@ -72,10 +86,10 @@ function PlayerCard(props: TGame) {
           />
         ) : (
           <div className={styles.placeholder} />
-        )}
+        )} */}
       </div>
     </div>
   );
 }
 
-export default PlayerCard;
+export default React.memo(PlayerCard);

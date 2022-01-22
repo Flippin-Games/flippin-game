@@ -24,6 +24,7 @@ function JoinRoom() {
 
   // TODO
   const handleChange = (e: any) => {
+    console.log("first");
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value,
@@ -35,6 +36,8 @@ function JoinRoom() {
     const socket = socketService.socket;
 
     if (!socket) return;
+
+    console.log("asdasda");
 
     if (!formValues.room || formValues.room.trim() === "") {
       alert("Please provide required fields.");

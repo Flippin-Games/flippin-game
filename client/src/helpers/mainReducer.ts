@@ -1,6 +1,8 @@
 const mainReducer = (state: any, action: any) => {
   const { data } = action;
 
+  console.log(action.type);
+
   switch (action.type) {
     case "timestampBatch":
     case "timestampFive":
