@@ -21,5 +21,4 @@ export const defaultState: GameStateProps = {
 
 export default React.createContext({
   state: defaultState,
-  dispatch: (a: any) => {},
 });

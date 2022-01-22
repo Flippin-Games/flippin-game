@@ -1,5 +1,4 @@
-import React from "react";
-import { MouseEvent, useContext, useEffect, useState } from "react";
+import { MouseEvent, useContext, useState, memo } from "react";
 
 import gameContext from "../../gameContext";
 import gameService from "../../services/gameService";
@@ -92,4 +91,4 @@ function PlayerCard(props: TGame) {
   );
 }
 
-export default React.memo(PlayerCard);
+export default memo(PlayerCard);

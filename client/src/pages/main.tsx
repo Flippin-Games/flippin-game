@@ -1,6 +1,7 @@
-import { useEffect, useReducer, useMemo } from "react";
+import { useEffect, useReducer, useMemo, useState } from "react";
 
 import GameContext, { defaultState } from "../gameContext";
+import DispatchContext from "../dispatchContext";
 import mainReducer from "../helpers/mainReducer";
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
@@ -11,14 +12,40 @@ import Game from "../components/game/game";
 import GameInfo from "../components/gameInfo/gameInfo";
 import Footer from "../components/footer/footer";
 
-function Main() {
-  console.log("Main RERENDER");
+import { BackendState } from "../helpers/types";
 
+const DefaultBackendState = {
+  isInRoom: false,
+  counter: 0,
+  localCounter: 0,
+  username: "",
+  users: [],
+  settings: {
+    autoMoveCoins: false,
+    amountOfBatches: 4,
+    batchSize: 5,
+    startAmount: 20,
+  },
+  time: {
+    currentTime: 0,
+    timestampBatch: 0,
+    timestampFive: 0,
+  },
+};
+
+function Main() {
+  const [backendState, setBackendState] =
+    useState<BackendState>(DefaultBackendState);
+  console.log("Main RERENDER");
   const [state, dispatch] = useReducer(mainReducer, defaultState);
 
   const contextValue = useMemo(() => {
-    return { state, dispatch };
-  }, [state, dispatch]);
+    return { state };
+  }, [state]);
+
+  const dispatchValue = useMemo(() => {
+    return { dispatch };
+  }, [dispatch]);
 
   const connectSocket = async () => {
     await socketService
@@ -30,27 +57,38 @@ function Main() {
 
   useEffect(() => {
     connectSocket();
+    handleGameUpdate();
   }, []);
 
   const handleGameUpdate = () => {
     if (socketService.socket) {
-      gameService.onGameUpdate(socketService.socket, updateContext);
+      gameService.onGameUpdate(socketService.socket, setBackendState as any);
     }
   };
 
+  useEffect(() => {
+    updateContext();
+  }, [backendState]);
+
   // TODO fix any
-  const updateContext = (backendState: any) => {
+  const updateContext = () => {
+    console.log(
+      JSON.stringify(backendState.users),
+      JSON.stringify(state.users)
+    );
     if (
       backendState.users &&
       JSON.stringify(backendState.users) !== JSON.stringify(state.users)
     ) {
-      console.log(" ====== IN =====");
       dispatch({
         type: "users",
         data: backendState.users,
       });
     }
-    if (backendState.settings) {
+    if (
+      backendState.settings &&
+      JSON.stringify(backendState.settings) !== JSON.stringify(state.settings)
+    ) {
       dispatch({
         type: "settings",
         data: backendState.settings,
@@ -94,10 +132,6 @@ function Main() {
   };
 
   useEffect(() => {
-    handleGameUpdate();
-  }, []);
-
-  useEffect(() => {
     if (!state.users?.length) return;
     const currentUserIndex = state.users.findIndex(
       (user: any) => user.username === state.username
@@ -116,13 +150,24 @@ function Main() {
 
   return (
     <GameContext.Provider value={contextValue}>
-      <div className="App">
-        {!state.isInRoom ? <Header /> : <GameInfo />}
-        <main className="main">
-          {!state.isInRoom ? <JoinRoom /> : <Game />}
-        </main>
-        <Footer />
-      </div>
+      <DispatchContext.Provider value={dispatchValue}>
+        <div className="App">
+          {!state.isInRoom ? <Header /> : <GameInfo />}
+          <main className="main">
+            {!state.isInRoom ? (
+              <JoinRoom />
+            ) : (
+              <Game
+                users={state.users}
+                counter={state.counter}
+                previousUser={state.previousUser}
+                username={state.username}
+              />
+            )}
+          </main>
+          <Footer />
+        </div>
+      </DispatchContext.Provider>
     </GameContext.Provider>
   );
 }

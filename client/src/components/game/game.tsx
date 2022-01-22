@@ -1,34 +1,25 @@
-import { useContext, useEffect } from "react";
+import { memo } from "react";
 
-import gameContext from "../../gameContext";
 import PlayerCard from "../playerCard/playerCard";
 
 import styles from "./game.module.scss";
 
-function Game() {
-  console.log("Game RERENDER");
-
-  const { state } = useContext(gameContext);
-
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-
+function Game({ counter, users, previousUser, username }: any) {
   return (
     <section className={styles.wrapper}>
-      {state.users?.map((user: any) => (
+      {users?.map((user: any) => (
         <PlayerCard
           key={user.username}
-          counter={state.counter}
+          counter={counter}
           localCounter={user.localCounter}
           flipped={user.flipped}
           name={user.username}
-          activeUser={user.username === state.username}
-          previousUser={state.previousUser}
+          activeUser={user.username === username}
+          previousUser={previousUser}
         />
       ))}
     </section>
   );
 }
 
-export default Game;
+export default memo(Game);

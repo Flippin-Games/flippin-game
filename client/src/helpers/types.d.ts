@@ -4,7 +4,11 @@ export type User = {
   flipped: number;
 };
 
-export type Time = {};
+export type Time = {
+  currentTime: number;
+  timestampBatch: number;
+  timestampFive: number;
+};
 
 export type Settings = {
   autoMoveCoins: boolean;
@@ -24,4 +28,14 @@ export type GameStateProps = {
   timestampBatch: number;
   timestampFive: number;
   previousUser?: User;
+};
+
+export type BackendState = {
+  isInRoom: boolean;
+  counter: number;
+  localCounter: number;
+  username: string;
+  users: User[];
+  settings: Settings;
+  time: Time;
 };

@@ -1,6 +1,8 @@
 import Button from "../button/button";
 import styles from "./coins.module.scss";
 
+import { memo } from "react";
+
 // TODO
 function Coins({ toFlip, flipped, clickHandler, isFliping }: any) {
   const Coin = ({ flip, flipped }: any) => (
@@ -10,8 +12,6 @@ function Coins({ toFlip, flipped, clickHandler, isFliping }: any) {
       }`}
     ></span>
   );
-
-  console.log("Coins Rerender");
 
   return (
     <>
@@ -51,4 +51,4 @@ function Coins({ toFlip, flipped, clickHandler, isFliping }: any) {
   );
 }
 
-export default Coins;
+export default memo(Coins);

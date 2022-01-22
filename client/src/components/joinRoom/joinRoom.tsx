@@ -9,6 +9,7 @@ import FormField from "../form/formField/formField";
 import Button from "../button/button";
 
 import styles from "./joinRoom.module.scss";
+import dispatchContext from "../../dispatchContext";
 
 const initialFormState = {
   name: "",
@@ -20,11 +21,10 @@ function JoinRoom() {
   const [isJoining, setIsJoining] = useState(false);
   const [error, setError] = useState("");
 
-  const { dispatch } = useContext(gameContext);
+  const { dispatch } = useContext(dispatchContext);
 
   // TODO
   const handleChange = (e: any) => {
-    console.log("first");
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value,
