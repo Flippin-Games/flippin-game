@@ -1,6 +1,8 @@
 import { MouseEvent, useContext, useState, memo } from "react";
 
-import gameContext from "../../gameContext";
+import { useAppSelector } from "../../store/hooks";
+
+// import gameContext from "../../gameContext";
 import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
 import Button from "../button/button";
@@ -18,8 +20,8 @@ type TGame = {
 };
 
 function PlayerCard(props: TGame) {
-  const { state } = useContext(gameContext);
-  const { username, settings } = state;
+  const { settings } = useAppSelector((state) => state.settings);
+  const { username } = useAppSelector((state) => state.local);
   const [isFliping, setIsFlipping] = useState(false);
 
   const handleLocalCounter = (e: MouseEvent<HTMLButtonElement>) => {

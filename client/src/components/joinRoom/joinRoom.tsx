@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 
-import gameContext from "../../gameContext";
+import { useAppDispatch } from "../../store/hooks";
 import socketService from "../../services/socketService";
 import gameService from "../../services/gameService";
 
@@ -10,6 +10,7 @@ import Button from "../button/button";
 
 import styles from "./joinRoom.module.scss";
 import dispatchContext from "../../dispatchContext";
+import { setIsInRoom, setUsername } from "../../store/features/local-slice";
 
 const initialFormState = {
   name: "",
@@ -20,8 +21,7 @@ function JoinRoom() {
   const [formValues, setFormValues] = useState(initialFormState);
   const [isJoining, setIsJoining] = useState(false);
   const [error, setError] = useState("");
-
-  const { dispatch } = useContext(dispatchContext);
+  const dispatchRedux = useAppDispatch();
 
   // TODO
   const handleChange = (e: any) => {
@@ -51,14 +51,8 @@ function JoinRoom() {
       .catch((err) => setError(err));
 
     if (joined) {
-      dispatch({
-        type: "username",
-        data: formValues.name,
-      });
-      dispatch({
-        type: "isInRoom",
-        data: true,
-      });
+      dispatchRedux(setUsername(formValues.name));
+      dispatchRedux(setIsInRoom(true));
     }
 
     setIsJoining(false);

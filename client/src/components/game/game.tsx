@@ -5,6 +5,7 @@ import PlayerCard from "../playerCard/playerCard";
 import styles from "./game.module.scss";
 
 function Game({ counter, users, previousUser, username }: any) {
+  console.log("GAME RERENDER");
   return (
     <section className={styles.wrapper}>
       {users?.map((user: any) => (

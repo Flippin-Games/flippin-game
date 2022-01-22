@@ -1,8 +1,7 @@
 import { useEffect, useReducer, useMemo, useState } from "react";
 
-import GameContext, { defaultState } from "../gameContext";
-import DispatchContext from "../dispatchContext";
-import mainReducer from "../helpers/mainReducer";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 
@@ -13,6 +12,14 @@ import GameInfo from "../components/gameInfo/gameInfo";
 import Footer from "../components/footer/footer";
 
 import { BackendState } from "../helpers/types";
+import {
+  setCurrentTime,
+  setTimestampBatch,
+  setTimestampFive,
+} from "../store/features/time-slice";
+import { setUsers } from "../store/features/users-slice";
+import { setSettings } from "../store/features/settings-slice";
+import { setCounter, setPreviousUser } from "../store/features/local-slice";
 
 const DefaultBackendState = {
   isInRoom: false,
@@ -32,20 +39,19 @@ const DefaultBackendState = {
     timestampFive: 0,
   },
 };
-
 function Main() {
   const [backendState, setBackendState] =
     useState<BackendState>(DefaultBackendState);
-  console.log("Main RERENDER");
-  const [state, dispatch] = useReducer(mainReducer, defaultState);
-
-  const contextValue = useMemo(() => {
-    return { state };
-  }, [state]);
-
-  const dispatchValue = useMemo(() => {
-    return { dispatch };
-  }, [dispatch]);
+  console.log("Main rerender");
+  const dispatchRedux = useAppDispatch();
+  // const { currentTime, timestampBatch, timestampFive } = useAppSelector(
+  //   (state) => state.time
+  // );
+  const { settings } = useAppSelector((state) => state.settings);
+  const { counter, isInRoom, username, previousUser } = useAppSelector(
+    (state) => state.local
+  );
+  const { users } = useAppSelector((state) => state.users);
 
   const connectSocket = async () => {
     await socketService
@@ -72,103 +78,72 @@ function Main() {
 
   // TODO fix any
   const updateContext = () => {
-    console.log(
-      JSON.stringify(backendState.users),
-      JSON.stringify(state.users)
-    );
+    console.log(JSON.stringify(backendState.users), JSON.stringify(users));
     if (
       backendState.users &&
-      JSON.stringify(backendState.users) !== JSON.stringify(state.users)
+      JSON.stringify(backendState.users) !== JSON.stringify(users)
     ) {
-      dispatch({
-        type: "users",
-        data: backendState.users,
-      });
+      console.log(1);
+      dispatchRedux(setUsers(backendState.users));
     }
     if (
       backendState.settings &&
-      JSON.stringify(backendState.settings) !== JSON.stringify(state.settings)
+      JSON.stringify(backendState.settings) !== JSON.stringify(settings)
     ) {
-      dispatch({
-        type: "settings",
-        data: backendState.settings,
-      });
+      console.log(2);
+      dispatchRedux(setSettings(backendState.settings));
     }
-    if (backendState.counter && backendState.counter !== state.counter) {
-      dispatch({
-        type: "counter",
-        data: backendState.counter,
-      });
+    if (backendState.counter && backendState.counter !== counter) {
+      console.log(3);
+      dispatchRedux(setCounter(backendState.counter));
     }
-    if (
-      backendState.time.currentTime &&
-      backendState.time.currentTime !== state.currentTime
-    ) {
-      dispatch({
-        type: "currentTime",
-        data: backendState.time.currentTime,
-      });
+    if (backendState.time.currentTime) {
+      console.log(4);
+      dispatchRedux(setCurrentTime(backendState.time.currentTime));
     }
-    if (
-      backendState?.time.timestampBatch &&
-      backendState.time.timestampBatch !== state.timestampBatch
-    ) {
-      dispatch({
-        type: "timestampBatch",
-        data: backendState.time.timestampBatch,
-      });
+    if (backendState?.time.timestampBatch) {
+      console.log(5);
+      dispatchRedux(setTimestampBatch(backendState.time.timestampBatch));
     }
-    if (
-      backendState?.time.timestampFive &&
-      backendState.time.timestampFive !== state.timestampFive
-    ) {
-      dispatch({
-        type: "timestampFive",
-        data: backendState.time.timestampFive,
-      });
+    if (backendState?.time.timestampFive) {
+      console.log(6);
+      dispatchRedux(setTimestampFive(backendState.time.timestampFive));
     }
-
-    console.log(state);
   };
 
   useEffect(() => {
-    if (!state.users?.length) return;
-    const currentUserIndex = state.users.findIndex(
-      (user: any) => user.username === state.username
-    );
+    console.log(users);
+    if (!users?.length) return;
 
+    const currentUserIndex = users.findIndex(
+      (user: any) => user.username === username
+    );
     const isFirst = currentUserIndex === 0;
 
     if (!isFirst) {
-      const previousUser = state.users[currentUserIndex - 1];
-      dispatch({
-        type: "previousUser",
-        data: previousUser,
-      });
+      const previousUser = users[currentUserIndex - 1];
+      dispatchRedux(setPreviousUser(previousUser));
+      console.log(previousUser);
     }
-  }, [state.users, state.username]);
+  }, [users, username]);
 
   return (
-    <GameContext.Provider value={contextValue}>
-      <DispatchContext.Provider value={dispatchValue}>
-        <div className="App">
-          {!state.isInRoom ? <Header /> : <GameInfo />}
-          <main className="main">
-            {!state.isInRoom ? (
-              <JoinRoom />
-            ) : (
-              <Game
-                users={state.users}
-                counter={state.counter}
-                previousUser={state.previousUser}
-                username={state.username}
-              />
-            )}
-          </main>
-          <Footer />
-        </div>
-      </DispatchContext.Provider>
-    </GameContext.Provider>
+    <div className="App">
+      {!isInRoom ? <Header /> : <GameInfo />}
+      <main className="main">
+        {!isInRoom ? (
+          <JoinRoom />
+        ) : (
+          <Game
+            users={users}
+            counter={counter}
+            previousUser={previousUser}
+            username={username}
+          />
+        )}
+      </main>
+      <Footer />
+    </div>
   );
 }
 
