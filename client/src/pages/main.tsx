@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useMemo, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
@@ -21,37 +21,18 @@ import { setUsers } from "../store/features/users-slice";
 import { setSettings } from "../store/features/settings-slice";
 import { setCounter, setPreviousUser } from "../store/features/local-slice";
 
-const DefaultBackendState = {
-  isInRoom: false,
-  counter: 0,
-  localCounter: 0,
-  username: "",
-  users: [],
-  settings: {
-    autoMoveCoins: false,
-    amountOfBatches: 4,
-    batchSize: 5,
-    startAmount: 20,
-  },
-  time: {
-    currentTime: 0,
-    timestampBatch: 0,
-    timestampFive: 0,
-  },
-};
 function Main() {
-  const [backendState, setBackendState] =
-    useState<BackendState>(DefaultBackendState);
   console.log("Main rerender");
   const dispatchRedux = useAppDispatch();
-  // const { currentTime, timestampBatch, timestampFive } = useAppSelector(
-  //   (state) => state.time
-  // );
   const { settings } = useAppSelector((state) => state.settings);
   const { counter, isInRoom, username, previousUser } = useAppSelector(
     (state) => state.local
   );
   const { users } = useAppSelector((state) => state.users);
+  const stateRef = useRef();
+  stateRef.current = users;
+  const settingsRef = useRef();
+  settingsRef.current = settings;
 
   const connectSocket = async () => {
     await socketService
@@ -68,17 +49,15 @@ function Main() {
 
   const handleGameUpdate = () => {
     if (socketService.socket) {
-      gameService.onGameUpdate(socketService.socket, setBackendState as any);
+      gameService.onGameUpdate(socketService.socket, updateContext);
     }
   };
 
-  useEffect(() => {
-    updateContext();
-  }, [backendState]);
-
   // TODO fix any
-  const updateContext = () => {
-    console.log(JSON.stringify(backendState.users), JSON.stringify(users));
+  function updateContext(backendState: any) {
+    const users = stateRef.current;
+    const settings = settingsRef.current;
+
     if (
       backendState.users &&
       JSON.stringify(backendState.users) !== JSON.stringify(users)
@@ -109,10 +88,9 @@ function Main() {
       console.log(6);
       dispatchRedux(setTimestampFive(backendState.time.timestampFive));
     }
-  };
+  }
 
   useEffect(() => {
-    console.log(users);
     if (!users?.length) return;
 
     const currentUserIndex = users.findIndex(

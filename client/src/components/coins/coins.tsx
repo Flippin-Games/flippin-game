@@ -1,18 +1,12 @@
+import { memo } from "react";
+
 import Button from "../button/button";
 import styles from "./coins.module.scss";
-
-import { memo } from "react";
+import Coin from "./coin";
 
 // TODO
 function Coins({ toFlip, flipped, clickHandler, isFliping }: any) {
-  const Coin = ({ flip, flipped }: any) => (
-    <span
-      className={`${styles.coin} ${flip ? styles.flip : ""} ${
-        flipped ? styles.flipped : ""
-      }`}
-    ></span>
-  );
-
+  console.log("rerenfer coind ====");
   return (
     <>
       <div className={styles.wrapper}>
@@ -30,7 +24,6 @@ function Coins({ toFlip, flipped, clickHandler, isFliping }: any) {
               <Coin flipped={true} />
             ))}
         </div>
-
         {isFliping ? (
           <div className={styles.flippingBox}>
             <Coin flip={true} />
