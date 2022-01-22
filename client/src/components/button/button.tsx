@@ -4,6 +4,7 @@ type ButtonProps = {
   text: string;
   onClick?: any; // TODO
   disabled?: boolean;
+  disabledText?: string;
   dataAtrr?: string;
 };
 
@@ -14,6 +15,7 @@ function Button({
   text,
   disabled,
   dataAtrr,
+  disabledText,
 }: ButtonProps) {
   return (
     <button
@@ -23,7 +25,7 @@ function Button({
       disabled={disabled}
       data-attr={dataAtrr}
     >
-      {text}
+      {!disabled ? text : disabledText}
     </button>
   );
 }
