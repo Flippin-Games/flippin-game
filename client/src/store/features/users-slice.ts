@@ -1,7 +1,8 @@
 // DUCKS pattern
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../../helpers/types";
+// import { User } from "../../helpers/types";
 
+// TODO any
 const initialState: any = {
   users: [],
 };

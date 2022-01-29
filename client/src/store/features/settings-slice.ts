@@ -1,7 +1,8 @@
 // DUCKS pattern
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Settings } from "../../helpers/types";
+// import { Settings } from "../../helpers/types";
 
+// TODO: any
 const initialState: any = {
   settings: {
     autoMoveCoins: false,

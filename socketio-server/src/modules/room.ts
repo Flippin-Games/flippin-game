@@ -16,7 +16,7 @@ class Room {
     this.counter = counter;
     this.started = false;
     this.settings = new Settings(true, 4, 5);
-    this.time = new Time(0, 0, 0, 0, null, this.id);
+    this.time = new Time(0, 0, 0, null, this.id);
   }
 
   getUsers(): User[] {

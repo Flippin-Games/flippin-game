@@ -4,22 +4,13 @@ class Time {
   startTime: number;
   currentTime: number;
   timestampBatch: number;
-  timestampFive: number;
   timer: ReturnType<typeof setInterval>;
   roomId: number;
 
-  constructor(
-    startTime,
-    currentTime,
-    timestampBatch,
-    timestampFive,
-    timer,
-    roomId
-  ) {
+  constructor(startTime, currentTime, timestampBatch, timer, roomId) {
     this.startTime = startTime;
     this.currentTime = currentTime;
     this.timestampBatch = timestampBatch;
-    this.timestampFive = timestampFive;
     this.timer = timer;
     this.roomId = roomId;
     console.log(this.roomId);
@@ -46,10 +37,6 @@ class Time {
 
   setTimestampBatch = () => {
     this.timestampBatch = Date.now() - this.startTime;
-  };
-
-  setTimestampFive = () => {
-    this.timestampFive = Date.now() - this.startTime;
   };
 
   stopTime = () => clearInterval(this.timer);

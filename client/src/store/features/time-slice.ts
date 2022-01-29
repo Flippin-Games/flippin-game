@@ -5,7 +5,6 @@ import { Time } from "../../helpers/types";
 const initialState: Time = {
   currentTime: 0,
   timestampBatch: 0,
-  timestampFive: 0,
 };
 
 const counterSlice = createSlice({
@@ -20,12 +19,8 @@ const counterSlice = createSlice({
     setTimestampBatch(state, action: PayloadAction<string>) {
       state.timestampBatch = action.payload;
     },
-    setTimestampFive(state, action: PayloadAction<string>) {
-      state.timestampFive = action.payload;
-    },
   },
 });
 
-export const { setCurrentTime, setTimestampBatch, setTimestampFive } =
-  counterSlice.actions;
+export const { setCurrentTime, setTimestampBatch } = counterSlice.actions;
 export default counterSlice.reducer;

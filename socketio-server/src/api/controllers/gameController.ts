@@ -97,11 +97,6 @@ export class GameController {
       room.time.setTimestampBatch();
     }
 
-    // timestampBatch
-    if (nextIndex === users.length && flipped === 5) {
-      room.time.setTimestampFive();
-    }
-
     GameController.emitUpateGame(io, roomId);
   }
 
