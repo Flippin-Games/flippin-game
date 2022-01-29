@@ -5,7 +5,13 @@ import styles from "./coins.module.scss";
 import Coin from "./coin";
 
 // TODO
-function Coins({ toFlip, flipped, clickHandler, isFliping }: any) {
+function Coins({
+  toFlip,
+  flipped,
+  clickHandler,
+  isFliping,
+  isActiveUser,
+}: any) {
   return (
     <>
       <div className={styles.wrapper}>
@@ -29,7 +35,7 @@ function Coins({ toFlip, flipped, clickHandler, isFliping }: any) {
           </div>
         ) : null}
       </div>
-      {toFlip > 0 ? (
+      {isActiveUser && toFlip > 0 ? (
         <Button
           type="button"
           onClick={clickHandler}
