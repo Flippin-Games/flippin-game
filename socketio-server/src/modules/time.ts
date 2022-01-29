@@ -26,7 +26,7 @@ class Time {
 
         if (GameController.didGameEnd(this.roomId)) {
           this.stopTime();
-          return;
+          console.log("STOP TIME AT: ", this.currentTime);
         }
 
         GameController.emitUpateGame(io, this.roomId);
