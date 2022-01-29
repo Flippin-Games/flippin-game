@@ -27,10 +27,10 @@ function PlayerCard(props: TGame) {
     setIsFlipping(true);
     setTimeout(() => {
       setIsFlipping(false);
+      if (socketService.socket) {
+        gameService.updateLocalCounter(socketService.socket, username);
+      }
     }, 1700);
-    if (socketService.socket) {
-      gameService.updateLocalCounter(socketService.socket, username);
-    }
   };
 
   const handleTakeCoins = (e: MouseEvent<HTMLButtonElement>) => {
@@ -71,6 +71,7 @@ function PlayerCard(props: TGame) {
           flipped={props.flipped}
           clickHandler={handleLocalCounter}
           isFliping={isFliping}
+          isActiveUser={props.activeUser}
         />
         <p>
           To flip: {props.localCounter} | Flipped: {props.flipped}
