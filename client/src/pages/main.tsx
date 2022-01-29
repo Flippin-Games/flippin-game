@@ -21,7 +21,6 @@ import { setSettings } from "../store/features/settings-slice";
 import { setCounter, setPreviousUser } from "../store/features/local-slice";
 
 function Main() {
-  console.log("Main rerender");
   const dispatchRedux = useAppDispatch();
   const { settings } = useAppSelector((state) => state.settings);
   const { counter, isInRoom, username, previousUser } = useAppSelector(
@@ -54,6 +53,7 @@ function Main() {
 
   // TODO fix any
   function updateContext(backendState: any) {
+    // usign ref to make sure it always checks current value, not init one
     const users = stateRef.current;
     const settings = settingsRef.current;
     const { time } = backendState;
