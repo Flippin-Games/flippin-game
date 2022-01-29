@@ -12,15 +12,15 @@ const counterSlice = createSlice({
   name: "time",
   initialState,
   reducers: {
-    setCurrentTime(state, action: PayloadAction<number>) {
+    setCurrentTime(state, action: PayloadAction<string>) {
       // it's okay to do this because immer makes it immutable
       // under the hood, see https://www.youtube.com/watch?v=9zySeP5vH9c
       state.currentTime = action.payload;
     },
-    setTimestampBatch(state, action: PayloadAction<number>) {
+    setTimestampBatch(state, action: PayloadAction<string>) {
       state.timestampBatch = action.payload;
     },
-    setTimestampFive(state, action: PayloadAction<number>) {
+    setTimestampFive(state, action: PayloadAction<string>) {
       state.timestampFive = action.payload;
     },
   },

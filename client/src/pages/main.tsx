@@ -11,7 +11,6 @@ import Game from "../components/game/game";
 import GameInfo from "../components/gameInfo/gameInfo";
 import Footer from "../components/footer/footer";
 
-import { BackendState } from "../helpers/types";
 import {
   setCurrentTime,
   setTimestampBatch,
@@ -57,36 +56,41 @@ function Main() {
   function updateContext(backendState: any) {
     const users = stateRef.current;
     const settings = settingsRef.current;
+    const { time } = backendState;
 
     if (
       backendState.users &&
       JSON.stringify(backendState.users) !== JSON.stringify(users)
     ) {
-      console.log(1);
       dispatchRedux(setUsers(backendState.users));
     }
     if (
       backendState.settings &&
       JSON.stringify(backendState.settings) !== JSON.stringify(settings)
     ) {
-      console.log(2);
       dispatchRedux(setSettings(backendState.settings));
     }
     if (backendState.counter && backendState.counter !== counter) {
-      console.log(3);
       dispatchRedux(setCounter(backendState.counter));
     }
-    if (backendState.time.currentTime) {
-      console.log(4);
-      dispatchRedux(setCurrentTime(backendState.time.currentTime));
+    if (time.currentTime) {
+      dispatchRedux(
+        setCurrentTime(new Date(time.currentTime).toISOString().substr(11, 8))
+      );
     }
-    if (backendState?.time.timestampBatch) {
-      console.log(5);
-      dispatchRedux(setTimestampBatch(backendState.time.timestampBatch));
+    if (time.timestampBatch) {
+      dispatchRedux(
+        setTimestampBatch(
+          new Date(time.timestampBatch).toISOString().substr(11, 8)
+        )
+      );
     }
-    if (backendState?.time.timestampFive) {
-      console.log(6);
-      dispatchRedux(setTimestampFive(backendState.time.timestampFive));
+    if (time.timestampFive) {
+      dispatchRedux(
+        setTimestampFive(
+          new Date(time.timestampBatch).toISOString().substr(11, 8)
+        )
+      );
     }
   }
 
@@ -96,12 +100,13 @@ function Main() {
     const currentUserIndex = users.findIndex(
       (user: any) => user.username === username
     );
+
     const isFirst = currentUserIndex === 0;
 
     if (!isFirst) {
       const previousUser = users[currentUserIndex - 1];
+
       dispatchRedux(setPreviousUser(previousUser));
-      console.log(previousUser);
     }
   }, [users, username]);
 
