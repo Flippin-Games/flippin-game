@@ -1,8 +1,7 @@
-import { MouseEvent, useContext, useState, memo } from "react";
+import { MouseEvent, useState, memo } from "react";
 
 import { useAppSelector } from "../../store/hooks";
 
-// import gameContext from "../../gameContext";
 import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
 import Button from "../button/button";

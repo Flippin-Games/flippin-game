@@ -14,7 +14,6 @@ import Footer from "../components/footer/footer";
 import {
   setCurrentTime,
   setTimestampBatch,
-  setTimestampFive,
 } from "../store/features/time-slice";
 import { setUsers } from "../store/features/users-slice";
 import { setSettings } from "../store/features/settings-slice";
@@ -81,13 +80,6 @@ function Main() {
     if (time.timestampBatch) {
       dispatchRedux(
         setTimestampBatch(
-          new Date(time.timestampBatch).toISOString().substr(11, 8)
-        )
-      );
-    }
-    if (time.timestampFive) {
-      dispatchRedux(
-        setTimestampFive(
           new Date(time.timestampBatch).toISOString().substr(11, 8)
         )
       );

@@ -7,7 +7,6 @@ export type User = {
 export type Time = {
   currentTime: number | string;
   timestampBatch: number | string;
-  timestampFive: number | string;
 };
 
 export type Settings = {
@@ -26,7 +25,6 @@ export type GameStateProps = {
   settings: Settings;
   currentTime: number;
   timestampBatch: number;
-  timestampFive: number;
   previousUser?: User;
 };
 

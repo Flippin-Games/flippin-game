@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import { useAppDispatch } from "../../store/hooks";
 import socketService from "../../services/socketService";
@@ -9,7 +9,6 @@ import FormField from "../form/formField/formField";
 import Button from "../button/button";
 
 import styles from "./joinRoom.module.scss";
-import dispatchContext from "../../dispatchContext";
 import { setIsInRoom, setUsername } from "../../store/features/local-slice";
 
 const initialFormState = {
