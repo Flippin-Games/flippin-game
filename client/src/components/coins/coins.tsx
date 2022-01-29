@@ -6,7 +6,6 @@ import Coin from "./coin";
 
 // TODO
 function Coins({ toFlip, flipped, clickHandler, isFliping }: any) {
-  console.log("rerenfer coind ====");
   return (
     <>
       <div className={styles.wrapper}>

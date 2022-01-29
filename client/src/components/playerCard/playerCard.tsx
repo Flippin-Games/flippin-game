@@ -67,27 +67,15 @@ function PlayerCard(props: TGame) {
         <div className={styles.placeholder} />
       )}
       <div>
-        {props.activeUser ? (
-          <Coins
-            toFlip={props.localCounter}
-            flipped={props.flipped}
-            clickHandler={handleLocalCounter}
-            isFliping={isFliping}
-          />
-        ) : null}
+        <Coins
+          toFlip={props.localCounter}
+          flipped={props.flipped}
+          clickHandler={handleLocalCounter}
+          isFliping={isFliping}
+        />
         <p>
           To flip: {props.localCounter} | Flipped: {props.flipped}
         </p>
-        {/* {props.activeUser && props.localCounter ? (
-          <Button
-            type="button"
-            onClick={handleLocalCounter}
-            className="btn btn-primary btn-s"
-            text="Flip Coin"
-          />
-        ) : (
-          <div className={styles.placeholder} />
-        )} */}
       </div>
     </div>
   );
