@@ -55,7 +55,7 @@ class GameService {
   ): Promise<boolean> {
     return new Promise((resolve, reject) => {
       socket.emit("start_game", { roomId, settings });
-      socket.on("game_started", () => {
+      socket.on("game_isPlaying", () => {
         resolve(true);
       });
       socket.on("game_start_error", ({ error }) => {
@@ -67,7 +67,7 @@ class GameService {
   public async endGame(socket: Socket, roomId: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       socket.emit("end_game", { roomId });
-      // socket.on("game_started", () => {
+      // socket.on("game_isPlaying", () => {
       //   resolve(true);
       // });
       // socket.on("game_start_error", ({ error }) => {

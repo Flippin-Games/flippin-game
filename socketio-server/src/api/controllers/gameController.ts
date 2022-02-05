@@ -46,8 +46,9 @@ export class GameController {
     const room = GameController.getRoomFromState(roomId);
     const lastUser = room.getUserByIndex(room.users.length - 1);
 
-    if (lastUser) {
-      return lastUser.flipped === room.settings.startAmount;
+    if (lastUser && lastUser.flipped === room.settings.startAmount) {
+      room.updateGamesPlayed();
+      return true;
     }
 
     return false;
@@ -68,7 +69,7 @@ export class GameController {
     const user = room.getUser(message.username);
     const currentUserIndex = room.getUserIndex(message.username);
     const { batchSize, autoMoveCoins, startAmount } = room.settings.get();
-    const { started, users } = room;
+    const { isPlaying, users } = room;
 
     const nextIndex = currentUserIndex + 1;
     const isFirst = currentUserIndex === 0;
@@ -76,7 +77,7 @@ export class GameController {
 
     console.log("== UPDATE LOCAL COUNTER ==");
 
-    if (isFirst && started && hasMaxCoins) {
+    if (isFirst && isPlaying && hasMaxCoins) {
       room.time.startTimer(io);
     }
 

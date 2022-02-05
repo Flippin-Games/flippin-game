@@ -39,6 +39,11 @@ class User {
   addToLocalCounter(amount: number): void {
     this.localCounter = this.localCounter + amount;
   }
+
+  resetCounters() {
+    this.flipped = 0;
+    this.localCounter = 0;
+  }
 }
 
 export default User;

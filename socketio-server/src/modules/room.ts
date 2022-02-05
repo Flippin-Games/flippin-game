@@ -7,14 +7,15 @@ class Room {
   users: User[];
   settings: Settings;
   counter?: number;
-  started?: boolean; // TODO: shouldn't be optional
+  isPlaying?: boolean; // TODO: shouldn't be optional
   time: Time;
+  gamesPlayed: { timeAllCompleted: number; timeBatchCompleted: number }[];
 
   constructor(id, users, counter) {
     this.id = id;
     this.users = users;
     this.counter = counter;
-    this.started = false;
+    this.isPlaying = false;
     this.settings = new Settings(true, 4, 5);
     this.time = new Time(0, 0, 0, null, this.id);
   }
@@ -49,8 +50,8 @@ class Room {
     this.users[0].localCounter = this.settings.startAmount || 20;
   }
 
-  setStarted(option: boolean): void {
-    this.started = option;
+  setIsPlaying(option: boolean): void {
+    this.isPlaying = option;
   }
 
   getCounter(): number {
@@ -69,6 +70,32 @@ class Room {
 
     userToTakeFrom.removeFlipped(batchSize);
     userToGiveTo.addToLocalCounter(batchSize);
+  }
+
+  updateGamesPlayed(): void {
+    const game = {
+      timeAllCompleted: this.time.currentTime,
+      timeBatchCompleted: this.time.timestampBatch,
+    };
+
+    if (this.gamesPlayed) {
+      this.gamesPlayed = [...this.gamesPlayed, game];
+    } else {
+      this.gamesPlayed = [game];
+    }
+
+    this.setIsPlaying(false);
+    this.resetTimeInRoom();
+    this.resetAllCounters();
+    console.log(this);
+  }
+
+  resetTimeInRoom(): void {
+    this.time = new Time(0, 0, 0, null, this.id);
+  }
+
+  resetAllCounters(): void {
+    this.users.forEach((user) => user.resetCounters());
   }
 }
 

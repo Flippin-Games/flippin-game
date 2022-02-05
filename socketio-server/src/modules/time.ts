@@ -26,6 +26,7 @@ class Time {
 
         if (GameController.didGameEnd(this.roomId)) {
           this.stopTime();
+          console.log(this.timestampBatch);
           console.log("STOP TIME AT: ", this.currentTime);
         }
 

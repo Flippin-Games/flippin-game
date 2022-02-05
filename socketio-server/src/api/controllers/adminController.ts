@@ -38,7 +38,7 @@ export class AdminController {
     @ConnectedSocket() socket: Socket,
     @MessageBody() message: any
   ) {
-    console.log("Game started! in room: ", message.roomId);
+    console.log("Game isPlaying! in room: ", message.roomId);
 
     const room = GameController.getRoomFromState(message.roomId);
 
@@ -47,9 +47,15 @@ export class AdminController {
 
       room.settings.update(autoMoveCoins, amountOfBatches, batchSize);
       room.setFirstUserCounter();
-      room.setStarted(true);
+      room.setIsPlaying(true);
 
-      socket.emit("game_started");
+      // TODO: change this to getter
+      if (room.gamesPlayed && room.gamesPlayed.length > 0) {
+        // Reset game
+        room.resetTimeInRoom();
+      }
+
+      socket.emit("game_isPlaying");
       GameController.emitUpateGame(io, message.roomId);
     } else {
       socket.emit("game_start_error", {

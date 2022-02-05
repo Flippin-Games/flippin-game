@@ -39,10 +39,10 @@ function SettingsForm(props: any) {
         />
         <button
           type="submit"
-          disabled={props.started}
+          disabled={props.isPlaying}
           className="btn btn-primary"
         >
-          Start Game
+          Give coins
         </button>
       </Form>
     </section>

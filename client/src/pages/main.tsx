@@ -18,6 +18,7 @@ import {
 import { setUsers } from "../store/features/users-slice";
 import { setSettings } from "../store/features/settings-slice";
 import { setCounter, setPreviousUser } from "../store/features/local-slice";
+import { setGamesPlayed } from "../store/features/games-slice";
 
 function Main() {
   const dispatchRedux = useAppDispatch();
@@ -26,10 +27,13 @@ function Main() {
     (state) => state.local
   );
   const { users } = useAppSelector((state) => state.users);
+  const { gamesPlayed } = useAppSelector((state) => state.games);
   const stateRef = useRef();
   stateRef.current = users;
   const settingsRef = useRef();
   settingsRef.current = settings;
+  const gamesPlayedRef = useRef();
+  gamesPlayedRef.current = gamesPlayed;
 
   const connectSocket = async () => {
     await socketService
@@ -56,6 +60,7 @@ function Main() {
     const users = stateRef.current;
     const settings = settingsRef.current;
     const { time } = backendState;
+    const gamesPlayed = gamesPlayedRef.current;
 
     if (
       backendState.users &&
@@ -72,18 +77,24 @@ function Main() {
     if (backendState.counter && backendState.counter !== counter) {
       dispatchRedux(setCounter(backendState.counter));
     }
-    if (time.currentTime) {
-      dispatchRedux(
-        setCurrentTime(new Date(time.currentTime).toISOString().substr(11, 8))
-      );
+
+    if (
+      backendState.gamesPlayed &&
+      JSON.stringify(backendState.gamesPlayed) !== JSON.stringify(gamesPlayed)
+    ) {
+      dispatchRedux(setGamesPlayed(backendState.gamesPlayed));
     }
-    if (time.timestampBatch) {
-      dispatchRedux(
-        setTimestampBatch(
-          new Date(time.timestampBatch).toISOString().substr(11, 8)
-        )
-      );
-    }
+
+    // TODO add check to update time only if it's different than current time
+    dispatchRedux(
+      setCurrentTime(new Date(time.currentTime).toISOString().substr(11, 8))
+    );
+
+    dispatchRedux(
+      setTimestampBatch(
+        new Date(time.timestampBatch).toISOString().substr(11, 8)
+      )
+    );
   }
 
   useEffect(() => {

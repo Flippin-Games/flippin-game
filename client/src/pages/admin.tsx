@@ -5,6 +5,8 @@ import SettingsForm from "../components/settingsForm/settingsForm";
 
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
+import { useAppSelector, useAppDispatch } from "../store/hooks";
+import { setIsPlaying } from "../store/features/admin-slice";
 
 const initialFormState = {
   amountOfBatches: 4,
@@ -38,9 +40,10 @@ const formReducer = (state: any, action: any) => {
 
 function Admin() {
   const [roomId, setRoomId] = useState<string>("");
-  const [started, setStarted] = useState<boolean>(false);
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState([]);
   const [formValues, dispatch] = useReducer(formReducer, initialFormState);
+  const { isPlaying } = useAppSelector((state) => state.admin);
+  const dispatchRedux = useAppDispatch();
 
   const connectSocket = async () => {
     await socketService
@@ -78,7 +81,8 @@ function Admin() {
       .catch((error) => alert(error));
 
     if (hasStarted) {
-      setStarted(hasStarted);
+      console.log(1);
+      // setIsPlaying(hasStarted);
     }
   };
 
@@ -91,7 +95,7 @@ function Admin() {
 
   const handleGameUpdate = () => {
     if (socketService.socket) {
-      gameService.onGameUpdate(socketService.socket, updateContext);
+      gameService.onGameUpdate(socketService.socket, updateState);
     }
   };
 
@@ -108,8 +112,13 @@ function Admin() {
   };
 
   // TODO fix any
-  const updateContext = (state: any) => {
+  const updateState = (state: any) => {
+    console.log(state);
     setUsers(state.users);
+
+    console.log(state.isPlaying, isPlaying);
+
+    dispatchRedux(setIsPlaying(state.isPlaying));
   };
 
   useEffect(() => {
@@ -144,12 +153,12 @@ function Admin() {
                 formValues={formValues}
                 handleChange={handleChange}
                 handleStartGame={handleStartGame}
-                started={started}
+                isPlaying={isPlaying}
               />
             </>
           )}
 
-          {started && (
+          {isPlaying && (
             <Button
               type="submit"
               onClick={handleEndGame}
@@ -160,7 +169,7 @@ function Admin() {
 
           {users && (
             <ol>
-              {users.map((user) => (
+              {/* {users.map((user) => (
                 <li key={user.username}>
                   {user.username}
                   <Button
@@ -171,7 +180,7 @@ function Admin() {
                     text="Remove"
                   />
                 </li>
-              ))}
+              ))} */}
             </ol>
           )}
         </div>
