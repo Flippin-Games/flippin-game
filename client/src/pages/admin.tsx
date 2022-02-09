@@ -148,7 +148,7 @@ function Admin() {
 
           {roomId && (
             <>
-              <h2>Your room ID: {roomId}</h2>
+              <h2>Your room ID: <span id="roomId">{roomId}</span></h2>
               <SettingsForm
                 formValues={formValues}
                 handleChange={handleChange}
