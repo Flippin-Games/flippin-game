@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useAppSelector } from "../../store/hooks";
+import formatTime from "../../utils/formatTime";
 
 import styles from "./time.module.scss";
 
@@ -33,9 +34,10 @@ function Time() {
             <>
               <hr />
               <ul className={styles.wrapper}>
-                <li>Time all completed: {game.timeAllCompleted}</li>
+                <li>Time all completed: {formatTime(game.timeAllCompleted)}</li>
                 <li>
-                  Time first batch got delivered: {game.timeBatchCompleted}
+                  Time first batch got delivered:{" "}
+                  {formatTime(game.timeBatchCompleted)}
                 </li>
               </ul>
             </>

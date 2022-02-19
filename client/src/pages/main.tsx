@@ -19,6 +19,7 @@ import { setUsers } from "../store/features/users-slice";
 import { setSettings } from "../store/features/settings-slice";
 import { setCounter, setPreviousUser } from "../store/features/local-slice";
 import { setGamesPlayed } from "../store/features/games-slice";
+import formatTime from "../utils/formatTime";
 
 function Main() {
   const dispatchRedux = useAppDispatch();
@@ -86,15 +87,9 @@ function Main() {
     }
 
     // TODO add check to update time only if it's different than current time
-    dispatchRedux(
-      setCurrentTime(new Date(time.currentTime).toISOString().substr(11, 8))
-    );
+    dispatchRedux(setCurrentTime(formatTime(time.currentTime)));
 
-    dispatchRedux(
-      setTimestampBatch(
-        new Date(time.timestampBatch).toISOString().substr(11, 8)
-      )
-    );
+    dispatchRedux(setTimestampBatch(formatTime(time.timestampBatch)));
   }
 
   useEffect(() => {
