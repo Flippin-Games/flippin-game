@@ -1,8 +1,9 @@
-import { useEffect } from "react";
 import { useAppSelector } from "../../store/hooks";
 import formatTime from "../../utils/formatTime";
 
 import styles from "./time.module.scss";
+import { ReactComponent as TimeIcon } from "../../assets/svgs/time.svg";
+import { ReactComponent as FirstTimeIcon } from "../../assets/svgs/time-first-batch.svg";
 
 // TODO
 // first batch doesnt work if only one batch is used
@@ -11,33 +12,38 @@ function Time() {
   const { currentTime, timestampBatch } = useAppSelector((state) => state.time);
   const { gamesPlayed } = useAppSelector((state) => state.games);
 
-  console.log(gamesPlayed);
-  useEffect(() => {
-    console.log(gamesPlayed);
-  }, [gamesPlayed]);
-
   return (
-    <div>
-      <h4>This Game:</h4>
-      <ul className={styles.wrapper}>
-        <li>Time since game started: {currentTime}</li>
+    <div className={styles.wrapper}>
+      <ul className={styles.time}>
+        <li>
+          <strong>Game stats</strong>
+        </li>
+        <li>
+          <TimeIcon /> {currentTime}
+        </li>
         {timestampBatch !== 0 && (
-          <li>Time first batch got delivered: {timestampBatch}</li>
+          <li>
+            <FirstTimeIcon /> {timestampBatch}
+          </li>
         )}
       </ul>
-
-      {/* // todo fix any */}
-      <h4>Previous Games:</h4>
+      {/* Todo this should be separate component */}
       {gamesPlayed.map(
-        (game: { timeAllCompleted: number; timeBatchCompleted: number }) => {
+        (
+          game: { timeAllCompleted: number; timeBatchCompleted: number },
+          index: number
+        ) => {
           return (
             <>
-              <hr />
-              <ul className={styles.wrapper}>
-                <li>Time all completed: {formatTime(game.timeAllCompleted)}</li>
+              <ul className={styles.time}>
                 <li>
-                  Time first batch got delivered:{" "}
-                  {formatTime(game.timeBatchCompleted)}
+                  <strong>Game no. {index + 1}</strong>
+                </li>
+                <li>
+                  <TimeIcon /> {formatTime(game.timeAllCompleted)}{" "}
+                </li>
+                <li>
+                  <FirstTimeIcon /> {formatTime(game.timeBatchCompleted)}
                 </li>
               </ul>
             </>

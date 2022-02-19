@@ -1,3 +1,20 @@
 .wrapper {
-    text-align: left;
+  display: flex;
+}
+
+.time {
+  text-align: left;
+  padding-right: 1rem;
+
+  svg {
+    width: 1rem;
+    margin-right: 0.5rem;
+  }
+
+  li {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
 }
