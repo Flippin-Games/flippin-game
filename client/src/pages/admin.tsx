@@ -7,6 +7,7 @@ import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { setIsPlaying } from "../store/features/admin-slice";
+import UsersList from "../components/usersList/usersList";
 
 const initialFormState = {
   amountOfBatches: 4,
@@ -116,7 +117,7 @@ function Admin() {
     console.log(state);
     setUsers(state.users);
 
-    console.log(state.isPlaying, isPlaying);
+    console.log(state.users);
 
     dispatchRedux(setIsPlaying(state.isPlaying));
   };
@@ -131,9 +132,6 @@ function Admin() {
 
   return (
     <div className="App">
-      <nav>
-        <h1>Hello Admin!</h1>
-      </nav>
       <main className="main">
         <div>
           {!roomId && roomId.length === 0 && (
@@ -145,44 +143,31 @@ function Admin() {
               text="Generate Room"
             />
           )}
-
-          {roomId && (
-            <>
-              <h2>Your room ID: <span id="roomId">{roomId}</span></h2>
-              <SettingsForm
-                formValues={formValues}
-                handleChange={handleChange}
-                handleStartGame={handleStartGame}
-                isPlaying={isPlaying}
+          <section>
+            {roomId && (
+              <section>
+                <h2>
+                  Your room ID: <span id="roomId">{roomId}</span>
+                </h2>
+                <SettingsForm
+                  formValues={formValues}
+                  handleChange={handleChange}
+                  handleStartGame={handleStartGame}
+                  isPlaying={isPlaying}
+                />
+              </section>
+            )}
+            {/* 
+            {isPlaying && (
+              <Button
+                type="submit"
+                onClick={handleEndGame}
+                className="btn btn-primary"
+                text="End Game"
               />
-            </>
-          )}
-
-          {isPlaying && (
-            <Button
-              type="submit"
-              onClick={handleEndGame}
-              className="btn btn-primary"
-              text="End Game"
-            />
-          )}
-
-          {users && (
-            <ol>
-              {/* {users.map((user) => (
-                <li key={user.username}>
-                  {user.username}
-                  <Button
-                    type="button"
-                    dataAtrr={user.username}
-                    onClick={handleRemove}
-                    className="btn btn-primary"
-                    text="Remove"
-                  />
-                </li>
-              ))} */}
-            </ol>
-          )}
+            )} */}
+            <UsersList handleRemove={handleRemove} users={users} />
+          </section>
         </div>
       </main>
     </div>

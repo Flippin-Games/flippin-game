@@ -42,7 +42,7 @@ function Coins({
           text="Flip"
           disabled={isFliping}
           disabledText="Flipping..."
-          className="btn-primary"
+          className="btn-primary btn-s"
         />
       ) : null}
     </>
