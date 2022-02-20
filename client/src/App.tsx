@@ -5,6 +5,8 @@ import Admin from "./pages/admin";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 
+// test commit
+
 const App = () => (
   <Provider store={store}>
     <Router>
