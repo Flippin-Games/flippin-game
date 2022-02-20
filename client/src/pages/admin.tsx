@@ -2,12 +2,14 @@ import { useEffect, useState, useReducer } from "react";
 
 import Button from "../components/button/button";
 import SettingsForm from "../components/settingsForm/settingsForm";
+import UsersList from "../components/usersList/usersList";
 
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { setIsPlaying } from "../store/features/admin-slice";
-import UsersList from "../components/usersList/usersList";
+
+import styles from "./admin.module.scss";
 
 const initialFormState = {
   amountOfBatches: 4,
@@ -143,7 +145,7 @@ function Admin() {
               text="Generate Room"
             />
           )}
-          <section>
+          <section className={styles.wrapper}>
             {roomId && (
               <section>
                 <h2>
@@ -166,7 +168,7 @@ function Admin() {
                 text="End Game"
               />
             )} */}
-            <UsersList handleRemove={handleRemove} users={users} />
+            {roomId && <UsersList handleRemove={handleRemove} users={users} />}
           </section>
         </div>
       </main>

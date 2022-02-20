@@ -12,6 +12,7 @@ function Coins({
   isFliping,
   isActiveUser,
 }: any) {
+  console.log(toFlip);
   return (
     <>
       <div className={styles.wrapper}>
@@ -35,16 +36,26 @@ function Coins({
           </div>
         ) : null}
       </div>
-      {isActiveUser && toFlip > 0 ? (
-        <Button
-          type="button"
-          onClick={clickHandler}
-          text="Flip"
-          disabled={isFliping}
-          disabledText="Flipping..."
-          className="btn-primary btn-s"
-        />
-      ) : null}
+      {isActiveUser &&
+        (toFlip !== 0 ? (
+          <Button
+            type="button"
+            onClick={clickHandler}
+            text="Flip"
+            disabled={isFliping}
+            disabledText="Flipping..."
+            className="btn-primary btn-s"
+          />
+        ) : (
+          <Button
+            type="button"
+            onClick={() => {}}
+            text="Flip"
+            disabled={true}
+            disabledText="Nothing to flip"
+            className="btn-primary btn-s"
+          />
+        ))}
     </>
   );
 }

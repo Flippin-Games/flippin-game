@@ -46,24 +46,22 @@ function PlayerCard(props: TGame) {
   const isPreviousUserAvailable = !!props.previousUser?.username.length;
   const shouldDisplayButton =
     props.activeUser &&
-    isPreviousUserAvailable &&
-    props.previousUser?.flipped >= settings.batchSize &&
-    !settings.autoMoveCoins;
+    !settings.autoMoveCoins &&
+    props.previousUser?.flipped >= settings.batchSize;
 
   return (
     <div className={styles.wrapper}>
       <h1>{props.name || username}</h1>
 
-      {/* TODO take this out, it looks like a mess */}
-      {shouldDisplayButton ? (
+      {props.activeUser && isPreviousUserAvailable && (
         <Button
           type="button"
           onClick={handleTakeCoins}
           className="btn-primary btn-s"
           text="Take Coins"
+          disabledText={`Wait for ${props.previousUser?.username}`}
+          disabled={!shouldDisplayButton}
         />
-      ) : (
-        <div className={styles.placeholder} />
       )}
       <div>
         <Coins
