@@ -10,20 +10,24 @@ function UsersList({ users, handleRemove }: any) {
       {users && (
         // TODO fix any
         <ol>
-          {users.map((user: any) => (
-            <li key={user.username}>
-              <div className={styles.item}>
-                {user.username}
-                <Button
-                  type="button"
-                  dataAtrr={user.username}
-                  onClick={handleRemove}
-                  className="btn btn-primary btn-s"
-                  text="Remove"
-                />
-              </div>
-            </li>
-          ))}
+          {users.length ? (
+            users.map((user: any) => (
+              <li key={user.username}>
+                <div className={styles.item}>
+                  {user.username}
+                  <Button
+                    type="button"
+                    dataAtrr={user.username}
+                    onClick={handleRemove}
+                    className="btn btn-primary btn-s"
+                    text="Remove"
+                  />
+                </div>
+              </li>
+            ))
+          ) : (
+            <li>No users logged in...</li>
+          )}
         </ol>
       )}
     </section>

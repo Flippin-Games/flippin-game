@@ -1,3 +1,4 @@
+import Button from "../button/button";
 import Form from "../form/form";
 import FormField from "../form/formField/formField";
 
@@ -37,13 +38,13 @@ function SettingsForm(props: any) {
           required={false}
           row={true}
         />
-        <button
+        <Button
           type="submit"
           disabled={props.isPlaying}
           className="btn btn-primary"
-        >
-          Give coins
-        </button>
+          disabledText="Game in progress..."
+          text="Give coins"
+        />
       </Form>
     </section>
   );
