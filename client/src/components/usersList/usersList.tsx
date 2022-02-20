@@ -6,7 +6,7 @@ import styles from "./usersList.module.scss";
 function UsersList({ users, handleRemove }: any) {
   return (
     <section>
-      <h2>Users in current game: </h2>
+      <h2>Users in current game</h2>
       {users && (
         // TODO fix any
         <ol>

@@ -21,7 +21,7 @@ import { setCounter, setPreviousUser } from "../store/features/local-slice";
 import { setGamesPlayed } from "../store/features/games-slice";
 import formatTime from "../utils/formatTime";
 
-function Main() {
+function Main({ isAdmin = false }) {
   const dispatchRedux = useAppDispatch();
   const { settings } = useAppSelector((state) => state.settings);
   const { counter, isInRoom, username, previousUser } = useAppSelector(
@@ -110,9 +110,9 @@ function Main() {
 
   return (
     <div className="App">
-      {!isInRoom ? <Header /> : <GameInfo />}
+      {!isInRoom && !isAdmin ? <Header /> : <GameInfo />}
       <main className="main">
-        {!isInRoom ? (
+        {!isInRoom && !isAdmin ? (
           <JoinRoom />
         ) : (
           <Game

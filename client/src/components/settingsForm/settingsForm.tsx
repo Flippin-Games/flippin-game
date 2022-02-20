@@ -12,7 +12,7 @@ function SettingsForm(props: any) {
           type="number"
           value={props.formValues.batchSize}
           onChange={props.handleChange}
-          label="Enter batch size"
+          label="Batch size"
           placeholder=""
           required
           row={true}
@@ -22,7 +22,7 @@ function SettingsForm(props: any) {
           type="number"
           value={props.formValues.amountOfBatches}
           onChange={props.handleChange}
-          label="Enter amount of batches"
+          label="Amount of batches"
           placeholder=""
           required
           row={true}

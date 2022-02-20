@@ -8,8 +8,11 @@ import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { setIsPlaying } from "../store/features/admin-slice";
+import { setIsInRoom } from "../store/features/local-slice";
+import { setUsers as setUsersRedux } from "../store/features/users-slice";
 
 import styles from "./admin.module.scss";
+import Main from "./main";
 
 const initialFormState = {
   amountOfBatches: 4,
@@ -71,6 +74,7 @@ function Admin() {
     // TODO: handle errors
     const room = await gameService.createRoom(socket);
     setRoomId(room);
+    dispatchRedux(setIsInRoom(true));
   };
 
   const handleStartGame = async (e: React.FormEvent) => {
@@ -89,12 +93,12 @@ function Admin() {
     }
   };
 
-  const handleEndGame = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (roomId && socketService.socket) {
-      gameService.endGame(socketService.socket, roomId);
-    }
-  };
+  // const handleEndGame = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (roomId && socketService.socket) {
+  //     gameService.endGame(socketService.socket, roomId);
+  //   }
+  // };
 
   const handleGameUpdate = () => {
     if (socketService.socket) {
@@ -116,12 +120,15 @@ function Admin() {
 
   // TODO fix any
   const updateState = (state: any) => {
-    console.log(state);
     setUsers(state.users);
 
-    console.log(state.users);
-
     dispatchRedux(setIsPlaying(state.isPlaying));
+    if (
+      state.users.length &&
+      JSON.stringify(state.users) !== JSON.stringify(users)
+    ) {
+      dispatchRedux(setUsersRedux(state.users));
+    }
   };
 
   useEffect(() => {
@@ -171,6 +178,9 @@ function Admin() {
             {roomId && <UsersList handleRemove={handleRemove} users={users} />}
           </section>
         </div>
+        <br />
+        <hr />
+        <Main isAdmin={true} />
       </main>
     </div>
   );
