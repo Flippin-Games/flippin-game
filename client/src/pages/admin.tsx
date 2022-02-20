@@ -7,8 +7,15 @@ import UsersList from "../components/usersList/usersList";
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
+import {
+  setCurrentTime,
+  setTimestampBatch,
+} from "../store/features/time-slice";
 import { setIsPlaying } from "../store/features/admin-slice";
 import { setIsInRoom } from "../store/features/local-slice";
+import { setGamesPlayed } from "../store/features/games-slice";
+import formatTime from "../utils/formatTime";
+
 import { setUsers as setUsersRedux } from "../store/features/users-slice";
 
 import styles from "./admin.module.scss";
@@ -83,14 +90,9 @@ function Admin() {
     const settings = formValues;
     if (!socket) return;
 
-    const hasStarted = await gameService
+    await gameService
       .startGame(socket, roomId, settings)
       .catch((error) => alert(error));
-
-    if (hasStarted) {
-      console.log(1);
-      // setIsPlaying(hasStarted);
-    }
   };
 
   // const handleEndGame = async (e: React.FormEvent) => {
@@ -120,8 +122,10 @@ function Admin() {
 
   // TODO fix any
   const updateState = (state: any) => {
+    const { time } = state;
     setUsers(state.users);
 
+    // TODO this is kind of repeated in mian.tsx, can I avoid repetition?
     dispatchRedux(setIsPlaying(state.isPlaying));
     if (
       state.users.length &&
@@ -129,13 +133,16 @@ function Admin() {
     ) {
       dispatchRedux(setUsersRedux(state.users));
     }
+    if (state.gamesPlayed) {
+      dispatchRedux(setGamesPlayed(state.gamesPlayed));
+    }
+    dispatchRedux(setCurrentTime(formatTime(time.currentTime)));
+    dispatchRedux(setTimestampBatch(formatTime(time.timestampBatch)));
+    // dispatchRedux(setGamesPlayed(state.gamesPlayed));
   };
 
   useEffect(() => {
     connectSocket();
-  }, []);
-
-  useEffect(() => {
     handleGameUpdate();
   }, []);
 
