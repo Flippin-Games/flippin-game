@@ -19,11 +19,14 @@ import { setUsers } from "../store/features/users-slice";
 import { setSettings } from "../store/features/settings-slice";
 import { setCounter, setPreviousUser } from "../store/features/local-slice";
 import { setGamesPlayed } from "../store/features/games-slice";
+// import { setIsPlaying } from "../store/features/admin-slice";
 import formatTime from "../utils/formatTime";
+// import Snackbar from "../components/snackbar/snackbar";
 
 function Main({ isAdmin = false }) {
   const dispatchRedux = useAppDispatch();
   const { settings } = useAppSelector((state) => state.settings);
+  // const { isPlaying } = useAppSelector((state) => state.admin);
   const { counter, isInRoom, username, previousUser } = useAppSelector(
     (state) => state.local
   );
@@ -35,6 +38,8 @@ function Main({ isAdmin = false }) {
   settingsRef.current = settings;
   const gamesPlayedRef = useRef();
   gamesPlayedRef.current = gamesPlayed;
+  // const isPlayingRef = useRef();
+  // isPlayingRef.current = gamesPlayed;
 
   const connectSocket = async () => {
     await socketService
@@ -62,6 +67,11 @@ function Main({ isAdmin = false }) {
     const settings = settingsRef.current;
     const { time } = backendState;
     const gamesPlayed = gamesPlayedRef.current;
+
+    // TODO snackbar
+    // if (backendState.isPlaying !== isPlaying) {
+    //   dispatchRedux(setIsPlaying(backendState.isPlaying));
+    // }
 
     if (
       backendState.users &&
@@ -111,6 +121,12 @@ function Main({ isAdmin = false }) {
   return (
     <div className="App">
       {!isInRoom && !isAdmin ? <Header /> : <GameInfo />}
+      {/* TODO get proper message from backend, display when it changes */}
+      {/* {isPlaying ? (
+        <Snackbar message="Coins given to the first user!" />
+      ) : (
+        <Snackbar message="Game ended!" />
+      )} */}
       <main className="main">
         {!isInRoom && !isAdmin ? (
           <JoinRoom />

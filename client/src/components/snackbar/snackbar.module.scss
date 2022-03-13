@@ -1,0 +1,13 @@
+.visible {
+  background-color: var(--background);
+  position: absolute;
+  top: 1rem;
+  padding: 0.8rem;
+  border: 2px solid var(--outline);
+  border-radius: 0.75em;
+  font-size: 0.9rem;
+}
+
+.hidden {
+  display: none;
+}
