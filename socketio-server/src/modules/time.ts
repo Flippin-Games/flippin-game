@@ -29,6 +29,7 @@ class Time {
           console.log(this.timestampBatch);
           console.log("STOP TIME AT: ", this.currentTime);
         }
+        GameController.updateUsers(this.roomId);
 
         GameController.emitUpateGame(io, this.roomId);
       }.bind(this),

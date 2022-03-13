@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
@@ -63,7 +63,7 @@ function Main({ isAdmin = false }) {
   // TODO fix any
   function updateContext(backendState: any) {
     // usign ref to make sure it always checks current value, not init one
-    const users = stateRef.current;
+    // const users = stateRef.current;
     const settings = settingsRef.current;
     const { time } = backendState;
     const gamesPlayed = gamesPlayedRef.current;
@@ -73,10 +73,8 @@ function Main({ isAdmin = false }) {
     //   dispatchRedux(setIsPlaying(backendState.isPlaying));
     // }
 
-    if (
-      backendState.users &&
-      JSON.stringify(backendState.users) !== JSON.stringify(users)
-    ) {
+    // todo I removed check and now it's updating more often
+    if (backendState.users) {
       dispatchRedux(setUsers(backendState.users));
     }
     if (

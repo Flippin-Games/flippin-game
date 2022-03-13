@@ -16,6 +16,7 @@ function Game({ counter, users, previousUser, username }: any) {
           name={user.username}
           activeUser={user.username === username}
           previousUser={previousUser}
+          areUsersBeforeMeFlipping={user.areUsersBeforeMePlaying}
         />
       ))}
     </section>

@@ -2,11 +2,13 @@ class User {
   username: string;
   localCounter: number;
   flipped: number;
+  areUsersBeforeMePlaying: boolean;
 
   constructor(username) {
     this.username = username;
     this.localCounter = 0;
     this.flipped = 0;
+    this.areUsersBeforeMePlaying = false;
   }
 
   getUsername(): string {
@@ -43,6 +45,11 @@ class User {
   resetCounters() {
     this.flipped = 0;
     this.localCounter = 0;
+    this.setAreUsersBeforeMeFlipping(false);
+  }
+
+  setAreUsersBeforeMeFlipping(val: boolean) {
+    this.areUsersBeforeMePlaying = val;
   }
 }
 

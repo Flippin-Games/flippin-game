@@ -16,6 +16,7 @@ type TGame = {
   counter: number;
   flipped: number;
   previousUser: any; // TODO fix
+  areUsersBeforeMeFlipping: boolean;
 };
 
 function PlayerCard(props: TGame) {
@@ -53,16 +54,18 @@ function PlayerCard(props: TGame) {
     <div className={styles.wrapper}>
       <h1>{props.name || username}</h1>
 
-      {props.activeUser && isPreviousUserAvailable && (
-        <Button
-          type="button"
-          onClick={handleTakeCoins}
-          className="btn-primary btn-s"
-          text="Take Coins"
-          disabledText={`Wait for ${props.previousUser?.username}`}
-          disabled={!shouldDisplayButton}
-        />
-      )}
+      {props.activeUser &&
+        isPreviousUserAvailable &&
+        props.areUsersBeforeMeFlipping && (
+          <Button
+            type="button"
+            onClick={handleTakeCoins}
+            className="btn-primary btn-s"
+            text="Take Coins"
+            disabledText={`Wait for ${props.previousUser?.username}`}
+            disabled={!shouldDisplayButton}
+          />
+        )}
       <div>
         <Coins
           toFlip={props.localCounter}

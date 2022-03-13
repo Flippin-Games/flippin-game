@@ -33,6 +33,22 @@ export class GameController {
     return room;
   }
 
+  static updateUsers(roomId: string) {
+    const room = GameController.getRoomFromState(roomId);
+    // are users before me playing
+
+    room.users.map((user) => {
+      const userIndex = room.getUserIndex(user.username);
+      const usersBeforeMe = room.users.slice(0, userIndex);
+      const areUsersBeforeMeFlipping =
+        usersBeforeMe.filter(
+          (usr: any) => usr.localCounter > 0 || usr.flipped > 0
+        ).length > 0;
+      console.log(userIndex, user, areUsersBeforeMeFlipping);
+      user.setAreUsersBeforeMeFlipping(areUsersBeforeMeFlipping);
+    });
+  }
+
   static emitUpateGame(@SocketIO() io: Server, roomId: string): void {
     console.log("=== EMIT UPDATE GAME ===");
 
