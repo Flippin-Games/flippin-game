@@ -18,12 +18,12 @@ function Time() {
         <li>
           <strong>Game stats</strong>
         </li>
-        <li>
-          <TimeIcon /> {currentTime}
+        <li title="Total Time">
+          <TimeIcon /> Total Time: {currentTime}
         </li>
         {timestampBatch !== 0 && (
-          <li>
-            <FirstTimeIcon /> {timestampBatch}
+          <li title="Time first batch got delivered">
+            <FirstTimeIcon /> 1st batch: {timestampBatch}
           </li>
         )}
       </ul>
@@ -36,14 +36,15 @@ function Time() {
           return (
             <>
               <ul className={styles.time}>
-                <li>
+                <li title="Time all batches got delivered">
                   <strong>Game no. {index + 1}</strong>
                 </li>
-                <li>
-                  <TimeIcon /> {formatTime(game.timeAllCompleted)}{" "}
+                <li title="Total Time">
+                  <TimeIcon /> Total time: {formatTime(game.timeAllCompleted)}{" "}
                 </li>
-                <li>
-                  <FirstTimeIcon /> {formatTime(game.timeBatchCompleted)}
+                <li title="Time first batch got delivered">
+                  <FirstTimeIcon /> 1st batch:{" "}
+                  {formatTime(game.timeBatchCompleted)}
                 </li>
               </ul>
             </>
