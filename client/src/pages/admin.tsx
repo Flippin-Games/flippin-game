@@ -22,8 +22,8 @@ import styles from "./admin.module.scss";
 import Main from "./main";
 
 const initialFormState = {
-  amountOfBatches: 4,
-  batchSize: 5,
+  amountOfBatches: 1,
+  batchSize: 20,
   autoMoveCoins: false,
 };
 

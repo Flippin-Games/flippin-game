@@ -6,8 +6,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: any = {
   settings: {
     autoMoveCoins: false,
-    amountOfBatches: 4,
-    batchSize: 5,
+    amountOfBatches: 1,
+    batchSize: 20,
     startAmount: 20,
   },
 };
