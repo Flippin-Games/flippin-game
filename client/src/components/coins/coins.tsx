@@ -12,7 +12,6 @@ function Coins({
   isFliping,
   isActiveUser,
 }: any) {
-  console.log(toFlip);
   return (
     <>
       <div className={styles.wrapper}>

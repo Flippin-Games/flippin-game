@@ -18,7 +18,7 @@ class GameService {
   }
 
   public async updateLocalCounter(socket: Socket, username: string) {
-    console.log("emit update local counter");
+    console.log("Emit: update local counter");
     socket.emit("update_local_counter", { username });
   }
 

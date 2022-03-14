@@ -7,9 +7,7 @@ function Snackbar({ message }) {
 
   useEffect(() => {
     setIsVisible(true);
-    console.log("hello");
     setTimeout(() => {
-      console.log("in");
       setIsVisible(false);
     }, 5000);
   }, []);

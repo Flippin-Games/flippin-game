@@ -87,7 +87,6 @@ class Room {
     this.setIsPlaying(false);
     this.resetTimeInRoom();
     this.resetAllCounters();
-    console.log(this);
   }
 
   resetTimeInRoom(): void {

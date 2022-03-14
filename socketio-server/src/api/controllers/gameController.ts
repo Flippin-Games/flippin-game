@@ -33,9 +33,9 @@ export class GameController {
     return room;
   }
 
+  // are users before me playing
   static updateUsers(roomId: string) {
     const room = GameController.getRoomFromState(roomId);
-    // are users before me playing
 
     room.users.map((user) => {
       const userIndex = room.getUserIndex(user.username);
@@ -44,7 +44,6 @@ export class GameController {
         usersBeforeMe.filter(
           (usr: any) => usr.localCounter > 0 || usr.flipped > 0
         ).length > 0;
-      console.log(userIndex, user, areUsersBeforeMeFlipping);
       user.setAreUsersBeforeMeFlipping(areUsersBeforeMeFlipping);
     });
   }

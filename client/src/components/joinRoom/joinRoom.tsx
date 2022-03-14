@@ -36,8 +36,6 @@ function JoinRoom() {
 
     if (!socket) return;
 
-    console.log("asdasda");
-
     if (!formValues.room || formValues.room.trim() === "") {
       alert("Please provide required fields.");
       return;
