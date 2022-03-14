@@ -33,7 +33,7 @@ function SettingsForm(props: any) {
           type="checkbox"
           checked={props.formValues.autoMoveCoins}
           onChange={props.handleChange}
-          label="Auto move coins to next user"
+          label="Auto move items to next user"
           placeholder=""
           required={false}
           row={true}
@@ -43,7 +43,7 @@ function SettingsForm(props: any) {
           disabled={props.isPlaying}
           className="btn btn-primary"
           disabledText="Game in progress..."
-          text="Give coins"
+          text="Start Game"
         />
       </Form>
     </section>

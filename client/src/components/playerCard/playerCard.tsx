@@ -61,7 +61,7 @@ function PlayerCard(props: TGame) {
             type="button"
             onClick={handleTakeCoins}
             className="btn-primary btn-s"
-            text="Take Coins"
+            text="Take Batch"
             disabledText={`Wait for ${props.previousUser?.username}`}
             disabled={!shouldDisplayButton}
           />

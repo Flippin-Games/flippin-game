@@ -6,7 +6,7 @@ import styles from "./usersList.module.scss";
 function UsersList({ users, handleRemove }: any) {
   return (
     <section>
-      <h2>Users in current game</h2>
+      <h2>Players in current game</h2>
       {users && (
         // TODO fix any
         <ol>
@@ -26,7 +26,7 @@ function UsersList({ users, handleRemove }: any) {
               </li>
             ))
           ) : (
-            <li>No users logged in...</li>
+            <li>No players logged in...</li>
           )}
         </ol>
       )}
