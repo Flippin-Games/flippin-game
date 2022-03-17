@@ -20,7 +20,7 @@ function Footer() {
 
       <div className={styles.contact}>
         Contact us:{" "}
-        <a href=" flippinsupport@flippingames.com">
+        <a href="mailto:flippinsupport@flippingames.com">
           flippinsupport@flippingames.com
         </a>
       </div>
