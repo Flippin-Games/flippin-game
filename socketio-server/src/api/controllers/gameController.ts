@@ -37,6 +37,12 @@ export class GameController {
   static updateUsers(roomId: string) {
     const room = GameController.getRoomFromState(roomId);
 
+    // stop timers if all users left
+    if (room.getIsEmpty()) {
+      room.resetTimeInRoom();
+      return;
+    }
+
     room.users.map((user) => {
       const userIndex = room.getUserIndex(user.username);
       const usersBeforeMe = room.users.slice(0, userIndex);

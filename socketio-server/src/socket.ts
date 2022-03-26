@@ -13,7 +13,9 @@ export default (httpServer) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("connection");
+    socket.on("disconnect", (reason) => {
+      console.log(reason);
+    });
   });
 
   const extension = env.NODE_ENV === "development" ? "ts" : "js";

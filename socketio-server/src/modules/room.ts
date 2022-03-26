@@ -34,6 +34,10 @@ class Room {
     return this.users[index];
   }
 
+  getIsEmpty(): boolean {
+    return this.users.length === 0;
+  }
+
   addUser(user: User): void {
     this.users.push(user);
   }
@@ -94,6 +98,7 @@ class Room {
   }
 
   resetTimeInRoom(): void {
+    console.log("Reset time in room");
     this.time.stopTime(); // this is to be dubble sure we clear interval in each case
     this.time = new Time(0, 0, 0, null, this.id);
   }
