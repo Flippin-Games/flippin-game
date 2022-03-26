@@ -1,6 +1,7 @@
 {
-  "name": "agile-penny",
-  "version": "0.0.0",
+  "name": "Flippin Games - Server",
+  "version": "1.0.0",
+  "author": "Weronika Dominiak <mail@weronika.dev> (https://weronika.dev)",
   "private": true,
   "scripts": {
     "dev": "nodemon --exec \"npm run tsnode\"",

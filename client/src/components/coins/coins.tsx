@@ -18,8 +18,8 @@ function Coins({
         <div className={styles.box}>
           {Array(toFlip)
             .fill(0)
-            .map(() => (
-              <Coin />
+            .map((i) => (
+              <Coin key={i} />
             ))}
         </div>
         <div className={styles.box}>
