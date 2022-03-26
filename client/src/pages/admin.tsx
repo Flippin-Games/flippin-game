@@ -175,16 +175,16 @@ function Admin() {
                     handleStartGame={handleStartGame}
                     isPlaying={isPlaying}
                   />
-                </section>
-              )}
 
-              {isPlaying && (
-                <Button
-                  type="submit"
-                  onClick={handleResetGame}
-                  className="btn btn-primary"
-                  text="Reset Current Game"
-                />
+                  {isPlaying && (
+                    <Button
+                      type="submit"
+                      onClick={handleResetGame}
+                      className="btn btn-primary"
+                      text="Reset Current Game"
+                    />
+                  )}
+                </section>
               )}
               {roomId && (
                 <UsersList handleRemove={handleRemove} users={users} />
