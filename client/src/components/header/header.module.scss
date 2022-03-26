@@ -2,10 +2,11 @@
   background-color: var(--primary);
   border-bottom: 2px solid var(--primary-dark);
   color: white;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .title {
   margin: 0;
-  text-shadow: 0 5px #680016; /* TODO Remove it?  */
+  text-shadow: 0 5px #680016;
+  text-align: center;
 }

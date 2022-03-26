@@ -20,6 +20,8 @@ import { setUsers as setUsersRedux } from "../store/features/users-slice";
 
 import styles from "./admin.module.scss";
 import Main from "./main";
+import Header from "../components/header/header";
+import Footer from "../components/footer/footer";
 
 const initialFormState = {
   amountOfBatches: 1,
@@ -150,10 +152,11 @@ function Admin() {
   }, []);
 
   return (
-    <div className="App">
-      <main className="main">
-        <div>
-          <div>
+    <>
+      <div className="App">
+        <Header />
+        <main className="main">
+          <section className={styles.wrapper}>
             {!roomId && roomId.length === 0 && (
               <Button
                 type="submit"
@@ -163,40 +166,36 @@ function Admin() {
                 text="Generate Room"
               />
             )}
-            <section className={styles.wrapper}>
-              {roomId && (
-                <section>
-                  <h2>
-                    Your room ID: <span id="roomId">{roomId}</span>
-                  </h2>
-                  <SettingsForm
-                    formValues={formValues}
-                    handleChange={handleChange}
-                    handleStartGame={handleStartGame}
-                    isPlaying={isPlaying}
-                  />
+            {roomId && (
+              <section>
+                <h2>
+                  Your room ID: <span id="roomId">{roomId}</span>
+                </h2>
+                <SettingsForm
+                  formValues={formValues}
+                  handleChange={handleChange}
+                  handleStartGame={handleStartGame}
+                  isPlaying={isPlaying}
+                />
 
-                  {isPlaying && (
-                    <Button
-                      type="submit"
-                      onClick={handleResetGame}
-                      className="btn btn-primary"
-                      text="Reset Current Game"
-                    />
-                  )}
-                </section>
-              )}
-              {roomId && (
-                <UsersList handleRemove={handleRemove} users={users} />
-              )}
-            </section>
-          </div>
-          <br />
+                {isPlaying && (
+                  <Button
+                    type="submit"
+                    onClick={handleResetGame}
+                    className="btn btn-primary"
+                    text="Reset Current Game"
+                  />
+                )}
+              </section>
+            )}
+            {roomId && <UsersList handleRemove={handleRemove} users={users} />}
+          </section>
           <hr />
           <Main isAdmin={true} />
-        </div>
-      </main>
-    </div>
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 }
 

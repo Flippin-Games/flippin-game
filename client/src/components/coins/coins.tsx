@@ -19,7 +19,7 @@ function Coins({
           {Array(toFlip)
             .fill(0)
             .map((i) => (
-              <Coin key={i} />
+              <Coin />
             ))}
         </div>
         <div className={styles.box}>

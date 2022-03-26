@@ -118,14 +118,15 @@ function Main({ isAdmin = false }) {
 
   return (
     <div className="App">
-      {!isInRoom && !isAdmin ? <Header /> : <GameInfo />}
+      {!isAdmin && <Header />}
+      {isInRoom ? <GameInfo /> : null}
       {/* TODO get proper message from backend, display when it changes */}
       {/* {isPlaying ? (
         <Snackbar message="Coins given to the first user!" />
       ) : (
         <Snackbar message="Game ended!" />
       )} */}
-      <main className="main">
+      <main className={isAdmin ? "main main__admin" : "main"}>
         {!isInRoom && !isAdmin ? (
           <JoinRoom />
         ) : (
@@ -137,7 +138,7 @@ function Main({ isAdmin = false }) {
           />
         )}
       </main>
-      <Footer />
+      {!isAdmin && <Footer />}
     </div>
   );
 }

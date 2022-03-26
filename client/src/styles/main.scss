@@ -9,6 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: var(--text);
   background-color: var(--light-grey);
+  overflow-x: hidden;
 }
 
 code {
@@ -17,11 +18,17 @@ code {
 }
 
 .main {
-  min-height: calc(100vh - 170px);
+  flex-grow: 1;
+  width: 100vw;
   font-size: calc(10px + 1vmin);
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+
+.main__admin {
+  min-height: 100%;
 }
 
 h1,
