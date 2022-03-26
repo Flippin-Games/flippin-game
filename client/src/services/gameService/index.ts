@@ -64,12 +64,12 @@ class GameService {
     });
   }
 
-  public async endGame(socket: Socket, roomId: string): Promise<boolean> {
+  public async resetGame(socket: Socket, roomId: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      socket.emit("end_game", { roomId });
-      // socket.on("game_isPlaying", () => {
-      //   resolve(true);
-      // });
+      socket.emit("reset_game", { roomId });
+      socket.on("game_reset", () => {
+        resolve(true);
+      });
       // socket.on("game_start_error", ({ error }) => {
       //   reject(error);
       // });

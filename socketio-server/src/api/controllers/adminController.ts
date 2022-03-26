@@ -64,10 +64,20 @@ export class AdminController {
     }
   }
 
-  @OnMessage("end_game")
-  public async endGame(@MessageBody() message: any) {
+  @OnMessage("reset_game")
+  public async resetGame(
+    @SocketIO() io: Server,
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() message: any
+  ) {
     const room = GameController.getRoomFromState(message.roomId);
-    room.time.stopTime();
+    room.resetCurrentGame();
+    room.resetAllCounters();
+    GameController.emitUpateGame(io, message.roomId);
+
+    socket.emit("game_reset", {
+      error: "Not enough players to start the game",
+    });
 
     console.log("Game ended! in room: ", message.roomId);
   }

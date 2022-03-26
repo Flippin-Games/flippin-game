@@ -84,12 +84,17 @@ class Room {
       this.gamesPlayed = [game];
     }
 
+    this.resetCurrentGame();
+  }
+
+  resetCurrentGame(): void {
     this.setIsPlaying(false);
     this.resetTimeInRoom();
     this.resetAllCounters();
   }
 
   resetTimeInRoom(): void {
+    this.time.stopTime(); // this is to be dubble sure we clear interval in each case
     this.time = new Time(0, 0, 0, null, this.id);
   }
 

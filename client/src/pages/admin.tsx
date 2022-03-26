@@ -95,12 +95,14 @@ function Admin() {
       .catch((error) => alert(error));
   };
 
-  // const handleEndGame = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (roomId && socketService.socket) {
-  //     gameService.endGame(socketService.socket, roomId);
-  //   }
-  // };
+  const handleResetGame = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (roomId && socketService.socket) {
+      gameService.resetGame(socketService.socket, roomId).then(() => {
+        dispatchRedux(setIsPlaying(false));
+      });
+    }
+  };
 
   const handleGameUpdate = () => {
     if (socketService.socket) {
@@ -133,6 +135,7 @@ function Admin() {
     ) {
       dispatchRedux(setUsersRedux(state.users));
     }
+
     if (state.gamesPlayed) {
       dispatchRedux(setGamesPlayed(state.gamesPlayed));
     }
@@ -150,44 +153,48 @@ function Admin() {
     <div className="App">
       <main className="main">
         <div>
-          {!roomId && roomId.length === 0 && (
-            <Button
-              type="submit"
-              onClick={handleGenerateRoom}
-              disabled={roomId.length > 0}
-              className="btn-primary"
-              text="Generate Room"
-            />
-          )}
-          <section className={styles.wrapper}>
-            {roomId && (
-              <section>
-                <h2>
-                  Your room ID: <span id="roomId">{roomId}</span>
-                </h2>
-                <SettingsForm
-                  formValues={formValues}
-                  handleChange={handleChange}
-                  handleStartGame={handleStartGame}
-                  isPlaying={isPlaying}
-                />
-              </section>
-            )}
-            {/* 
-            {isPlaying && (
+          <div>
+            {!roomId && roomId.length === 0 && (
               <Button
                 type="submit"
-                onClick={handleEndGame}
-                className="btn btn-primary"
-                text="End Game"
+                onClick={handleGenerateRoom}
+                disabled={roomId.length > 0}
+                className="btn-primary"
+                text="Generate Room"
               />
-            )} */}
-            {roomId && <UsersList handleRemove={handleRemove} users={users} />}
-          </section>
+            )}
+            <section className={styles.wrapper}>
+              {roomId && (
+                <section>
+                  <h2>
+                    Your room ID: <span id="roomId">{roomId}</span>
+                  </h2>
+                  <SettingsForm
+                    formValues={formValues}
+                    handleChange={handleChange}
+                    handleStartGame={handleStartGame}
+                    isPlaying={isPlaying}
+                  />
+                </section>
+              )}
+
+              {isPlaying && (
+                <Button
+                  type="submit"
+                  onClick={handleResetGame}
+                  className="btn btn-primary"
+                  text="Reset Current Game"
+                />
+              )}
+              {roomId && (
+                <UsersList handleRemove={handleRemove} users={users} />
+              )}
+            </section>
+          </div>
+          <br />
+          <hr />
+          <Main isAdmin={true} />
         </div>
-        <br />
-        <hr />
-        <Main isAdmin={true} />
       </main>
     </div>
   );
