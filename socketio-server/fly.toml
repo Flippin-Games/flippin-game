@@ -1,6 +1,6 @@
-# fly.toml file generated for agile-penny on 2022-01-16T15:09:59Z
+# fly.toml file generated for flippin-game on 2022-03-28T20:13:59+01:00
 
-app = "agile-penny"
+app = "flippin-game"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
