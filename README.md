@@ -35,7 +35,7 @@ Start app with `npm run dev`
 ### Frontend
 
 Deployment is handled by Netlify. It will get triggered every time there is new change in master.
-Env variable needs to point to server instance running on fly.io.
+Env variable needs to point to server instance running on fly.io - this is set so only need to worry about it if we move away from fly.io.
 
 ### Backend
 
