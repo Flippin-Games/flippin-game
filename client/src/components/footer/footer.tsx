@@ -30,7 +30,7 @@ function Footer() {
 
         <div>
           <p className={styles.copyright}>
-            Copyright @ 2020 - Flippingames.com
+            Copyright @ 2022 - Flippingames.com
           </p>
           <p className={styles.note}>
             Built with ❤️ by{" "}
