@@ -61,6 +61,8 @@ function Admin() {
   const dispatchRedux = useAppDispatch();
 
   const connectSocket = async () => {
+    // please uncomment line bellow on your local only
+    // console.log(process.env.REACT_APP_PUBLIC_URL);
     await socketService
       .connect(`${process.env.REACT_APP_PUBLIC_URL}`)
       .catch((err) => {
