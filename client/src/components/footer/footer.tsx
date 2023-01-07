@@ -8,7 +8,7 @@ function Footer() {
         <div className={styles.footer__nav}>
           <div className={styles.col}>
             <a
-              href="https://drive.google.com/drive/folders/1pGIcpZVsK-g0MEEoQO-icj5EVoQBByK8?usp=sharing"
+              href="https://docs.google.com/document/d/1-_pGMtmaqAoKhFu1Dl_CBBx69G72370g2aFWAaKC5u0?usp=sharing"
               target="_blank"
             >
               Facilitation Guide
