@@ -1,4 +1,5 @@
 import styles from "./footer.module.scss";
+import RedTangerineIcon from "../../assets/imgs/RedTangerineLogo.png";
 
 function Footer() {
   return (
@@ -20,17 +21,23 @@ function Footer() {
             </a>
           </div>
 
+          <div>
+            <a href="https://www.redtangerine.org" target="_blank">
+              <img src={RedTangerineIcon}  className={styles.logo} alt="Red Tangerine Logo"/>
+            </a>
+          </div> 
+
           <div className={styles.contact}>
             Contact us:{" "}
-            <a href="mailto:flippinsupport@flippingames.com">
-              flippinsupport@flippingames.com
+            <a href="mailto:info@redtangerine.org">
+              info@redtangerine.org
             </a>
           </div>
         </div>
 
         <div>
           <p className={styles.copyright}>
-            Copyright @ 2022 - Flippingames.com
+            Copyright @ 2023 Red Tangerine. All Rights Reserved.
           </p>
           <p className={styles.note}>
             Built with ❤️ by{" "}
