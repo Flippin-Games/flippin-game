@@ -50,7 +50,8 @@ $ flyctl auth login
 > Email: flippingames0@gmail.com
 > Password: **************
 
-# Deploy the app, this step will take a few minutes
+# Deploy the app, from the socketio-server directory in powershell IDE terminal window 
+# Use GC RT account. This step will take a few minutes
 $flyctl --app flippin-game deploy .
 
 ```
