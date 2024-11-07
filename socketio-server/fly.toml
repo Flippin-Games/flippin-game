@@ -7,7 +7,7 @@ kill_timeout = 5
 processes = []
 
 [build]
-  builder = "heroku/buildpacks:22"
+  builder = "heroku/buildpacks:24"
 
 [env]
   PORT = "9000"
@@ -42,7 +42,7 @@ processes = []
     restart_limit = 0
     timeout = "2s"
 
-[http_service]
+[[http_service]]
   auto_stop_machines = "stop"
   auto_start_machines = true
   min_machines_running = 0
