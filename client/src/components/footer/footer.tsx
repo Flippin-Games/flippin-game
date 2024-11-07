@@ -28,7 +28,7 @@ function Footer() {
           </div> 
 
           <div className={styles.contact}>
-            Contact us:{" "}
+            Contact Us:{" "}
             <a href="mailto:info@redtangerine.org">
               info@redtangerine.org
             </a>
