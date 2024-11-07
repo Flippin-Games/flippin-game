@@ -45,6 +45,9 @@ Requires installed & started docker.
 # Install flyctl with curl
 $ curl https://fly.io/install.sh | sh
 
+# Install flyctl with powershell
+$ pwsh -Command "iwr https://fly.io/install.ps1 -useb | iex"
+
 # Login to Fly
 $ flyctl auth login
 > Email: flippingames0@gmail.com
