@@ -37,7 +37,7 @@ function Footer() {
 
         <div>
           <p className={styles.copyright}>
-            Copyright @ 2023 Red Tangerine. All Rights Reserved.
+            Copyright @ 2024 Red Tangerine. All Rights Reserved.
           </p>
           <p className={styles.note}>
             Built with ❤️ by{" "}
