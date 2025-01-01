@@ -50,6 +50,12 @@ $ pwsh -Command "iwr https://fly.io/install.ps1 -useb | iex"
 
 # Login to Fly
 $ flyctl auth login
+
+# USE THIS ONE
+> Email: glaudia.califano@redtangerine.org
+> Password: FLsGCDS112@
+
+# I THINK THIS IS OLD
 > Email: flippingames0@gmail.com
 > Password: **************
 
@@ -72,3 +78,4 @@ $flyctl --app flippin-game deploy .
 - [github](https://github.com/Flippin-Games/flippin-games)
 - [github user](https://github.com/flippingames)
 - [socket.io](https://socket.io/)
+
