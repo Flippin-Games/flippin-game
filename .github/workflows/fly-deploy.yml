@@ -13,6 +13,6 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - run: docker build -t registry.fly.io/flippin-game:latest ./socketio-server && docker push registry.fly.io/flippin-game:latest && flyctl deploy -a flippin-game --image registry.fly.io/flippin-game:latest
+      - run: flyctl auth docker
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
