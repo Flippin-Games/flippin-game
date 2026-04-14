@@ -13,6 +13,6 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - run: cd socketio-server && flyctl deploy --remote-only -a flippin-game
+      - run: cd socketio-server && flyctl deploy --remote-only -a flippin-game --depot
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
