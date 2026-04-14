@@ -12,8 +12,15 @@ export default (httpServer) => {
     allowEIO3: true,
   });
 
+  let count = 0;
+
   io.on("connection", (socket) => {
+    count++;
+    console.log("CONNECT", socket.id, "TOTAL:", count);
+
     socket.on("disconnect", (reason) => {
+      count--;
+      console.log("DISCONNECT", socket.id, "TOTAL:", count);
       console.log(reason);
     });
   });
