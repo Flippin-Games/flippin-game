@@ -13,6 +13,6 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - run: flyctl deploy --remote-only -a flippin-game --build-only
+      - run: flyctl deploy --remote-only -a flippin-game --config fly.toml
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
