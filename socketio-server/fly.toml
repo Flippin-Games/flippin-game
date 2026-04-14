@@ -8,6 +8,7 @@ processes = []
 
 [build]
   builder = "heroku/buildpacks:24"
+  buildpacks = ["heroku/nodejs"]
 
 [env]
   PORT = "9000"
