@@ -22,6 +22,9 @@ export class GameController {
     );
 
     const gameRoom = socketRooms && socketRooms[0];
+    
+    console.log("SOCKET ROOMS:", socketRooms);
+
     return gameRoom;
   }
 
