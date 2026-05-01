@@ -43,4 +43,9 @@ app.use(function (err, req, res, next) {
   // res.render("error");
 });
 
+// handler to test HTTP app repsonds
+app.get("/", (req, res) => {
+  res.send("OK");
+});
+
 export default app;
