@@ -43,6 +43,7 @@ export class GameController {
     // stop timers if all users left
     if (room.getIsEmpty()) {
       room.resetTimeInRoom();
+      GameController.removeRoom(roomId);
       return;
     }
 
@@ -80,6 +81,11 @@ export class GameController {
 
   static addRoom(room: Room) {
     GameController.gameState.rooms.push(room);
+  }
+
+  static removeRoom(roomId: string) {
+  GameController.gameState.rooms =
+    GameController.gameState.rooms.filter(r => r.id !== roomId);
   }
 
   @OnMessage("update_local_counter")
